@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/create_account.dart';
 import 'package:mobile_app/forgot_password.dart';
+import 'package:mobile_app/main.dart';
 
 // Username input class
 class LoginUser extends StatefulWidget{
@@ -212,7 +213,7 @@ class _LoginPassState extends State<LoginPass > {
                     child: TextButton(
                         onPressed: (){
                           // Change LoginUser() for the Main Menu
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginUser()));
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
                         },
                         child: const Text(
                           'LOG IN',
