@@ -62,7 +62,7 @@ class _LoginUserState extends State<LoginUser> {
 
             // Next button using container, box decoration, and align
             Padding(
-                padding: const EdgeInsets.only(right: 45),
+                padding: const EdgeInsets.only(right: 55),
               child:  Align(
                 alignment: Alignment.centerRight,
                 child: Container(
@@ -188,7 +188,7 @@ class _LoginPassState extends State<LoginPass > {
 
             const Padding(padding: EdgeInsets.only(top: 35)),
             Padding(
-              padding: const EdgeInsets.only(right: 45),
+              padding: const EdgeInsets.only(right: 55),
               child:  Align(
                 alignment: Alignment.centerRight,
                 child: Container(

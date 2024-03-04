@@ -59,8 +59,23 @@ flutter:
   uses-material-design: true
 
   assets:
+     - assets/images/back_icon.png
+     - assets/images/black_check.png
+     - assets/images/blue_checkmark.png
+     - assets/images/camera_icon.png
+     - assets/images/camera_icon_blue.png
+     - assets/images/capture_icon.png
+     - assets/images/gallery_icon.png
+     - assets/images/loading_icon.gif
+     - assets/images/logo2_text.png
      - assets/images/logo_notext.png
      - assets/images/logo_text.png
+     - assets/images/logout_icon.png
+     - assets/images/menu_icon.png
+     - assets/images/profile_icon.png
+     - assets/images/recycle_icon.png
+     - assets/images/reports_icon.png
+     - assets/images/teal_checkmark.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
