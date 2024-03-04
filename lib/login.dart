@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/create_account.dart';
-import 'create_account.dart';
+import 'package:mobile_app/forgot_password.dart';
 
 // Username input class
 class LoginUser extends StatefulWidget{
@@ -38,7 +38,6 @@ class _LoginUserState extends State<LoginUser> {
                       hintText: 'Username',
                       filled: true,
                       fillColor: Colors.black12
-
                   ),
                 )
             ),
@@ -172,6 +171,8 @@ class _LoginPassState extends State<LoginPass > {
                   ),
                 )
             ),
+            // Hidden error message, change states when password is incorrect
+            // *not functional yet*
             Visibility(
               visible: isVisible,
               child: const Padding(
@@ -226,7 +227,10 @@ class _LoginPassState extends State<LoginPass > {
             ),
             const Padding(padding: EdgeInsets.only(top: 50)),
             TextButton(
-                onPressed: (){/*TO DO*/},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ForgotPasswordMN())
+                  );
+                },
                 child: const Text(
                   'Forgot Password?',
                   style: TextStyle(

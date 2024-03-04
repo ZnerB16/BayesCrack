@@ -73,6 +73,7 @@ flutter:
      - assets/images/logout_icon.png
      - assets/images/menu_icon.png
      - assets/images/profile_icon.png
+     - assets/images/profile_placeholder.png
      - assets/images/recycle_icon.png
      - assets/images/reports_icon.png
      - assets/images/teal_checkmark.png

@@ -349,7 +349,7 @@ class _CreateAccountPass extends State<CreateAccountPass> {
                 ),
               )
           ),
-          const Padding(padding: EdgeInsets.only(top: 30)),
+          const Padding(padding: EdgeInsets.only(top: 20)),
           const SizedBox(
               width: 280,
               height: 55,
@@ -430,7 +430,7 @@ class _CreateAccountPass extends State<CreateAccountPass> {
                           onPressed: (){
                             Navigator.push(
                               // Insert loading screen and successful screen here
-                                context, MaterialPageRoute(builder: (_) => const CreateAccountPass())
+                                context, MaterialPageRoute(builder: (_) => const _Success())
                             );
                           },
                           child: const Text(
@@ -451,5 +451,76 @@ class _CreateAccountPass extends State<CreateAccountPass> {
     );
   }
 }
+
+class _Success extends StatelessWidget{
+  const _Success({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children:[
+            const Center(
+              child: Image(
+                image: AssetImage('assets/images/blue_checkmark.png'),
+                width: 150,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(top: 30)),
+            const SizedBox(
+              width: 200,
+              child: Text(
+                'Account created successfully.',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff414040)
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(top: 30)),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: const Color(0xff284b63),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color: const Color(0xff284b63)
+                      ),
+                      boxShadow:  [BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        spreadRadius: 3,
+                        blurRadius: 3,
+                        offset: const Offset(0, 3), // changes position of shadow
+                      ),
+                      ]
+                  ),
+                  child: TextButton(
+                      onPressed: (){
+                        // Change LoginUser() for the Main Menu
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginUser()));
+                      },
+                      child: const Text(
+                        'LOG IN',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                  )
+              ),
+            ),
+          ],
+        )
+    );
+  }
+}
+
 
 
