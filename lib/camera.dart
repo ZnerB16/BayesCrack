@@ -43,8 +43,9 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff284b63), // Set background color here
       appBar: AppBar(
-        backgroundColor: Color(0xff284b63),
+        backgroundColor: Colors.transparent,
         title: const Text(
           'Camera',
           style: TextStyle(
@@ -60,61 +61,78 @@ class _CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
-      
-        body: FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return CameraPreview(_controller);
-            } else {
-              return Center(child: CircularProgressIndicator());
+      extendBody: true,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return CameraPreview(_controller);
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+          const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0), // Add horizontal padding
+            child: Text(
+              'Fit in the concrete crack you want to capture',
+              style: TextStyle(
+                color: Color(0xffFFFFFF),
+                fontSize: 16,
+                fontWeight: FontWeight.w400
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 100), // Add space between the sentence and the FloatingActionButton
+        ],
+      ),
+  
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        width: 100, // Adjust width as needed
+        height: 100, // Adjust height as needed
+        child: FloatingActionButton(
+          onPressed: () async {
+            // Take the Picture in a try / catch block. If anything goes wrong,
+            // catch the error.
+            try {
+              // Ensure that the camera is initialized.
+              await _initializeControllerFuture;
+
+              // Attempt to take a picture and get the file `image`
+              // where it was saved.
+              final image = await _controller.takePicture();
+
+              if (!context.mounted) return;
+
+              // If the picture was taken, display it on a new screen.
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DisplayPictureScreen(
+                    // Pass the automatically generated path to
+                    // the DisplayPictureScreen widget.
+                    imagePath: image.path,
+                  ),
+                ),
+              );
+            } catch (e) {
+              // If an error occurs, log the error to the console.
+              print(e);
             }
           },
-        ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        color: Color(0xff284b63), 
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Center(
-              child: Text(
-                'Fit in the concrete crack you want to capture',
-                style: TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400
-                ),
-                textAlign: TextAlign.center, // Center the text horizontally
-              ),
-            ),
-            SizedBox(
-              width: 120, // Adjust the width as needed
-              height: 120, // Adjust the height as needed
-              child: FloatingActionButton(
-                backgroundColor: Color(0xff284b63),
-                foregroundColor: Color(0xffFFFFFF), // Change the color of the icon if needed
-                child: Image.asset('assets/images/capture_icon.png'),
-                onPressed: () async {
-                  try {
-                    await _initializeControllerFuture;
-                    final XFile picture = await _controller.takePicture();
-                    // ignore: use_build_context_synchronously
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DisplayPictureScreen(imagePath: picture.path),
-                      ),
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-              ),
-            ),
-          ],
+          elevation: 10.0, // Add depth to the button
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0), 
+          side: BorderSide(color: Colors.transparent),
+          ),
+          backgroundColor: Colors.white, 
+          child: Image.asset('assets/images/capture_icon.png'),
         ),
       ),
     );
