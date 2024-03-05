@@ -14,6 +14,7 @@ class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   late List<CameraDescription> cameras;
+  bool _isFlashOn = false;
 
   @override
   void initState() {
@@ -26,7 +27,7 @@ class _CameraScreenState extends State<CameraScreen> {
       // Initialize the camera controller
       _controller = CameraController(
         cameras[0],
-        ResolutionPreset.medium,
+        ResolutionPreset.high,
       );
       _initializeControllerFuture = _controller.initialize();
     }).catchError((error) {
@@ -43,7 +44,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff284b63), // Set background color here
+      backgroundColor: Color(0xff284b63),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text(
@@ -61,6 +62,7 @@ class _CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
+      
       extendBody: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,66 +80,112 @@ class _CameraScreenState extends State<CameraScreen> {
             ),
           ),
           const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0), // Add horizontal padding
+            padding: EdgeInsets.symmetric(vertical: 10.0), 
             child: Text(
               'Fit in the concrete crack you want to capture',
               style: TextStyle(
                 color: Color(0xffFFFFFF),
                 fontSize: 16,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w300
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 100), // Add space between the sentence and the FloatingActionButton
+          SizedBox(height: 120),
         ],
       ),
   
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SizedBox(
-        width: 100, // Adjust width as needed
-        height: 100, // Adjust height as needed
-        child: FloatingActionButton(
-          onPressed: () async {
-            // Take the Picture in a try / catch block. If anything goes wrong,
-            // catch the error.
-            try {
-              // Ensure that the camera is initialized.
-              await _initializeControllerFuture;
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 105.0, right: 50.0),
+            child: SizedBox(
+              width: 100, 
+              height: 100, 
+              child: FloatingActionButton(
+                onPressed: () async {
+                  // Take the Picture in a try / catch block. If anything goes wrong,
+                  // catch the error.
+                  try {
+                    // Ensure that the camera is initialized.
+                    await _initializeControllerFuture;
 
-              // Attempt to take a picture and get the file `image`
-              // where it was saved.
-              final image = await _controller.takePicture();
+                    // Set flash mode to on just before capturing the image
+                    if (_isFlashOn) {
+                      await _controller.setFlashMode(FlashMode.torch);
+                    }
+              
+                    // Attempt to take a picture and get the file `image`
+                    // where it was saved.
+                    final image = await _controller.takePicture();
 
-              if (!context.mounted) return;
+                    if (!context.mounted) return;
 
-              // If the picture was taken, display it on a new screen.
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DisplayPictureScreen(
-                    // Pass the automatically generated path to
-                    // the DisplayPictureScreen widget.
-                    imagePath: image.path,
-                  ),
+                    // Turn off flash after capturing the image
+                    await _controller.setFlashMode(FlashMode.off);
+                    setState(() {
+                      _isFlashOn = false;
+                    });
+
+                    // If the picture was taken, display it on a new screen.
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => DisplayPictureScreen(
+                          // Pass the automatically generated path to
+                          // the DisplayPictureScreen widget.
+                          imagePath: image.path,
+                        ),
+                      ),
+                    );
+
+                  } catch (e) {
+                    // If an error occurs, log the error to the console.
+                    print(e);
+                  }
+                },
+                elevation: 10.0, 
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0), 
+                  side: BorderSide(color: Colors.transparent),
                 ),
-              );
-            } catch (e) {
-              // If an error occurs, log the error to the console.
-              print(e);
-            }
-          },
-          elevation: 10.0, // Add depth to the button
-          shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0), 
-          side: BorderSide(color: Colors.transparent),
+                backgroundColor: Colors.white, 
+                child: Image.asset('assets/images/capture_icon.png'),
+              ),
+            ),
           ),
-          backgroundColor: Colors.white, 
-          child: Image.asset('assets/images/capture_icon.png'),
-        ),
+          
+          FloatingActionButton(
+            onPressed: () {
+              _toggleFlash();
+            },
+            child: Icon(
+              _isFlashOn ? Icons.flash_on : Icons.flash_off,
+              color: Color(0xff284b63),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0), 
+                  side: BorderSide(color: Colors.transparent),
+                ),
+          ),
+        ],
       ),
-    );
+    ); 
   }
 
+  void _toggleFlash() async {
+    try {
+      await _controller.setFlashMode(_isFlashOn ? FlashMode.off : FlashMode.torch);
+      setState(() {
+        _isFlashOn = !_isFlashOn;
+      });
+    } catch (e) {
+      print('Error toggling flashlight: $e');
+    }
+  }
 }
 
 class DisplayPictureScreen extends StatelessWidget {
@@ -152,4 +200,5 @@ class DisplayPictureScreen extends StatelessWidget {
       body: Image.file(File(imagePath)),
     );
   }
-}
+} 
+
