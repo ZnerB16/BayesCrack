@@ -27,9 +27,11 @@ class _CameraScreenState extends State<CameraScreen> {
       // Initialize the camera controller
       _controller = CameraController(
         cameras[0],
-        ResolutionPreset.high,
+        ResolutionPreset.veryHigh,
       );
       _initializeControllerFuture = _controller.initialize();
+      // Set flash mode to off initially
+      _controller.setFlashMode(FlashMode.off);
     }).catchError((error) {
       print('Error initializing cameras: $error');
     });
@@ -91,7 +93,7 @@ class _CameraScreenState extends State<CameraScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 120),
+          SizedBox(height: 100),
         ],
       ),
   
@@ -100,10 +102,10 @@ class _CameraScreenState extends State<CameraScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 105.0, right: 50.0),
+            padding: const EdgeInsets.only(left: 85.0, right: 50.0),
             child: SizedBox(
-              width: 100, 
-              height: 100, 
+              width: 80, 
+              height: 80, 
               child: FloatingActionButton(
                 onPressed: () async {
                   // Take the Picture in a try / catch block. If anything goes wrong,
@@ -160,9 +162,12 @@ class _CameraScreenState extends State<CameraScreen> {
             onPressed: () {
               _toggleFlash();
             },
-            child: Icon(
-              _isFlashOn ? Icons.flash_on : Icons.flash_off,
-              color: Color(0xff284b63),
+            child: Transform.scale(
+              scale: 1.0,
+              child: Icon(
+                _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                color: Color(0xff284b63),
+              ),
             ),
             backgroundColor: Colors.white,
             elevation: 0.0,
@@ -170,6 +175,8 @@ class _CameraScreenState extends State<CameraScreen> {
                   borderRadius: BorderRadius.circular(20.0), 
                   side: BorderSide(color: Colors.transparent),
                 ),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  mini: true, // Set mini to true to make the button smaller
           ),
         ],
       ),
@@ -178,7 +185,14 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _toggleFlash() async {
     try {
-      await _controller.setFlashMode(_isFlashOn ? FlashMode.off : FlashMode.torch);
+      // Toggle the flash mode
+      if (_isFlashOn) {
+        // Turn off the flash
+        await _controller.setFlashMode(FlashMode.off);
+      } else {
+        // Turn on the flash
+        await _controller.setFlashMode(FlashMode.torch);
+      }
       setState(() {
         _isFlashOn = !_isFlashOn;
       });
@@ -186,6 +200,7 @@ class _CameraScreenState extends State<CameraScreen> {
       print('Error toggling flashlight: $e');
     }
   }
+
 }
 
 class DisplayPictureScreen extends StatelessWidget {
