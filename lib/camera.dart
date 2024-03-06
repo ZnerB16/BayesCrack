@@ -219,7 +219,7 @@ class DisplayPictureScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Center(
-            child: Text('Save Image',
+            child: Text('Confirmation',
                         style: TextStyle(
                         color: Color(0xff284b63),
                         fontSize: 24,
@@ -246,7 +246,7 @@ class DisplayPictureScreen extends StatelessWidget {
                 SizedBox(height: 20),
                 Center(
                   child: Text(
-                    'Are you sure you want to save this image?',
+                    'Run severity classification on this image?',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
