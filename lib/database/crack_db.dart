@@ -184,4 +184,24 @@ class CrackDB{
       ''', [id, id, id]
     );
   }
+  // Count predictions
+  Future<List> countPredictions(String prediction) async{
+    final database = await DatabaseService().database;
+    final count = await database.rawQuery(
+      '''
+      SELECT COUNT(id) FROM predictions WHERE prediction = ?
+      ''', [prediction]
+    );
+    return count.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
+  // Count all images
+  Future<List> countAll() async{
+    final database = await DatabaseService().database;
+    final count = await database.rawQuery(
+      '''
+      SELECT COUNT(id) FROM predictions
+      '''
+    );
+    return count.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
 }

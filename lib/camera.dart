@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
+import 'input_img_details.dart';
 import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
