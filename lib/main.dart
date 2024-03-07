@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/input_img_details.dart';
 import 'main_menu.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff284b63)),
         useMaterial3: true,
       ),
-      home: const MainMenu(),
+      home: const CrackInput(),
     );
   }
 }

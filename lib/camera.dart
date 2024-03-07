@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:mobile_app/input_img_details.dart';
 import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
@@ -291,7 +292,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Navigate to the input_img_details.dart file
-                      Navigator.pushNamed(context, '/input_img_details');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CrackInput()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff284b63),
