@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/camera.dart';
 import 'package:mobile_app/save_image_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 
 class CrackInput extends StatefulWidget{
-  const CrackInput ({super.key});
+  const CrackInput (String imagePath, {super.key});
 
   @override
   State<CrackInput> createState() => _CrackInput();

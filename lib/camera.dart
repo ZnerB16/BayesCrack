@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
-import 'input_img_details.dart';
-import 'package:path/path.dart' as path;
+import 'classify.dart'; // Import your classify.dart file
+import 'severity_result.dart'; // Import SeverityResultScreen
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -206,19 +206,6 @@ class _CameraScreenState extends State<CameraScreen> {
         await _controller.setFlashMode(FlashMode.torch);
       }
       
-      // Get current date and time
-      DateTime now = DateTime.now();
-      String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-      
-      // Get current location
-      Location location = new Location();
-      LocationData? currentLocation = await location.getLocation();
-      double latitude = currentLocation.latitude!;
-      double longitude = currentLocation.longitude!;
-      
-      // Now you have date, time, latitude, and longitude
-      // You can use this information as needed
-      
       setState(() {
         _isFlashOn = !_isFlashOn;
       });
@@ -228,37 +215,17 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
+
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
-  final Function(bool) onConfirm;
-  final String formattedDateTime;
-  final double latitude;
-  final double longitude;
 
-  const DisplayPictureScreen({
-    Key? key,
-    required this.imagePath,
-    required this.onConfirm,
-    required this.formattedDateTime,
-    required this.latitude,
-    required this.longitude,
-  }) : super(key: key);
+  const DisplayPictureScreen({Key? key, required this.imagePath, required Null Function(bool confirmed) onConfirm, required formattedDateTime, required latitude, required longitude}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Confirmation',
-            style: TextStyle(
-              color: Color(0xff284b63),
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        automaticallyImplyLeading: false,
+        title: Text('Confirmation'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -273,14 +240,6 @@ class DisplayPictureScreen extends StatelessWidget {
                   ),
                   constraints: BoxConstraints(maxHeight: 620),
                   child: Image.file(File(imagePath)),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Date Time: $formattedDateTime\nLatitude: $latitude\nLongitude: $longitude',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
                 ),
                 SizedBox(height: 20),
                 Center(
@@ -328,9 +287,29 @@ class DisplayPictureScreen extends StatelessWidget {
                   width: 120,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to the input_img_details.dart file
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CrackInput()));
+                    onPressed: () async {
+                      // Instantiate Classifier
+                      Classifier classifier = Classifier();
+
+                      // Load model
+                      await classifier.loadModel();
+
+                      // Perform classification
+                      String classificationResult = await classifier.classify(imagePath);
+
+                      // Dispose model
+                      await classifier.disposeModel();
+
+                      // Navigate to SeverityResultScreen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeverityResultScreen(
+                            classificationResult: classificationResult,
+                            imagePath: imagePath,
+                          ),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff284b63),

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -55,10 +56,11 @@ class Classifier {
   }
 
   // Perform inference on image
-  Future<Map<String, dynamic>?> classifyImage(Uint8List image) async {
+  Future<String> classify(String imagePath) async {
     try {
-      // Preprocess image to match model input size
-      Uint8List processedImage = preprocessImage(image);
+      // Load and preprocess image
+      Uint8List imageBytes = await File(imagePath).readAsBytes();
+      Uint8List processedImage = preprocessImage(imageBytes);
 
       // Perform inference
       _interpreter.getInputTensors()[0].data = processedImage.buffer.asFloat32List() as Uint8List;
@@ -66,12 +68,12 @@ class Classifier {
 
       // Get the output tensor and process results
       final output = _interpreter.getOutputTensors()[0].data;
-      final result = {'output': output, 'labels': _labels};
+      String classificationResult = processOutput(output as Float32List);
 
-      return result;
+      return classificationResult;
     } catch (e) {
       print('Failed to classify image: $e');
-      return null;
+      return 'Failed to classify image';
       // Handle the error, throw, or return as needed
     }
   }
@@ -85,4 +87,14 @@ class Classifier {
       // Handle the error, throw, or return as needed
     }
   }
+
+  // Process output tensor and get classification result
+  String processOutput(Float32List output) {
+    // Convert the output tensor to class index
+    int classIndex = output[0].round();
+    
+    // Map class index to corresponding label
+    return _labels[classIndex];
+  }
 }
+
