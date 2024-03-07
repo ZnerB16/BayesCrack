@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class Classifier {
@@ -39,13 +40,28 @@ class Classifier {
     }
   }
 
+  // Preprocess image to match model input size (227x227)
+  Uint8List preprocessImage(Uint8List image) {
+    // Decode the image using image package
+    img.Image imgData = img.decodeImage(image)!;
+
+    // Resize the image to 227x227
+    imgData = img.copyResize(imgData, width: 227, height: 227);
+
+    // Convert the image back to Uint8List
+    Uint8List resizedImage = Uint8List.fromList(img.encodePng(imgData));
+
+    return resizedImage;
+  }
+
   // Perform inference on image
   Future<Map<String, dynamic>?> classifyImage(Uint8List image) async {
     try {
-      // Preprocess your image if needed
+      // Preprocess image to match model input size
+      Uint8List processedImage = preprocessImage(image);
 
       // Perform inference
-      _interpreter.getInputTensors()[0].data = image.buffer.asFloat32List() as Uint8List;
+      _interpreter.getInputTensors()[0].data = processedImage.buffer.asFloat32List() as Uint8List;
       _interpreter.invoke();
 
       // Get the output tensor and process results
@@ -70,9 +86,3 @@ class Classifier {
     }
   }
 }
-
-
-
-
-
-
