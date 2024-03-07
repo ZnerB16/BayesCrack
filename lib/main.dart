@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/input_img_details.dart';
 import 'main_menu.dart';
 
 void main() {

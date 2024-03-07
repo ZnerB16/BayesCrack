@@ -14,7 +14,7 @@ class CrackDB{
   Future <void> createTable(Database database) async{
     // Image table
     await database.execute(
-      """CREATE TABLE IF NOT EXISTS $imageTable(
+      """ CREATE TABLE IF NOT EXISTS $imageTable(
       "id" INTEGER NOT NULL,
       "image_path" TEXT NOT NULL,
       "image_name" TEXT NOT NULL,
@@ -26,7 +26,7 @@ class CrackDB{
     );
     // Building table
     await database.execute(
-        """CREATE TABLE IF NOT EXISTS $buildingTable(
+      """ CREATE TABLE IF NOT EXISTS $buildingTable(
       "id" INTEGER NOT NULL,
       "building_name" TEXT NOT NULL,
       PRIMARY KEY("id" AUTOINCREMENT)
@@ -35,7 +35,7 @@ class CrackDB{
     );
     // Floor table
     await database.execute(
-        """CREATE TABLE IF NOT EXISTS $floorTable(
+      """ CREATE TABLE IF NOT EXISTS $floorTable(
       "id" INTEGER NOT NULL,
       "floor_name" TEXT NOT NULL,
       "building_id" INTEGER NOT NULL,
@@ -46,7 +46,7 @@ class CrackDB{
     );
     // Room table
     await database.execute(
-        """CREATE TABLE IF NOT EXISTS $roomTable(
+      """ CREATE TABLE IF NOT EXISTS $roomTable(
       "id" INTEGER NOT NULL,
       "room_name" TEXT NOT NULL,
       "building_id" INTEGER NOT NULL,
@@ -60,7 +60,7 @@ class CrackDB{
 
     // Crack info table
     await database.execute(
-      """CREATE TABLE IF NOT EXISTS $crackTable (
+      """ CREATE TABLE IF NOT EXISTS $crackTable (
       "id" INTEGER NOT NULL,
       "image_id" INTEGER NOT NULL,
       "tracking_no" INTEGER NOT NULL,
@@ -109,6 +109,7 @@ class CrackDB{
       """
     );
   }
+  // Insert into image table
   Future<int> createImage({required String imagePath}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
@@ -118,55 +119,61 @@ class CrackDB{
       [imagePath]
     );
   }
+  // Insert into building table
   Future<int> createBuilding({required String buildingName}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
-        '''
+      '''
       INSERT INTO $buildingTable(building_name) VALUES (?)
       ''',
         [buildingName]
     );
   }
+  // Insert into floor table
   Future<int> createFloor({required String floorName, required int buildingID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
-        '''
+      '''
       INSERT INTO $floorTable(floor_name, building_id) VALUES (?, ?)
       ''',
         [floorName, buildingID]
     );
   }
+  // Insert into room table
   Future<int> createRoom({required String roomName, required int buildingID, required int floorID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
-        '''
+      '''
       INSERT INTO $floorTable(room_name, building_id, floor_id) VALUES (?, ?, ?)
       ''',
         [roomName, buildingID, floorID]
     );
   }
+  // Insert into prediction table
   Future<int> createPrediction({required String prediction, required int recommendID, required int imageID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
-        '''
+      '''
       INSERT INTO $predictionTable(prediction, recommendation_id, image_id) VALUES (?, ?, ?)
       ''',
         [prediction, recommendID, imageID]
     );
   }
+  // Fetch crack info
   Future<List<CrackInfo>> fetchALlCrack() async{
     final database = await DatabaseService().database;
     final crackInfo = await database.rawQuery(
       '''
       SELECT * FROM crack_info
-      JOIN image ON crack_info.image_id = image.id
-      JOIN building ON crack_info.building_id = building.id
-      JOIN floor ON crack_info.floor_id = floor.id
-      JOIN room ON crack_info.room_id = room.id
+      CROSS JOIN image ON crack_info.image_id = image.id
+      CROSS JOIN building ON crack_info.building_id = building.id
+      CROSS JOIN floor ON crack_info.floor_id = floor.id
+      CROSS JOIN room ON crack_info.room_id = room.id
       '''
     );
     return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
   }
+  // Delete image data including its info and prediction
   Future<void> deleteImage(int id) async{
     final database = await DatabaseService().database;
     await database.rawDelete(
