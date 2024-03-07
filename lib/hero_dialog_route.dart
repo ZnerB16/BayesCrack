@@ -21,7 +21,7 @@ class HeroDialogRoute<T> extends PageRoute<T>{
   bool get maintainState => true;
 
   @override
-  Color? get barrierColor => const Color(0xff284b63);
+  Color? get barrierColor => Colors.transparent;
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,

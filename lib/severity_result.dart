@@ -7,10 +7,18 @@ import 'package:mobile_app/input_img_details.dart';
 class SeverityResultScreen extends StatelessWidget {
   final String imagePath;
   final String classificationResult;
+  final String formattedDateTime;
+  final String geolocation;
+  final double latitude;
+  final double longitude;
 
-  const SeverityResultScreen({
+  const SeverityResultScreen({super.key,
     required this.imagePath,
     required this.classificationResult,
+    required this.formattedDateTime,
+    required this.geolocation,
+    required this.latitude,
+    required this.longitude
   });
 
   @override
@@ -95,7 +103,12 @@ class SeverityResultScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CrackInput(imagePath),
+                        builder: (context) => CrackInput(
+                            imagePath: imagePath,
+                            formattedDateTime: formattedDateTime,
+                            latitude: latitude,
+                            longitude: longitude
+                        ),
                       ),
                     );
                   },

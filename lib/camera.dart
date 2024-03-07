@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/get_geolocation.dart';
 import 'classify.dart'; // Import your classify.dart file
 import 'severity_result.dart'; // Import SeverityResultScreen
+
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -19,10 +21,11 @@ class _CameraScreenState extends State<CameraScreen> {
   late Future<void> _initializeControllerFuture;
   late List<CameraDescription> cameras;
   bool _isFlashOn = false;
-  
-  get formattedDateTime => null;
-  get latitude => null;
-  get longitude => null;
+
+  String formattedDateTime = "";
+  String geolocation = "";
+  double latitude = 0.0;
+  double longitude = 0.0;
 
   @override
   void initState() {
@@ -43,6 +46,18 @@ class _CameraScreenState extends State<CameraScreen> {
     }).catchError((error) {
       print('Error initializing cameras: $error');
     });
+  }
+  Future<void> getDetails() async{
+    // Get current date and time
+    DateTime now = DateTime.now();
+    formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+
+    // Get current location
+    Location location = Location();
+    LocationData? currentLocation = await location.getLocation();
+    latitude = currentLocation.latitude!;
+    longitude = currentLocation.longitude!;
+    geolocation = GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng();
   }
 
   @override
@@ -135,6 +150,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     setState(() {
                       _isFlashOn = false;
                     });
+                    await getDetails();
 
                     // Navigate to the DisplayPictureScreen with the image path
                     Navigator.push(
@@ -150,6 +166,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             }
                           },
                           formattedDateTime: formattedDateTime,
+                          geolocation: geolocation,
                           latitude: latitude,
                           longitude: longitude,
                         ),
@@ -218,8 +235,21 @@ class _CameraScreenState extends State<CameraScreen> {
 
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final Function(bool) onConfirm;
+  final String formattedDateTime;
+  final String geolocation;
+  final double latitude;
+  final double longitude;
 
-  const DisplayPictureScreen({Key? key, required this.imagePath, required Null Function(bool confirmed) onConfirm, required formattedDateTime, required latitude, required longitude}) : super(key: key);
+  const DisplayPictureScreen({
+    Key? key,
+    required this.imagePath,
+    required this.onConfirm,
+    required this.formattedDateTime,
+    required this.geolocation,
+    required this.latitude,
+    required this.longitude,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -238,8 +268,16 @@ class DisplayPictureScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 620),
+                  constraints: BoxConstraints(maxHeight: 500),
                   child: Image.file(File(imagePath)),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Date Time: $formattedDateTime\nLatitude: $latitude\nLongitude: $longitude\nGeolocation: $geolocation',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 SizedBox(height: 20),
                 Center(
@@ -307,6 +345,10 @@ class DisplayPictureScreen extends StatelessWidget {
                           builder: (context) => SeverityResultScreen(
                             classificationResult: classificationResult,
                             imagePath: imagePath,
+                            formattedDateTime: formattedDateTime,
+                            geolocation: geolocation,
+                            longitude: longitude,
+                            latitude: latitude,
                           ),
                         ),
                       );

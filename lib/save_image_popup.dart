@@ -17,7 +17,7 @@ class SaveImagePopup extends StatelessWidget{
           },
           child: Material(
             color: Colors.white,
-            elevation: 2,
+            elevation: 3,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32)
             ),
@@ -25,7 +25,7 @@ class SaveImagePopup extends StatelessWidget{
                 width: 300,
                 height: 180,
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   child: Column(
                     children: [
                       const Align(

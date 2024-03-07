@@ -3,7 +3,19 @@ import 'package:mobile_app/save_image_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 
 class CrackInput extends StatefulWidget{
-  const CrackInput (String imagePath, {super.key});
+  final String? imagePath;
+  final String? formattedDateTime;
+  final double? latitude;
+  final double? longitude;
+
+  const CrackInput (
+      {
+        super.key,
+        this.imagePath,
+        this.formattedDateTime,
+        this.latitude,
+        this.longitude
+      });
 
   @override
   State<CrackInput> createState() => _CrackInput();
