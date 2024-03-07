@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:location/location.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
@@ -16,6 +18,10 @@ class _CameraScreenState extends State<CameraScreen> {
   late Future<void> _initializeControllerFuture;
   late List<CameraDescription> cameras;
   bool _isFlashOn = false;
+  
+  get formattedDateTime => null;
+  get latitude => null;
+  get longitude => null;
 
   @override
   void initState() {
@@ -142,6 +148,9 @@ class _CameraScreenState extends State<CameraScreen> {
                               Navigator.pop(context);
                             }
                           },
+                          formattedDateTime: formattedDateTime,
+                          latitude: latitude,
+                          longitude: longitude,
                         ),
                       ),
                     );
@@ -185,7 +194,7 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  void _toggleFlash() async {
+    void _toggleFlash() async {
     try {
       // Toggle the flash mode
       if (_isFlashOn) {
@@ -195,6 +204,20 @@ class _CameraScreenState extends State<CameraScreen> {
         // Turn on the flash
         await _controller.setFlashMode(FlashMode.torch);
       }
+      
+      // Get current date and time
+      DateTime now = DateTime.now();
+      String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+      
+      // Get current location
+      Location location = new Location();
+      LocationData? currentLocation = await location.getLocation();
+      double latitude = currentLocation.latitude!;
+      double longitude = currentLocation.longitude!;
+      
+      // Now you have date, time, latitude, and longitude
+      // You can use this information as needed
+      
       setState(() {
         _isFlashOn = !_isFlashOn;
       });
@@ -207,26 +230,33 @@ class _CameraScreenState extends State<CameraScreen> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final Function(bool) onConfirm;
+  final String formattedDateTime;
+  final double latitude;
+  final double longitude;
 
   const DisplayPictureScreen({
     Key? key,
     required this.imagePath,
     required this.onConfirm,
+    required this.formattedDateTime,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-            child: Text('Confirmation',
-                        style: TextStyle(
-                        color: Color(0xff284b63),
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600
-                        ),
-                    ),
-                  ),
+        title: Center(
+          child: Text(
+            'Confirmation',
+            style: TextStyle(
+              color: Color(0xff284b63),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
         automaticallyImplyLeading: false,
       ),
       body: Column(
@@ -242,6 +272,14 @@ class DisplayPictureScreen extends StatelessWidget {
                   ),
                   constraints: BoxConstraints(maxHeight: 620),
                   child: Image.file(File(imagePath)),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Date Time: $formattedDateTime\nLatitude: $latitude\nLongitude: $longitude',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 SizedBox(height: 20),
                 Center(
@@ -315,4 +353,4 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
