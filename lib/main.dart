@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff284b63)),
         useMaterial3: true,
       ),
-      home: const CrackInput(),
+      home: const MainMenu(),
     );
   }
 }
