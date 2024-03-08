@@ -256,6 +256,8 @@ class DisplayPictureScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Confirmation'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
