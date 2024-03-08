@@ -79,6 +79,15 @@ flutter:
      - assets/images/recycle_icon.png
      - assets/images/reports_icon.png
      - assets/images/teal_checkmark.png
+     - assets/images/question_mark.png
+     - assets/images/save_image.png
+     - assets/images/crack_information.png
+     - assets/images/crack_classification.png
+     - assets/images/raven.png
+     - assets/images/brenz.png
+     - assets/images/kyra.png
+     - assets/images/francis.png
+     
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
