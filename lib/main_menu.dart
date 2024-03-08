@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'camera.dart';
 import 'package:mobile_app/help_popup.dart';
-import 'package:mobile_app/save_image_route.dart';
+import 'package:mobile_app/hero_dialog_route.dart';
 
 class MainMenu extends StatefulWidget{
   const MainMenu({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
-import 'input_img_details.dart';
+
 
 class HelpPopup extends StatelessWidget{
   const HelpPopup ({super.key});
