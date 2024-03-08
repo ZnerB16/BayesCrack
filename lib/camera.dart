@@ -5,8 +5,8 @@ import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
-import 'classify.dart'; // Import your classify.dart file
-import 'severity_result.dart'; // Import SeverityResultScreen
+import 'classify.dart'; 
+import 'severity_result.dart'; 
 
 
 class CameraScreen extends StatefulWidget {
