@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/camera.dart';
 import 'package:mobile_app/save_image_popup.dart';
-import 'package:mobile_app/save_image_route.dart';
+import 'package:mobile_app/hero_dialog_route.dart';
 
 class CrackInput extends StatefulWidget{
-  const CrackInput ({super.key});
+  final String? imagePath;
+  final String? formattedDateTime;
+  final double? latitude;
+  final double? longitude;
+
+  const CrackInput (
+      {
+        super.key,
+        this.imagePath,
+        this.formattedDateTime,
+        this.latitude,
+        this.longitude
+      });
 
   @override
   State<CrackInput> createState() => _CrackInput();
@@ -14,12 +25,13 @@ class _CrackInput extends State<CrackInput>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Align(
               alignment: Alignment.topLeft,
+              /// Title text
               child: Text(
                   "Crack Information",
                   style: TextStyle(
@@ -28,12 +40,14 @@ class _CrackInput extends State<CrackInput>{
                   )
               )
             ),
+            /// Description text
             const Text(
                 "Enter the required information of the image below.\n\nNote: Crack Tracking Number will serve as the folder name where the image will be saved.",
               style: TextStyle(
                 fontSize: 12
               ),
             ),
+            /// Start text fields
             const Padding(padding: EdgeInsets.only(top: 30)),
             createTextField('Crack Tracking Number  (Numeric Input only)', isNumber: true),
             const Padding(padding: EdgeInsets.only(top: 10)),
@@ -45,6 +59,9 @@ class _CrackInput extends State<CrackInput>{
             const Padding(padding: EdgeInsets.only(top: 10)),
             createTextField('Remarks/Note (OPTIONAL)', height: 150),
             const Padding(padding: EdgeInsets.only(top: 20)),
+            /// End text fields
+
+            /// Start Cancel and Done button
             SizedBox(
               width: 500,
               child: Row(mainAxisAlignment: MainAxisAlignment.end,
@@ -126,11 +143,12 @@ class _CrackInput extends State<CrackInput>{
               )
             )
           ],
+          /// End cancel and done button
         ),
       )
     );
   }
-  // Textfield creation function
+  /// Text field creation function
   SizedBox createTextField(String text, {double height = 50.0, bool isNumber = false}){
     TextInputType keyboard = TextInputType.text;
     if(isNumber){
