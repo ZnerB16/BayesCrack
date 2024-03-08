@@ -63,7 +63,7 @@ class Classifier {
       Uint8List processedImage = preprocessImage(imageBytes);
 
       // Perform inference
-      _interpreter.getInputTensors()[0].data = processedImage.buffer.asFloat32List() as Uint8List;
+      _interpreter.getInputTensors()[0].data = processedImage;
       _interpreter.invoke();
 
       // Get the output tensor and process results
