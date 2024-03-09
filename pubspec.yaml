@@ -37,6 +37,7 @@ dependencies:
   tflite_flutter: ^0.10.0
   image: ^4.0.0
   geocoding: ^2.2.0
+  tuple: ^2.0.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -92,7 +93,6 @@ flutter:
      - assets/images/brenz.png
      - assets/images/kyra.png
      - assets/images/francis.png
-     - assets/model/
      - assets/model/Ensemble_BCCE_Model.tflite
      - assets/model/labels.txt
 

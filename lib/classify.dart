@@ -20,7 +20,7 @@ class Classifier {
 
       // Check if interpreter is not null
       print('Model loaded successfully.');
-      
+
       // Allocate tensors
       _interpreter.allocateTensors();
 
@@ -34,7 +34,7 @@ class Classifier {
       } else {
         print('Failed to load labels or labels file is empty.');
       }
-        } catch (e) {
+    } catch (e) {
       print('Failed to load model: $e');
       // Handle the error, throw, or return as needed
     }
@@ -53,46 +53,64 @@ class Classifier {
   }
 
   // Preprocess image to match model input size (227x227) and normalize pixel values
-  Uint8List preprocessImage(Uint8List image) {
+  List<double> preprocessImage(Uint8List image) {
     // Decode the image using image package
-    img.Image imgData = img.decodeImage(image)!;
-
+    img.Image? imgData = img.decodeImage(image);
+    if (imgData == null) {
+      throw Exception('Failed to decode image');
+    }
     // Resize the image to 227x227
     imgData = img.copyResize(imgData, width: 227, height: 227);
-
     // Convert Uint8List to List<int> for element-wise operations
-    List<int> pixelData = imgData.getBytes();
+    Uint8List pixelData = imgData.getBytes();
 
-    // Normalize the pixel values to [0, 1]
-    List<double> normalizedPixels = pixelData.map((pixel) => pixel / 255.0).toList();
+    // Normalize the pixel values to [0, 1] and convert to Uint8List
+    List <double> normalizedPixels = pixelData.map((pixel) => pixel / 255.0).toList();
+    Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).toInt()).toList());
 
-    // Convert the normalized pixel values back to Uint8List
-     return Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).round()).toList());
+    // Print normalized pixel values
+    print('Normalized pixel values: $normalizedPixels');
+
+    return normalizedPixels;
 }
 
-    // Perform inference on image
-    Future<String> classify(imagePath) async {
+  // Perform inference on image
+  Future<String> classify(imagePath) async {
     try {
+      
+      final inputTensors = _interpreter.getInputTensors();
+      final outputTensors = _interpreter.getOutputTensors();
+
+      print('Input tensors: $inputTensors');
+      print('Output tensors: $outputTensors');
+
+      if (inputTensors.isEmpty || outputTensors.isEmpty) {
+        throw Exception('Input or output tensors are null or empty');
+      }
       // Load and preprocess image
       Uint8List imageBytes = await File(imagePath).readAsBytes();
-      print('Image loaded: $imagePath');
+      print('Image loaded: $imageBytes');
       print('Image size: ${imageBytes.length} bytes');
-      
-      Uint8List processedImage = preprocessImage(imageBytes);
+
+      Uint8List imageDimensions = preprocessImage(imageBytes) as Uint8List;
       print('Image preprocessed.');
-      print('Processed image size: ${processedImage.length} bytes');
+      print('Processed image shape: ${imageDimensions[0]}x${imageDimensions[1]}');
+      print('Processed image data type: ${imageDimensions.runtimeType}');
+      print('Processed image size: ${imageDimensions.length} bytes');
 
       // Perform inference
-      final inputTensor = _interpreter.getInputTensors()[0];
+      final inputTensor = inputTensors[0];
       print('Input tensor shape before setting data: ${inputTensor.shape}');
-      inputTensor.data = processedImage.buffer.asUint8List();
+      inputTensor.data = imageDimensions;
+      print('Input tensor data set');
       _interpreter.invoke();
       print('Inference completed.');
 
       // Get the output tensor and process results
       final outputTensor = _interpreter.getOutputTensors()[0];
       print('Output tensor shape: ${outputTensor.shape}');
-      String classificationResult = processOutput(outputTensor.data.buffer.asFloat32List());
+      String classificationResult =
+          processOutput(outputTensor.data.buffer.asFloat32List());
       print('Classification result: $classificationResult');
 
       return classificationResult;
