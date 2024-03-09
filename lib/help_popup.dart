@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
+import 'package:mobile_app/hero_dialog_route.dart';
 
 
 class HelpPopup extends StatelessWidget{
@@ -128,7 +130,7 @@ class HelpPopup extends StatelessWidget{
                                             onPressed: (){
                                               Navigator.pushReplacement(
                                                 // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const HelpPopup2())
+                                                  context, HeroDialogRoute(builder: (_) => const HelpPopup2())
                                               );
                                             },
                                             child: const Text(
@@ -291,7 +293,7 @@ class HelpPopup2 extends StatelessWidget{
                                             onPressed: (){
                                               Navigator.pushReplacement(
                                                 // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const HelpPopup3())
+                                                  context, HeroDialogRoute(builder: (_) => const HelpPopup3())
                                               );
                                             },
                                             child: const Text(
@@ -454,7 +456,7 @@ class HelpPopup3 extends StatelessWidget{
                                             onPressed: (){
                                               Navigator.pushReplacement(
                                                 // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const HelpPopup4())
+                                                  context, HeroDialogRoute(builder: (_) => const HelpPopup4())
                                               );
                                             },
                                             child: const Text(
