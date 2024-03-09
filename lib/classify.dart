@@ -41,36 +41,39 @@ class Classifier {
     }
   }
 
-  // Preprocess image to match model input size (227x227)
+  // Preprocess image to match model input size (227x227) and normalize pixel values
   Uint8List preprocessImage(Uint8List image) {
-  // Decode the image using image package
-  img.Image imgData = img.decodeImage(image)!;
-  
-  // Log the dimensions of the original image
-  print('Original Image Dimensions: ${imgData.width}x${imgData.height}');
-  
-  // Resize the image to 227x227
-  imgData = img.copyResize(imgData, width: 227, height: 227);
-  
-  // Log the dimensions of the resized image
-  print('Resized Image Dimensions: ${imgData.width}x${imgData.height}');
-  
-  // Convert the image back to Uint8List
-  Uint8List resizedImage = Uint8List.fromList(img.encodePng(imgData));
-  
-  return resizedImage;
-}
+    // Decode the image using image package
+    img.Image imgData = img.decodeImage(image)!;
+
+    // Resize the image to 227x227
+    imgData = img.copyResize(imgData, width: 227, height: 227);
+
+    // Convert Uint8List to List<int> for element-wise operations
+    List<int> pixelData = imgData.getBytes();
+
+    // Normalize the pixel values to [0, 1]
+    List<double> normalizedPixels = pixelData.map((pixel) => pixel / 255.0).toList();
+
+    // Convert the normalized pixel values back to Uint8List
+    Uint8List resizedImage = Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).round()).toList());
+
+    return resizedImage;
+  }
 
   // Perform inference on image
   Future<String> classify(imagePath) async {
     try {
       // Load and preprocess image
       Uint8List imageBytes = await File(imagePath).readAsBytes();
+      print('Image loaded: $imagePath');
       Uint8List processedImage = preprocessImage(imageBytes);
+      print('Image preprocessed.');
 
       // Perform inference
       _interpreter.getInputTensors()[0].data = processedImage;
       _interpreter.invoke();
+      print('Inference completed.');
 
       // Get the output tensor and process results
       final output = _interpreter.getOutputTensors()[0].data;
@@ -98,9 +101,8 @@ class Classifier {
   String processOutput(Float32List output) {
     // Convert the output tensor to class index
     int classIndex = output[0].round();
-    
+
     // Map class index to corresponding label
     return _labels[classIndex];
   }
 }
-
