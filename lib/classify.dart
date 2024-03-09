@@ -43,20 +43,26 @@ class Classifier {
 
   // Preprocess image to match model input size (227x227)
   Uint8List preprocessImage(Uint8List image) {
-    // Decode the image using image package
-    img.Image imgData = img.decodeImage(image)!;
-
-    // Resize the image to 227x227
-    imgData = img.copyResize(imgData, width: 227, height: 227);
-
-    // Convert the image back to Uint8List
-    Uint8List resizedImage = Uint8List.fromList(img.encodePng(imgData));
-
-    return resizedImage;
-  }
+  // Decode the image using image package
+  img.Image imgData = img.decodeImage(image)!;
+  
+  // Log the dimensions of the original image
+  print('Original Image Dimensions: ${imgData.width}x${imgData.height}');
+  
+  // Resize the image to 227x227
+  imgData = img.copyResize(imgData, width: 227, height: 227);
+  
+  // Log the dimensions of the resized image
+  print('Resized Image Dimensions: ${imgData.width}x${imgData.height}');
+  
+  // Convert the image back to Uint8List
+  Uint8List resizedImage = Uint8List.fromList(img.encodePng(imgData));
+  
+  return resizedImage;
+}
 
   // Perform inference on image
-  Future<String> classify(String imagePath) async {
+  Future<String> classify(imagePath) async {
     try {
       // Load and preprocess image
       Uint8List imageBytes = await File(imagePath).readAsBytes();
