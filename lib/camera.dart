@@ -23,9 +23,10 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isFlashOn = false;
 
   String formattedDateTime = "";
-  String geolocation = "";
+  late String geolocation;
   double latitude = 0.0;
   double longitude = 0.0;
+  String address = "";
 
   @override
   void initState() {
@@ -57,7 +58,11 @@ class _CameraScreenState extends State<CameraScreen> {
     LocationData? currentLocation = await location.getLocation();
     latitude = currentLocation.latitude!;
     longitude = currentLocation.longitude!;
-    geolocation = GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng();
+    GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng().then((String result){
+      setState(() {
+        geolocation = result;
+      });
+    });
   }
 
   @override
@@ -151,7 +156,6 @@ class _CameraScreenState extends State<CameraScreen> {
                       _isFlashOn = false;
                     });
                     await getDetails();
-
                     // Navigate to the DisplayPictureScreen with the image path
                     Navigator.push(
                       context,
@@ -273,13 +277,16 @@ class DisplayPictureScreen extends StatelessWidget {
                   constraints: BoxConstraints(maxHeight: 500),
                   child: Image.file(File(imagePath)),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Date Time: $formattedDateTime\nLatitude: $latitude\nLongitude: $longitude\nGeolocation: $geolocation',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
+                SizedBox(height: 10),
+                Container(
+                    width: 250,
+                    child: Text(
+                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                 ),
                 SizedBox(height: 20),
                 Center(
@@ -295,7 +302,7 @@ class DisplayPictureScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
