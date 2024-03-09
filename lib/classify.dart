@@ -18,12 +18,23 @@ class Classifier {
         options: interpreterOptions,
       );
 
+      // Check if interpreter is not null
+      print('Model loaded successfully.');
+      
       // Allocate tensors
       _interpreter.allocateTensors();
 
       // Load labels
       _labels = await loadLabels('assets/model/labels.txt');
-    } catch (e) {
+
+      // Check if labels are loaded successfully
+      if (_labels.isNotEmpty) {
+        print('Labels loaded successfully:');
+        _labels.forEach((label) => print(label));
+      } else {
+        print('Failed to load labels or labels file is empty.');
+      }
+        } catch (e) {
       print('Failed to load model: $e');
       // Handle the error, throw, or return as needed
     }
@@ -56,28 +67,33 @@ class Classifier {
     List<double> normalizedPixels = pixelData.map((pixel) => pixel / 255.0).toList();
 
     // Convert the normalized pixel values back to Uint8List
-    Uint8List resizedImage = Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).round()).toList());
+     return Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).round()).toList());
+}
 
-    return resizedImage;
-  }
-
-  // Perform inference on image
-  Future<String> classify(imagePath) async {
+    // Perform inference on image
+    Future<String> classify(imagePath) async {
     try {
       // Load and preprocess image
       Uint8List imageBytes = await File(imagePath).readAsBytes();
       print('Image loaded: $imagePath');
+      print('Image size: ${imageBytes.length} bytes');
+      
       Uint8List processedImage = preprocessImage(imageBytes);
       print('Image preprocessed.');
+      print('Processed image size: ${processedImage.length} bytes');
 
       // Perform inference
-      _interpreter.getInputTensors()[0].data = processedImage;
+      final inputTensor = _interpreter.getInputTensors()[0];
+      print('Input tensor shape before setting data: ${inputTensor.shape}');
+      inputTensor.data = processedImage.buffer.asUint8List();
       _interpreter.invoke();
       print('Inference completed.');
 
       // Get the output tensor and process results
-      final output = _interpreter.getOutputTensors()[0].data;
-      String classificationResult = processOutput(output as Float32List);
+      final outputTensor = _interpreter.getOutputTensors()[0];
+      print('Output tensor shape: ${outputTensor.shape}');
+      String classificationResult = processOutput(outputTensor.data.buffer.asFloat32List());
+      print('Classification result: $classificationResult');
 
       return classificationResult;
     } catch (e) {

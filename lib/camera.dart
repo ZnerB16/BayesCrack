@@ -334,7 +334,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   width: 120,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () async {
+                   onPressed: () async {
                       // Instantiate Classifier
                       Classifier classifier = Classifier();
 
