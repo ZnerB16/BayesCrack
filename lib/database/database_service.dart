@@ -7,8 +7,10 @@ class DatabaseService {
 
   Future<Database> get database async{
     if(_database != null){
+      print("Database already exists");
       return _database!;
     }
+
     _database = await _initialize();
     return _database!;
   }
@@ -25,6 +27,7 @@ class DatabaseService {
       onCreate: create,
       singleInstance: true,
     );
+    print("Successfully created");
     return database;
   }
   Future<void> create(Database database, int version) async =>

@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import 'classes/prediction.dart';
 import 'database_service.dart';
 import 'classes/crack_info.dart';
 
@@ -40,7 +41,7 @@ class CrackDB{
       "floor_name" TEXT NOT NULL,
       "building_id" INTEGER NOT NULL,
       PRIMARY KEY("id" AUTOINCREMENT),
-      FOREIGN KEY("building_id") REFERENCES building("id")
+      FOREIGN KEY("building_id") REFERENCES buildings("id")
       );
       """
     );
@@ -52,8 +53,8 @@ class CrackDB{
       "building_id" INTEGER NOT NULL,
       "floor_id" INTEGER NOT NULL,
       PRIMARY KEY("id" AUTOINCREMENT),
-      FOREIGN KEY("building_id") REFERENCES building("id"),
-      FOREIGN KEY("floor_id) REFERENCES floor("id")
+      FOREIGN KEY("building_id") REFERENCES buildings("id"),
+      FOREIGN KEY("floor_id") REFERENCES floors("id")
       );
       """
     );
@@ -69,10 +70,10 @@ class CrackDB{
       "room_id" INTEGER NOT NULL,
       "remarks" TEXT,
       PRIMARY KEY("id" AUTOINCREMENT),
-      FOREIGN KEY("image_id") REFERENCES image("id"),
-      FOREIGN KEY("building_id") REFERENCES building("id"),
-      FOREIGN KEY("floor_id") REFERENCES floor("id"),
-      FOREIGN KEY("room_id") REFERENCES room("id") 
+      FOREIGN KEY("image_id") REFERENCES images("id"),
+      FOREIGN KEY("building_id") REFERENCES buildings("id"),
+      FOREIGN KEY("floor_id") REFERENCES floors("id"),
+      FOREIGN KEY("room_id") REFERENCES rooms("id") 
       );"""
     );
     await database.execute(
@@ -83,19 +84,28 @@ class CrackDB{
     """);
     await database.execute(
         """ INSERT INTO $recommendationsTable ("id", "advise")
-        VALUES(
-          1, "There is no crack detected.
-        ),
-        (
-          2, "This crack does not pose any serious risk. However, sealing the crack with epoxy or polyurethane-based products is recommended to prevent it from expanding. Ensure to use appropriate sealing materials suited to the type of crack and the surface material. It is also essential to monitor the growth of the crack over time."
-        ),
-        (
-          3, "This crack poses a medium risk. As a precautionary measure, it is essential to report the crack and exercise caution in the area. Structural repairs such as injection grouting, crack stitching, or replacement of wall sections may be necessary to prevent the crack from widening. Seek assistance from a qualified professional to assess the extent of the damage and ensure appropriate repair methods."
-        ),
-        (
-          4, "All occupants should evacuate the building immediately and report the crack. Large cracks indicate severe structural instability, posing high risks to anyone inside. Extensive repair works such as structural reinforcement, wall replacements, breaking out, or recasting may be required to ensure the building's safety. A qualified professional will assess the extent of the damage and ensure appropriate repair methods."
-        );   
-    """);
+        VALUES(?, ?),
+        (?, ?),
+        (?, ?),
+        (?, ?);   
+    """,[1, "There is no crack detected.",
+         2, "This crack does not pose any serious risk. "
+        "However, sealing the crack with epoxy or polyurethane-based products is recommended to prevent it from expanding. "
+        "Ensure to use appropriate sealing materials suited to the type of crack and the surface material. "
+        "It is also essential to monitor the growth of the crack over time.",
+         3, "This crack poses a medium risk. As a precautionary measure, "
+        "it is essential to report the crack and exercise caution in the area. "
+        "Structural repairs such as injection grouting, crack stitching, "
+        "or replacement of wall sections may be necessary to prevent the crack from widening. "
+        "Seek assistance from a qualified professional to assess the extent of the damage and "
+        "ensure appropriate repair methods.",
+        4, "All occupants should evacuate the building immediately and report the crack. "
+          "Large cracks indicate severe structural instability, "
+          "posing high risks to anyone inside. Extensive repair works such as structural "
+          "reinforcement, wall replacements, breaking out, or recasting may be required to "
+          "ensure the building's safety. A qualified professional will assess the extent of the "
+          "damage and ensure appropriate repair methods."]);
+
     await database.execute(
       """ CREATE TABLE IF NOT EXISTS $predictionTable(
       "id" INTEGER NOT NULL,
@@ -110,7 +120,7 @@ class CrackDB{
     );
   }
   // Insert into image table
-  Future<int> createImage({required String imagePath}) async{
+  Future<int> insertImage({required String imagePath}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
@@ -120,7 +130,7 @@ class CrackDB{
     );
   }
   // Insert into building table
-  Future<int> createBuilding({required String buildingName}) async{
+  Future<int> insertBuilding({required String buildingName}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
@@ -130,7 +140,7 @@ class CrackDB{
     );
   }
   // Insert into floor table
-  Future<int> createFloor({required String floorName, required int buildingID}) async{
+  Future<int> insertFloor({required String floorName, required int buildingID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
@@ -140,7 +150,7 @@ class CrackDB{
     );
   }
   // Insert into room table
-  Future<int> createRoom({required String roomName, required int buildingID, required int floorID}) async{
+  Future<int> insertRoom({required String roomName, required int buildingID, required int floorID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
@@ -150,7 +160,7 @@ class CrackDB{
     );
   }
   // Insert into prediction table
-  Future<int> createPrediction({required String prediction, required int recommendID, required int imageID}) async{
+  Future<int> insertPrediction({required String prediction, required int recommendID, required int imageID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
@@ -189,10 +199,11 @@ class CrackDB{
     final database = await DatabaseService().database;
     final count = await database.rawQuery(
       '''
-      SELECT COUNT(id) FROM predictions WHERE prediction = ?
+      SELECT COUNT(id) 
+      FROM predictions WHERE prediction = ?
       ''', [prediction]
     );
-    return count.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+    return count.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
   }
   // Count all images
   Future<List> countAll() async{
@@ -202,6 +213,6 @@ class CrackDB{
       SELECT COUNT(id) FROM predictions
       '''
     );
-    return count.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+    return count.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
   }
 }

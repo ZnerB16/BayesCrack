@@ -23,10 +23,9 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isFlashOn = false;
 
   String formattedDateTime = "";
-  late String geolocation = "";
+  late String geolocation;
   double latitude = 0.0;
   double longitude = 0.0;
-  String address = "";
 
   @override
   void initState() {

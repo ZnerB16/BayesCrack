@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'camera.dart';
 import 'package:mobile_app/help_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
+import 'database/crack_db.dart';
+
 
 class MainMenu extends StatefulWidget{
   const MainMenu({super.key});
@@ -12,8 +14,31 @@ class MainMenu extends StatefulWidget{
 
 class _MainMenu extends State<MainMenu>{
 
+  int noneCount = 0;
+  int lowCount = 0;
+  int medCount = 0;
+  int highCount = 0;
+  int total = 0;
+
+  void setCounts() async {
+    var crackDB = CrackDB();
+    var countsNone = await crackDB.countPredictions("None");
+    var countsLow = await crackDB.countPredictions("Low");
+    var countsMed = await crackDB.countPredictions("Medium");
+    var countsHigh = await crackDB.countPredictions("High");
+
+    setState(() {
+      noneCount = countsNone[0];
+      lowCount = countsLow[0];
+      medCount = countsMed[0];
+      highCount = countsHigh[0];
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    setCounts();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -22,7 +47,7 @@ class _MainMenu extends State<MainMenu>{
           child: Image.asset(
             'assets/images/logo_text.png', 
             fit: BoxFit.contain,
-            height: 40,
+            height: 80,
           ),
         ),
         actions: [
@@ -44,50 +69,67 @@ class _MainMenu extends State<MainMenu>{
       ),
       body: Column(
         children: [
-          SizedBox(height:20.0),
+          const SizedBox(height:20.0),
           Container(
             width: double.infinity,
             height: 100.0,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             decoration: BoxDecoration(
-              color: Color(0xFF639598),
+              color: const Color(0xFF639598),
               borderRadius: BorderRadius.circular(15.0)
             ),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 16.0),
-                child: Text(
-                  'Total Cracks Recorded',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0, 
-                  ),
-                ),
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Total Cracks Recorded',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(right: 50),
+                        child: Text(
+                          "$total",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.w500
+                          ),
+                        ),
+                    )
+                  ],
+                )
               ),
             ),
             //add child widgets
           ),//1container
-          SizedBox(height:10.0),
+          const SizedBox(height:10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildRoundedBox(),
-              _buildRoundedBox(),
-              _buildRoundedBox(),
-              _buildRoundedBox(),
+              _buildRoundedBox(title: "None", count: noneCount),
+              _buildRoundedBox(title: "Low", count: lowCount),
+              _buildRoundedBox(title: "Medium", count: medCount),
+              _buildRoundedBox(title: "High", count: highCount),
             ],
           ),
-          SizedBox(height:50.0),
+          const SizedBox(height:50.0),
           Container(
             width: double.infinity,
             height: 320.0,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             decoration: BoxDecoration(
-              color: Color(0xFF284B63),
+              color: const Color(0xFF284B63),
               borderRadius: BorderRadius.circular(15.0)
             ),
-            child: Align(
+            child: const Align(
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: EdgeInsets.only(left: 16.0, top: 30),
@@ -125,12 +167,12 @@ class _MainMenu extends State<MainMenu>{
                   onPressed: () {
                     Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CameraScreen()),
+                    MaterialPageRoute(builder: (context) => const CameraScreen()),
                     );
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                   onPressed: () {
                     // Navigate to quit
                   },
@@ -142,14 +184,39 @@ class _MainMenu extends State<MainMenu>{
       )
     );
   }
-  Widget _buildRoundedBox() {
+  Widget _buildRoundedBox({required String title, int count = 0}) {
     return Container(
       width: 90.0,
       height: 120.0,
       decoration: BoxDecoration(
-        color: Colors.grey, // You can set your desired color
+        color: const Color(0xffD9D9D9), // You can set your desired color
         borderRadius: BorderRadius.circular(15.0),
       ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 65,
+              child: Text(
+                "$count",
+                style: const TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.w500
+                ),
+              ),
+            ),
+            Text(
+              title,
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500
+              ),
+          ),],
+        )
+      ),
+
       // Add child widgets or content inside the rounded box if needed
     );
   }

@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'database/database_service.dart';
 import 'main_menu.dart';
+import 'database/crack_db.dart';
 
 void main() {
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const MyHomePage(),
     );
   }
+  
 }
 
 class MyHomePage extends StatelessWidget {
@@ -37,9 +42,13 @@ class MyHomePage extends StatelessWidget {
 
             // Button Widget
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                final database = await DatabaseService().database;
+                var crackDB = CrackDB();
+                crackDB.createTable(database);
+
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MainMenu()),
+                  context, MaterialPageRoute(builder: (context) => const MainMenu()),
                 );
               },
               child: Text('Start'),
