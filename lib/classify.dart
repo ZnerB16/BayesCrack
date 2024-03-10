@@ -52,63 +52,32 @@ class Classifier {
     }
   }
 
-  // Preprocess image to match model input size (227x227) and normalize pixel values
-  List<double> preprocessImage(Uint8List image) {
-    // Decode the image using image package
-    img.Image? imgData = img.decodeImage(image);
-    if (imgData == null) {
-      throw Exception('Failed to decode image');
-    }
-    // Resize the image to 227x227
-    imgData = img.copyResize(imgData, width: 227, height: 227);
-    // Convert Uint8List to List<int> for element-wise operations
-    Uint8List pixelData = imgData.getBytes();
-
-    // Normalize the pixel values to [0, 1] and convert to Uint8List
-    List <double> normalizedPixels = pixelData.map((pixel) => pixel / 255.0).toList();
-    Uint8List.fromList(normalizedPixels.map((pixel) => (pixel * 255).toInt()).toList());
-
-    // Print normalized pixel values
-    print('Normalized pixel values: $normalizedPixels');
-
-    return normalizedPixels;
-}
-
-  // Perform inference on image
-  Future<String> classify(imagePath) async {
+  // Perform classification
+  Future<String> classify(String imagePath) async {
     try {
-      
-      final inputTensors = _interpreter.getInputTensors();
-      final outputTensors = _interpreter.getOutputTensors();
+      // Read image file
+      img.Image? image = img.decodeImage(File(imagePath).readAsBytesSync());
+      print('Image loaded from: $image');
+      print('Image size: ${image?.length} bytes');
 
-      print('Input tensors: $inputTensors');
-      print('Output tensors: $outputTensors');
+      // Resize image to 227x227
+      img.Image resizedImage = img.copyResize(image!, width: 227, height: 227);
 
-      if (inputTensors.isEmpty || outputTensors.isEmpty) {
-        throw Exception('Input or output tensors are null or empty');
-      }
-      // Load and preprocess image
-      Uint8List imageBytes = await File(imagePath).readAsBytes();
-      print('Image loaded: $imageBytes');
-      print('Image size: ${imageBytes.length} bytes');
+      // Normalize pixel values to [0, 1] and convert to Uint8List
+      Uint8List flattenedPixels = Uint8List.fromList(resizedImage.getBytes().expand((byte) => [(byte / 255.0 ).toInt()]).toList());
 
-      Uint8List imageDimensions = preprocessImage(imageBytes) as Uint8List;
       print('Image preprocessed.');
-      print('Processed image shape: ${imageDimensions[0]}x${imageDimensions[1]}');
-      print('Processed image data type: ${imageDimensions.runtimeType}');
-      print('Processed image size: ${imageDimensions.length} bytes');
+      print('Processed image shape: ${resizedImage.width}x${resizedImage.height}');
+      print('Processed image data type: ${flattenedPixels.runtimeType}');
+      print('Processed image size: ${flattenedPixels.length} bytes');
 
-      // Perform inference
-      final inputTensor = inputTensors[0];
-      print('Input tensor shape before setting data: ${inputTensor.shape}');
-      inputTensor.data = imageDimensions;
-      print('Input tensor data set');
+      // Perform classification
+      final inputTensor = _interpreter.getInputTensors()[0];
+      inputTensor.data = flattenedPixels;
       _interpreter.invoke();
-      print('Inference completed.');
 
       // Get the output tensor and process results
       final outputTensor = _interpreter.getOutputTensors()[0];
-      print('Output tensor shape: ${outputTensor.shape}');
       String classificationResult =
           processOutput(outputTensor.data.buffer.asFloat32List());
       print('Classification result: $classificationResult');
