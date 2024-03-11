@@ -176,7 +176,6 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                     );
                   } catch (e) {
-                    // If an error occurs, log the error to the console.
                     print(e);
                   }
                 },
@@ -208,7 +207,7 @@ class _CameraScreenState extends State<CameraScreen> {
               side: BorderSide(color: Colors.transparent),
             ),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            mini: true, // Set mini to true to make the button smaller
+            mini: true,
           ),
         ],
       ),
@@ -258,7 +257,13 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirmation'),
+        title: Text('Confirmation',
+          style: TextStyle(
+              color: Color(0xff284b63),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/main_menu.dart';
 import 'package:mobile_app/input_img_details.dart';
+import 'severity_result_explanations.dart';
 
 class SeverityResultScreen extends StatelessWidget {
   final String imagePath;
@@ -23,9 +24,18 @@ class SeverityResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    String interpretation = interpretations[classificationResult] ?? 'Explanation not found';
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crack Severity Classification'),
+        title: const Text('Crack Severity Classification',
+          style: TextStyle(
+              color: Color(0xff284b63),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -53,10 +63,8 @@ class SeverityResultScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Place holder hehehehehhe will assign string soon.'
-                  'Oh, a simple complication. Miscommunications lead to fall out. So many things that I wish you knew.'
-                  ' So many walls up I cant break through',
-                  textAlign: TextAlign.center,
+                  interpretation,
+                  textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
