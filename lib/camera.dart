@@ -143,6 +143,8 @@ class _CameraScreenState extends State<CameraScreen> {
                       await _controller.setFlashMode(FlashMode.torch);
                     }
 
+                    // Jyne The process here need to show loading screen Jyne
+                       //////////////////////////////////////////////////////
                     // Attempt to take a picture and get the file `image`
                     // where it was saved.
                     final image = await _controller.takePicture();
@@ -155,9 +157,10 @@ class _CameraScreenState extends State<CameraScreen> {
                       _isFlashOn = false;
                     });
                     await getDetails();
+                    //////////////////////////////////////////
+                    // Jyne Here loading screen is done Jyne
+
                     // Navigate to the DisplayPictureScreen with the image path
-                    
-                    // Here loading screen Jyne
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -340,20 +343,22 @@ class DisplayPictureScreen extends StatelessWidget {
                   width: 120,
                   height: 40,
                   child: ElevatedButton(
-                   onPressed: () async {
+                   onPressed: () async {   
                       // Instantiate Classifier
                       Classifier classifier = Classifier();
 
+                      // Jyne The process here need to show loading screen Jyne
+                         ///////////////////////////////////////
                       // Load model
                       await classifier.loadModel();
 
                       // Perform classification
                       String classificationResult = await classifier.classify(imagePath);
-                      
-                      // Here loading screen Jyne
 
                       // Dispose model
                       await classifier.disposeModel();
+                        ///////////////////////////////////
+                      // Jyne Here loading screen done Jyne
 
                       // Navigate to SeverityResultScreen
                       Navigator.push(
