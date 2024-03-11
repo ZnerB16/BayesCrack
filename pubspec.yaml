@@ -74,7 +74,7 @@ flutter:
      - assets/images/camera_icon_blue.png
      - assets/images/capture_icon.png
      - assets/images/gallery_icon.png
-     - assets/images/loading_icon.gif
+     - assets/images/blue_loading.gif
      - assets/images/logo2_text.png
      - assets/images/logo_notext.png
      - assets/images/logo_text.png
@@ -98,7 +98,7 @@ flutter:
      - assets/images/Camera.png
      - assets/images/logout.png
      - assets/images/photo.png
-
+     - assets/images/tobedeleted.gif
 
 
 

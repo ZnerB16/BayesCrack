@@ -1,12 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
-import 'classify.dart'; 
-import 'severity_result.dart'; 
+import 'classify.dart';
+import 'severity_result.dart';
+import 'loading_screen.dart';
 
 
 class CameraScreen extends StatefulWidget {
@@ -132,6 +132,15 @@ class _CameraScreenState extends State<CameraScreen> {
               height: 80,
               child: FloatingActionButton(
                 onPressed: () async {
+                  
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return LoadingScreen();
+                      },
+                    );
+
                   // Take the Picture in a try / catch block. If anything goes wrong,
                   // catch the error.
                   try {
@@ -143,12 +152,9 @@ class _CameraScreenState extends State<CameraScreen> {
                       await _controller.setFlashMode(FlashMode.torch);
                     }
 
-                    // Jyne The process here need to show loading screen Jyne
-                       //////////////////////////////////////////////////////
                     // Attempt to take a picture and get the file `image`
                     // where it was saved.
                     final image = await _controller.takePicture();
-
                     if (!context.mounted) return;
 
                     // Turn off flash after capturing the image
@@ -156,9 +162,10 @@ class _CameraScreenState extends State<CameraScreen> {
                     setState(() {
                       _isFlashOn = false;
                     });
+                    
                     await getDetails();
-                    //////////////////////////////////////////
-                    // Jyne Here loading screen is done Jyne
+                    
+                    Navigator.of(context, rootNavigator: true).pop(); 
 
                     // Navigate to the DisplayPictureScreen with the image path
                     Navigator.push(
@@ -344,12 +351,20 @@ class DisplayPictureScreen extends StatelessWidget {
                   height: 40,
                   child: ElevatedButton(
                    onPressed: () async {   
+                       
+                       showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingScreen();
+                        },
+                      );
+
+                      await Future.delayed(Duration(milliseconds: 1000));
+
                       // Instantiate Classifier
                       Classifier classifier = Classifier();
 
-                      // Jyne The process here need to show loading screen Jyne
-                         ///////////////////////////////////////
-                      // Load model
                       await classifier.loadModel();
 
                       // Perform classification
@@ -357,8 +372,8 @@ class DisplayPictureScreen extends StatelessWidget {
 
                       // Dispose model
                       await classifier.disposeModel();
-                        ///////////////////////////////////
-                      // Jyne Here loading screen done Jyne
+
+                      Navigator.of(context, rootNavigator: true).pop(); 
 
                       // Navigate to SeverityResultScreen
                       Navigator.push(
@@ -375,6 +390,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         ),
                       );
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff284b63),
                       shape: RoundedRectangleBorder(

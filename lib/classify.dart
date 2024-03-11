@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+
 class Classifier {
   late Interpreter _interpreter;
   late List<String> _labels;
@@ -11,6 +12,7 @@ class Classifier {
   // Load TensorFlow Lite model and labels
   Future<void> loadModel() async {
     try {
+
       // Load model
       final interpreterOptions = InterpreterOptions();
       _interpreter = await Interpreter.fromAsset(
@@ -37,7 +39,7 @@ class Classifier {
     } catch (e) {
       print('Failed to load model: $e');
       // Handle the error, throw, or return as needed
-    }
+    } 
   }
 
   // Load labels from a file
