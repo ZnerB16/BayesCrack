@@ -52,53 +52,53 @@ class Classifier {
     }
   }
 
+  /// Gets the interpreter instance
+  Interpreter get interpreter => _interpreter;
+  
   // Perform classification
   Future<String> classify(String imagePath) async {
     try {
       // Read image file
       img.Image? image = img.decodeImage(File(imagePath).readAsBytesSync());
-      print('Image loaded from: $image');
+      print('Image loaded from: $imagePath');
       print('Image size: ${image?.length} bytes');
 
-      // Resize image to 227x227
-      img.Image resizedImage = img.copyResize(image!, width: 227, height: 227);
+      // Resize image to 150x150 (assuming input size)
+      img.Image resizedImage =
+          img.copyResize(image!, width: 227, height: 227);
 
-      // Convert to Uint8List
-      Uint8List convertedImage = Uint8List.fromList(resizedImage.getBytes());
-
-      // Reshape convertedImage to match input tensor shape [1, 227, 227, 3]
-      Uint8List reshapedImage = Uint8List(1 * 227 * 227 * 3);
-      for (int i = 0; i < 227; i++) {
-        for (int j = 0; j < 227; j++) {
-          for (int k = 0; k < 3; k++) {
-            reshapedImage[i * 227 * 3 + j * 3 + k] = convertedImage[k * 227 * 227 + i * 227 + j];
-          }
-        }
-      }
+      // Convert to Float32List
+       Float32List convertedImage = Float32List.fromList(resizedImage.getBytes().map((pixel) => pixel / 255.0).toList());
 
       print('Image preprocessed.');
       print('Processed image shape: ${resizedImage.width}x${resizedImage.height}');
       print('Processed image data type: ${convertedImage.runtimeType}');
       print('Processed image size: ${convertedImage.length} bytes');
 
-      // Perform classification
-      final inputTensor = _interpreter.getInputTensors()[0];
-      print('Input tensor shape before setting data: ${inputTensor.shape}');
-      print('Display my image tensor shape: ${inputTensor.data.shape}');
-      inputTensor.data = reshapedImage;
-      _interpreter.invoke();
+      // Print pixel values from the converted image row by row for test only
+      // print('Pixel values of converted image:');
+      // for (int y = 0; y < resizedImage.height; y++) {
+      //  StringBuffer rowBuffer = StringBuffer();
+      //  for (int x = 0; x < resizedImage.width; x++) {
+      //    int pixelIndex = y * resizedImage.width + x;
+      //    rowBuffer.write('${convertedImage[pixelIndex]} ');
+      //  }
+      //  print(rowBuffer.toString());
+      //}
 
-      // Get the output tensor and process results
-      final outputTensor = _interpreter.getOutputTensors()[0];
-      String classificationResult =
-          processOutput(outputTensor.data.buffer.asFloat32List());
-      print('Classification result: $classificationResult');
+      final input = convertedImage.reshape([1, 227, 227, 3]);
+      final output = Float32List(1 * 4).reshape([1, 4]);
 
-      return classificationResult;
+      _interpreter.run(input, output);
+
+      final predictionResult = output[0];
+      int maxIndex = predictionResult.indexOf(predictionResult.reduce(
+          (double maxElement, double element) =>
+              element > maxElement ? element : maxElement));
+      return _labels[maxIndex];
     } catch (e) {
-      print('Failed to classify image: $e');
-      return 'Failed to classify image';
-      // Handle the error, throw, or return as needed
+      print('Error during classification: $e');
+      return "Error";
     }
   }
 
@@ -110,14 +110,5 @@ class Classifier {
       print('Failed to dispose model: $e');
       // Handle the error, throw, or return as needed
     }
-  }
-
-  // Process output tensor and get classification result
-  String processOutput(Float32List output) {
-    // Convert the output tensor to class index
-    int classIndex = output[0].round();
-
-    // Map class index to corresponding label
-    return _labels[classIndex];
   }
 }

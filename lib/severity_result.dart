@@ -40,33 +40,33 @@ class SeverityResultScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 500),
+                  constraints: BoxConstraints(maxHeight: 450),
                   child: Image.file(File(imagePath)),
                 ),
                 SizedBox(height: 10),
                 Text(
-                  classificationResult,
+                  'Result: $classificationResult',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Help me connect the severity explanations here. Place holder palang ni.'
+                  'Place holder hehehehehhe will assign string soon.'
                   'Oh, a simple complication. Miscommunications lead to fall out. So many things that I wish you knew.'
                   ' So many walls up I cant break through',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

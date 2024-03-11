@@ -273,29 +273,29 @@ class DisplayPictureScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 500),
+                  constraints: BoxConstraints(maxHeight: 450),
                   child: Image.file(File(imagePath)),
-                ),
-                SizedBox(height: 10),
-                Container(
-                    width: 250,
-                    child: Text(
-                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                 ),
                 SizedBox(height: 20),
                 Center(
                   child: Text(
                     'Run severity classification on this image?',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                    width: 250,
+                    child: Text(
+                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                 ),
               ],
             ),
