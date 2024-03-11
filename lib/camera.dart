@@ -156,6 +156,8 @@ class _CameraScreenState extends State<CameraScreen> {
                     });
                     await getDetails();
                     // Navigate to the DisplayPictureScreen with the image path
+                    
+                    // Here loading screen Jyne
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -347,6 +349,8 @@ class DisplayPictureScreen extends StatelessWidget {
 
                       // Perform classification
                       String classificationResult = await classifier.classify(imagePath);
+                      
+                      // Here loading screen Jyne
 
                       // Dispose model
                       await classifier.disposeModel();
