@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'camera.dart';
+import 'package:flutter/services.dart'; // Import the SystemNavigator
+import 'camera.dart'; // Import the camera.dart file
 
 void main() {
   runApp(GalleryScreen());
@@ -66,6 +67,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           context,
           MaterialPageRoute(builder: (context) => CameraScreen()), // Navigate to CameraScreen
         );
+      } else if (_selectedIndex == 2) {
+        // If the quit button is clicked
+        SystemNavigator.pop(); // This will exit the app
       }
     });
   }
@@ -115,7 +119,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             icon: Image.asset(
               'assets/images/logout.png', // Path to your quit icon image
               width: 20, // Adjust the width of the quit icon
-              height: 20, // Adjust the height of the quit icon
+              height: 18, // Adjust the height of the quit icon
             ),
           ),
         ],
