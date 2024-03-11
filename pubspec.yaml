@@ -95,6 +95,10 @@ flutter:
      - assets/images/francis.png
      - assets/model/Ensemble_BCCE_Model.tflite
      - assets/model/labels.txt
+     - assets/images/Camera.png
+     - assets/images/logout.png
+     - assets/images/photo.png
+
 
 
 
