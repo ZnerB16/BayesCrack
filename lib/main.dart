@@ -33,8 +33,8 @@ class MyHomePage extends StatelessWidget {
           children:  [
             Image.asset(
               'assets/images/logo_text.png', // Replace with the path to your image
-              width: 200.0, // Adjust the width as needed
-              height: 200.0, // Adjust the height as needed
+              width: 300.0, // Adjust the width as needed
+              height: 300.0, // Adjust the height as needed
             ),
             
             // SizedBox for spacing
@@ -51,7 +51,20 @@ class MyHomePage extends StatelessWidget {
                   context, MaterialPageRoute(builder: (context) => const MainMenu()),
                 );
               },
-              child: Text('Start'),
+              
+              style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff284b63),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+
+              child: Text('START',
+                style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
             ),
           ],
         ),

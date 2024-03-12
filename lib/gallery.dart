@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import the SystemNavigator
-import 'camera.dart'; // Import the camera.dart file
-
-void main() {
-  runApp(GalleryScreen());
-}
+import 'camera.dart';
+import 'main_menu.dart'; // Import the camera.dart file
 
 class GalleryScreen extends StatelessWidget {
   @override
@@ -43,6 +40,38 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Image.asset(
             'assets/images/logo_text.png', // Path to your logo image
             height: kToolbarHeight + 20, // Increased image height
+          ),
+        ),
+        leading: InkWell(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainMenu()), 
+              ModalRoute.withName('/'),
+            );
+          },
+          child: Row(
+            children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Color(0xff284b63),
+                  BlendMode.modulate, 
+                ),
+                child: SizedBox(
+                  width: 22, 
+                  height: 22, 
+                  child: Image.asset('assets/images/back_icon.png'),
+                ),
+              ),
+              Text(
+                'Back', 
+                style: TextStyle(
+                  color: Color(0xff284b63), 
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
           ),
         ),
       ),

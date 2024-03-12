@@ -222,7 +222,7 @@ class HelpPopup2 extends StatelessWidget{
                       Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
-                            'assets/images/loading_icon.gif',
+                            'assets/images/blue_loading.gif',
                             height: 100,
                           ),
                         ),

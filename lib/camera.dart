@@ -5,6 +5,7 @@ import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
 import 'classify.dart';
+import 'main_menu.dart';
 import 'severity_result.dart';
 import 'loading_screen.dart';
 
@@ -87,7 +88,11 @@ class _CameraScreenState extends State<CameraScreen> {
         leading: IconButton(
           icon: Image.asset('assets/images/back_icon.png'),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainMenu()), 
+              ModalRoute.withName('/'),
+            );
           },
         ),
       ),

@@ -53,21 +53,31 @@ class SeverityResultScreen extends StatelessWidget {
                   constraints: BoxConstraints(maxHeight: 450),
                   child: Image.file(File(imagePath)),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Result: $classificationResult',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+                SizedBox(height: 1),
+                Container(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
                 ),
-                SizedBox(height: 5),
-                Text(
-                  interpretation,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Text(
+                      'Result: $classificationResult',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      interpretation,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
