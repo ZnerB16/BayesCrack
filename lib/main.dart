@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'permission_request.dart';
 import 'database/database_service.dart';
 import 'main_menu.dart';
 import 'database/crack_db.dart';
 
 void main() {
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -46,7 +46,7 @@ class MyHomePage extends StatelessWidget {
                 final database = await DatabaseService().database;
                 var crackDB = CrackDB();
                 crackDB.createTable(database);
-
+                const Permissions().requestLocationPermission();
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const MainMenu()),
                 );
