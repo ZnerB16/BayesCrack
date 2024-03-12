@@ -1,12 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
-import 'classify.dart'; 
-import 'severity_result.dart'; 
+import 'classify.dart';
+import 'severity_result.dart';
+import 'loading_screen.dart';
 
 
 class CameraScreen extends StatefulWidget {
@@ -132,6 +132,15 @@ class _CameraScreenState extends State<CameraScreen> {
               height: 80,
               child: FloatingActionButton(
                 onPressed: () async {
+                  
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return LoadingScreen();
+                      },
+                    );
+
                   // Take the Picture in a try / catch block. If anything goes wrong,
                   // catch the error.
                   try {
@@ -146,7 +155,6 @@ class _CameraScreenState extends State<CameraScreen> {
                     // Attempt to take a picture and get the file `image`
                     // where it was saved.
                     final image = await _controller.takePicture();
-
                     if (!context.mounted) return;
 
                     // Turn off flash after capturing the image
@@ -154,7 +162,11 @@ class _CameraScreenState extends State<CameraScreen> {
                     setState(() {
                       _isFlashOn = false;
                     });
+                    
                     await getDetails();
+                    
+                    Navigator.of(context, rootNavigator: true).pop(); 
+
                     // Navigate to the DisplayPictureScreen with the image path
                     Navigator.push(
                       context,
@@ -176,7 +188,6 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                     );
                   } catch (e) {
-                    // If an error occurs, log the error to the console.
                     print(e);
                   }
                 },
@@ -208,7 +219,7 @@ class _CameraScreenState extends State<CameraScreen> {
               side: BorderSide(color: Colors.transparent),
             ),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            mini: true, // Set mini to true to make the button smaller
+            mini: true,
           ),
         ],
       ),
@@ -258,7 +269,13 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirmation'),
+        title: Text('Confirmation',
+          style: TextStyle(
+              color: Color(0xff284b63),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -273,29 +290,29 @@ class DisplayPictureScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 500),
+                  constraints: BoxConstraints(maxHeight: 450),
                   child: Image.file(File(imagePath)),
-                ),
-                SizedBox(height: 10),
-                Container(
-                    width: 250,
-                    child: Text(
-                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                 ),
                 SizedBox(height: 20),
                 Center(
                   child: Text(
                     'Run severity classification on this image?',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                    width: 250,
+                    child: Text(
+                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                 ),
               ],
             ),
@@ -333,11 +350,21 @@ class DisplayPictureScreen extends StatelessWidget {
                   width: 120,
                   height: 40,
                   child: ElevatedButton(
-                   onPressed: () async {
+                   onPressed: () async {   
+                       
+                       showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingScreen();
+                        },
+                      );
+
+                      await Future.delayed(Duration(milliseconds: 1000));
+
                       // Instantiate Classifier
                       Classifier classifier = Classifier();
 
-                      // Load model
                       await classifier.loadModel();
 
                       // Perform classification
@@ -345,6 +372,8 @@ class DisplayPictureScreen extends StatelessWidget {
 
                       // Dispose model
                       await classifier.disposeModel();
+
+                      Navigator.of(context, rootNavigator: true).pop(); 
 
                       // Navigate to SeverityResultScreen
                       Navigator.push(
@@ -361,6 +390,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         ),
                       );
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff284b63),
                       shape: RoundedRectangleBorder(

@@ -3,17 +3,16 @@ import 'camera.dart';
 import 'package:mobile_app/help_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 import 'database/crack_db.dart';
+import 'gallery.dart'; // Import the GalleryScreen
 
-
-class MainMenu extends StatefulWidget{
-  const MainMenu({super.key});
+class MainMenu extends StatefulWidget {
+  const MainMenu({Key? key}) : super(key: key);
 
   @override
-  State<MainMenu> createState() => _MainMenu();
+  State<MainMenu> createState() => _MainMenuState();
 }
 
-class _MainMenu extends State<MainMenu>{
-
+class _MainMenuState extends State<MainMenu> {
   int noneCount = 0;
   int lowCount = 0;
   int medCount = 0;
@@ -33,19 +32,23 @@ class _MainMenu extends State<MainMenu>{
       medCount = countsMed[0];
       highCount = countsHigh[0];
     });
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    setCounts();
   }
 
   @override
   Widget build(BuildContext context) {
-    setCounts();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 80,
         flexibleSpace: Center(
           child: Image.asset(
-            'assets/images/logo_text.png', 
+            'assets/images/logo_text.png',
             fit: BoxFit.contain,
             height: 80,
           ),
@@ -56,11 +59,11 @@ class _MainMenu extends State<MainMenu>{
               'assets/images/question_mark.png',
               fit: BoxFit.contain,
               height: 40,
-            ),// image asset 
-            onPressed: (){
+            ), // image asset
+            onPressed: () {
               Navigator.of(context).push(HeroDialogRoute(
-                builder: (context){
-                return const HelpPopup();
+                builder: (context) {
+                  return const HelpPopup();
                 },
               ));
             },
@@ -69,48 +72,43 @@ class _MainMenu extends State<MainMenu>{
       ),
       body: Column(
         children: [
-          const SizedBox(height:20.0),
+          const SizedBox(height: 20.0),
           Container(
             width: double.infinity,
             height: 100.0,
             margin: const EdgeInsets.all(0),
             decoration: BoxDecoration(
-              color: const Color(0xFF639598),
-              borderRadius: BorderRadius.circular(15.0)
-            ),
+                color: const Color(0xFF639598),
+                borderRadius: BorderRadius.circular(15.0)),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Total Cracks Recorded',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total Cracks Recorded',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500),
                       ),
-                    ),
-                    Padding(
+                      Padding(
                         padding: const EdgeInsets.only(right: 50),
                         child: Text(
                           "$total",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 45.0,
-                              fontWeight: FontWeight.w500
-                          ),
+                              fontWeight: FontWeight.w500),
                         ),
-                    )
-                  ],
-                )
-              ),
+                      )
+                    ],
+                  )),
             ),
-            //add child widgets
-          ),//1container
-          const SizedBox(height:10.0),
+          ), //1container
+          const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -120,15 +118,14 @@ class _MainMenu extends State<MainMenu>{
               _buildRoundedBox(title: "High", count: highCount),
             ],
           ),
-          const SizedBox(height:50.0),
+          const SizedBox(height: 50.0),
           Container(
             width: double.infinity,
             height: 320.0,
             margin: const EdgeInsets.all(0),
             decoration: BoxDecoration(
-              color: const Color(0xFF284B63),
-              borderRadius: BorderRadius.circular(15.0)
-            ),
+                color: const Color(0xFF284B63),
+                borderRadius: BorderRadius.circular(15.0)),
             child: const Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -137,37 +134,39 @@ class _MainMenu extends State<MainMenu>{
                   'Recent Captures',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16.0, 
+                    fontSize: 16.0,
                   ),
                 ),
               ),
             ),
-            //add child widgets
-          ),//2container
+          ), //2container
           BottomAppBar(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
                   icon: Image.asset(
-                  'assets/images/gallery_icon.png',
-                  fit: BoxFit.contain,
-                  height: 40,
-                  ),// image asset 
+                    'assets/images/gallery_icon.png',
+                    fit: BoxFit.contain,
+                    height: 40,
+                  ), // image asset
                   onPressed: () {
-                    // Navigate to the gallery
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GalleryScreen()), // Navigate to GalleryScreen
+                    );
                   },
                 ),
                 IconButton(
                   icon: Image.asset(
-                  'assets/images/camera_icon_blue.png',
-                  fit: BoxFit.contain,
-                  height: 40,
-                  ),// image asset 
+                    'assets/images/camera_icon_blue.png',
+                    fit: BoxFit.contain,
+                    height: 40,
+                  ), // image asset
                   onPressed: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CameraScreen()),
+                      context,
+                      MaterialPageRoute(builder: (context) => const CameraScreen()),
                     );
                   },
                 ),
@@ -179,11 +178,12 @@ class _MainMenu extends State<MainMenu>{
                 ),
               ],
             ),
-          ),//bottomAppBar
-        ],//children
-      )
+          ), //bottomAppBar
+        ], //children
+      ),
     );
   }
+
   Widget _buildRoundedBox({required String title, int count = 0}) {
     return Container(
       width: 90.0,
@@ -193,31 +193,23 @@ class _MainMenu extends State<MainMenu>{
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Align(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 65,
-              child: Text(
-                "$count",
-                style: const TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w500
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 65,
+                child: Text(
+                  "$count",
+                  style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w500),
                 ),
               ),
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500
+              Text(
+                title,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-          ),],
-        )
-      ),
-
-      // Add child widgets or content inside the rounded box if needed
+            ],
+          )),
     );
   }
 }

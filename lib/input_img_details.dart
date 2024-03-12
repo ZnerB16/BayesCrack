@@ -7,6 +7,8 @@ class CrackInput extends StatefulWidget{
   final String? formattedDateTime;
   final double? latitude;
   final double? longitude;
+  final String? classificationResult;
+  final String? interpretation; 
 
   const CrackInput (
       {
@@ -14,7 +16,9 @@ class CrackInput extends StatefulWidget{
         this.imagePath,
         this.formattedDateTime,
         this.latitude,
-        this.longitude
+        this.longitude,
+        this.classificationResult,
+        this.interpretation, 
       });
 
   @override
