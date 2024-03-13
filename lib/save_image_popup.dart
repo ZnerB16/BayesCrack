@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
+import 'package:mobile_app/data_display_test.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 import 'input_img_details.dart';
 import 'globals.dart' as globals;
 
-class SaveImagePopup extends StatelessWidget{
+class SaveImagePopup extends StatefulWidget{
   const SaveImagePopup({super.key});
 
   @override
+  State<SaveImagePopup> createState() => _SaveImagePopupState();
+}
+
+class _SaveImagePopupState extends State<SaveImagePopup> {
+  int imageID = 0;
+  int buildingID = 0;
+  int floorID = 0;
+
+  void getID() async {
+    var crackDB = CrackDB();
+    var imageList = await crackDB.getLatestImage();
+    var buildList = await crackDB.getLatestBuilding();
+    var floorList = await crackDB.getLatestFloor();
+
+    setState(() {
+      imageID = imageList[0];
+      buildingID = buildList[0];
+      floorID = floorList[0];
+    });
+
+  }
+  @override
   Widget build(BuildContext context) {
+    getID();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -117,17 +141,36 @@ class SaveImagePopup extends StatelessWidget{
                                             ]
                                         ),
                                         child: TextButton(
-                                            onPressed: (){
+                                            onPressed: () async {
+
                                               var crackDB = CrackDB();
                                               crackDB.insertImage(
                                                   imagePath: globals.imagePath,
                                                   datetime: globals.formattedDateTime,
                                                   geolocation: globals.geolocation
                                               );
+                                              crackDB.insertBuilding(
+                                                  buildingName: globals.building
+                                              );
+                                              getID();
+                                              crackDB.insertFloor(
+                                                  floorName: globals.floor,
+                                                  buildingID: buildingID
+                                              );
+                                              crackDB.insertRoom(
+                                                  roomName: globals.room,
+                                                  buildingID: buildingID,
+                                                  floorID: floorID
+                                              );
+                                              crackDB.insertPrediction(
+                                                  prediction: globals.classificationResult,
+                                                  recommendation: globals.recommend,
+                                                  imageID: imageID
+                                              );
 
                                               Navigator.push(
                                                 // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const CrackInput())
+                                                  context, MaterialPageRoute(builder: (_) => const DisplayDataFromDB())
                                               );
                                             },
                                             child: const Text(
@@ -154,5 +197,4 @@ class SaveImagePopup extends StatelessWidget{
       ),
     );
   }
-  
 }

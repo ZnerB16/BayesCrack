@@ -9,3 +9,4 @@ String floor = "";
 String room = "";
 String remarks = "";
 String classificationResult = "";
+String recommend = "";

@@ -27,7 +27,6 @@ class DatabaseService {
       onCreate: create,
       singleInstance: true,
     );
-    print("Successfully created");
     return database;
   }
   Future<void> create(Database database, int version) async =>

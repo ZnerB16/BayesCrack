@@ -15,6 +15,7 @@ class SeverityResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     
     String interpretation = interpretations[globals.classificationResult] ?? 'Explanation not found';
+    globals.recommend = interpretation;
 
     return Scaffold(
       appBar: AppBar(

@@ -37,7 +37,7 @@ class MyHomePage extends StatelessWidget {
             ),
             
             // SizedBox for spacing
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
 
             // Button Widget
             ElevatedButton(
@@ -59,7 +59,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
 
-              child: Text('START',
+              child: const Text('START',
                 style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

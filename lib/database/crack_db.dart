@@ -1,5 +1,10 @@
+import 'package:mobile_app/globals.dart';
 import 'package:sqflite/sqflite.dart';
+import 'classes/image.dart';
+import 'classes/building.dart';
+import 'classes/floor.dart';
 import 'classes/prediction.dart';
+import 'classes/room.dart';
 import 'database_service.dart';
 import 'classes/crack_info.dart';
 
@@ -10,7 +15,6 @@ class CrackDB{
   final roomTable = 'rooms';
   final crackTable = 'crack_info';
   final predictionTable = 'predictions';
-  final recommendationsTable = 'recommendations';
 
   Future <void> createTable(Database database) async{
     // Image table
@@ -79,10 +83,9 @@ class CrackDB{
       """ CREATE TABLE IF NOT EXISTS $predictionTable(
       "id" INTEGER NOT NULL,
       "prediction" TEXT NOT NULL,
-      "recommendation_id" INTEGER NOT NULL,
+      "recommendation" TEXT NOT NULL,
       "image_id" INTEGER NOT NULL,
-      PRIMARY KEY("id" AUTOINCREMENT),
-      FOREIGN KEY("recommendation_id") REFERENCES recommendations("id"),
+      PRIMARY KEY("id" AUTOINCREMENT), 
       FOREIGN KEY("image_id") REFERENCES images("id")
       );
       """
@@ -109,33 +112,33 @@ class CrackDB{
     );
   }
   // Insert into floor table
-  Future<int> insertFloor({required String floorName}) async{
+  Future<int> insertFloor({required String floorName, required int buildingID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $floorTable(floor_name) VALUES (?)
+      INSERT INTO $floorTable(floor_name, building_id) VALUES (?, ?)
       ''',
-        [floorName]
+        [floorName, buildingID]
     );
   }
   // Insert into room table
-  Future<int> insertRoom({required String roomName}) async{
+  Future<int> insertRoom({required String roomName, required int buildingID, required int floorID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $floorTable(room_name) VALUES (?)
+      INSERT INTO $roomTable(room_name, building_id, floor_id) VALUES (?, ?, ?)
       ''',
-        [roomName]
+        [roomName, buildingID, floorID]
     );
   }
   // Insert into prediction table
-  Future<int> insertPrediction({required String prediction, required int imageID}) async{
+  Future<int> insertPrediction({required String prediction, required String recommendation, required int imageID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $predictionTable(prediction, image_id) VALUES (?, ?)
+      INSERT INTO $predictionTable(prediction, recommendation, image_id) VALUES (?, ?, ?)
       ''',
-        [prediction, imageID]
+        [prediction, recommendation, imageID]
     );
   }
   // Fetch crack info
@@ -183,5 +186,50 @@ class CrackDB{
       '''
     );
     return count.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List> getLatestBuilding() async{
+    final database = await DatabaseService().database;
+    final building = await database.rawQuery(
+      '''
+      SELECT * FROM $buildingTable ORDER BY id DESC LIMIT 1;
+      '''
+    );
+    return building.map((info) => Building.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List> getLatestFloor() async{
+    final database = await DatabaseService().database;
+    final floor = await database.rawQuery(
+      '''
+      SELECT * FROM $floorTable ORDER BY id DESC LIMIT 1;
+      '''
+    );
+    return floor.map((info) => Floor.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List> getLatestRoom() async{
+    final database = await DatabaseService().database;
+    final room = await database.rawQuery(
+      '''
+      SELECT * FROM $roomTable ORDER BY id DESC LIMIT 1;
+      '''
+    );
+    return room.map((info) => Room.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List> getLatestImage() async{
+    final database = await DatabaseService().database;
+    final images = await database.rawQuery(
+        '''
+      SELECT id FROM images ORDER BY id DESC LIMIT 1;
+      '''
+    );
+    return images.map((info) => Image.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List> getSixLatestImages() async{
+    final database = await DatabaseService().database;
+    final images = await database.rawQuery(
+      '''
+      SELECT * FROM images ORDER BY id DESC LIMIT 6;
+      '''
+    );
+    return images.map((info) => Floor.fromSQfliteDatabase(info)).toList();
   }
 }
