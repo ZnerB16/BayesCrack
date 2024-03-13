@@ -39,7 +39,6 @@ dependencies:
   geocoding: ^2.2.0
   tuple: ^2.0.2
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -100,6 +99,10 @@ flutter:
      - assets/images/photo.png
      - assets/images/tobedeleted.gif
      - assets/images/folder.png
+     - assets/images/delete.png
+     - assets/images/delete1.png
+     - assets/images/delete2.png
+
 
 
 

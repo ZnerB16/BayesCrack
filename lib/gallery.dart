@@ -85,7 +85,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MainMenu()), 
+              MaterialPageRoute(builder: (context) => MainMenu()),
               ModalRoute.withName('/'),
             );
           },
@@ -94,18 +94,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   Color(0xff284b63),
-                  BlendMode.modulate, 
+                  BlendMode.modulate,
                 ),
                 child: SizedBox(
-                  width: 22, 
-                  height: 22, 
+                  width: 22,
+                  height: 22,
                   child: Image.asset('assets/images/back_icon.png'),
                 ),
               ),
               Text(
-                'Menu', 
+                '',
                 style: TextStyle(
-                  color: Color(0xff284b63), 
+                  color: Color(0xff284b63),
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                 ),
