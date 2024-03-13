@@ -103,7 +103,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               Text(
-                'Back', 
+                'Menu', 
                 style: TextStyle(
                   color: Color(0xff284b63), 
                   fontSize: 15,
