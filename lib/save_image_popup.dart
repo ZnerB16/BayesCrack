@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
+import 'package:mobile_app/database/crack_db.dart';
+import 'package:mobile_app/hero_dialog_route.dart';
 import 'input_img_details.dart';
+import 'globals.dart' as globals;
 
 class SaveImagePopup extends StatelessWidget{
   const SaveImagePopup({super.key});
@@ -75,7 +78,11 @@ class SaveImagePopup extends StatelessWidget{
                                         ),
                                         child: TextButton(
                                             onPressed: (){
-                                              Navigator.pop(context);
+                                              Navigator.push(context, HeroDialogRoute(
+                                                  builder: (context){
+                                                    return const CrackInput();
+                                                  }
+                                              ));
                                             },
                                             child: const Text(
                                               'CANCEL',
@@ -111,6 +118,13 @@ class SaveImagePopup extends StatelessWidget{
                                         ),
                                         child: TextButton(
                                             onPressed: (){
+                                              var crackDB = CrackDB();
+                                              crackDB.insertImage(
+                                                  imagePath: globals.imagePath,
+                                                  datetime: globals.formattedDateTime,
+                                                  geolocation: globals.geolocation
+                                              );
+
                                               Navigator.push(
                                                 // Insert image saved
                                                   context, MaterialPageRoute(builder: (_) => const CrackInput())

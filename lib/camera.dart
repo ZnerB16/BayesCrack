@@ -5,10 +5,11 @@ import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
 import 'classify.dart';
+import 'globals.dart';
 import 'main_menu.dart';
 import 'severity_result.dart';
 import 'loading_screen.dart';
-
+import 'globals.dart' as globals;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -52,16 +53,17 @@ class _CameraScreenState extends State<CameraScreen> {
     // Get current date and time
     DateTime now = DateTime.now();
     formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-
     // Get current location
     Location location = Location();
-    LocationData? currentLocation = await location.getLocation();
+    LocationData currentLocation = await location.getLocation();
     latitude = currentLocation.latitude!;
     longitude = currentLocation.longitude!;
-    GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng().then((String result){
+    await GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng().then((String result){
       setState(() {
         geolocation = result;
       });
+      globals.formattedDateTime = formattedDateTime;
+      globals.geolocation = geolocation;
     });
   }
 
@@ -107,7 +109,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return CameraPreview(_controller);
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
@@ -123,7 +125,7 @@ class _CameraScreenState extends State<CameraScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 100),
+          const SizedBox(height: 100),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -142,7 +144,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return LoadingScreen();
+                        return const LoadingScreen();
                       },
                     );
 
@@ -167,29 +169,16 @@ class _CameraScreenState extends State<CameraScreen> {
                     setState(() {
                       _isFlashOn = false;
                     });
-                    
+
                     await getDetails();
-                    
+                    globals.imagePath = image.path;
                     Navigator.of(context, rootNavigator: true).pop(); 
 
                     // Navigate to the DisplayPictureScreen with the image path
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DisplayPictureScreen(
-                          imagePath: image.path,
-                          onConfirm: (bool confirmed) {
-                            if (confirmed) {
-                              // Handle confirmation action here
-                              // For now, just navigate back to CameraScreen
-                              Navigator.pop(context);
-                            }
-                          },
-                          formattedDateTime: formattedDateTime,
-                          geolocation: geolocation,
-                          latitude: latitude,
-                          longitude: longitude,
-                        ),
+                        builder: (context) => const DisplayPictureScreen(),
                       ),
                     );
                   } catch (e) {
@@ -251,24 +240,8 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
-
 class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-  final Function(bool) onConfirm;
-  final String formattedDateTime;
-  final String geolocation;
-  final double latitude;
-  final double longitude;
-
-  const DisplayPictureScreen({
-    Key? key,
-    required this.imagePath,
-    required this.onConfirm,
-    required this.formattedDateTime,
-    required this.geolocation,
-    required this.latitude,
-    required this.longitude,
-  }) : super(key: key);
+  const DisplayPictureScreen ({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +269,7 @@ class DisplayPictureScreen extends StatelessWidget {
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
                   constraints: BoxConstraints(maxHeight: 450),
-                  child: Image.file(File(imagePath)),
+                  child: Image.file(File(globals.imagePath)),
                 ),
                 SizedBox(height: 20),
                 Center(
@@ -312,7 +285,7 @@ class DisplayPictureScreen extends StatelessWidget {
                 Container(
                     width: 250,
                     child: Text(
-                      'Date Time: $formattedDateTime\nGeolocation: $geolocation',
+                      'Date Time: $formattedDateTime \nGeolocation: $geolocation',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -373,7 +346,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       await classifier.loadModel();
 
                       // Perform classification
-                      String classificationResult = await classifier.classify(imagePath);
+                      globals.classificationResult = await classifier.classify(globals.imagePath);
 
                       // Dispose model
                       await classifier.disposeModel();
@@ -384,14 +357,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SeverityResultScreen(
-                            classificationResult: classificationResult,
-                            imagePath: imagePath,
-                            formattedDateTime: formattedDateTime,
-                            geolocation: geolocation,
-                            longitude: longitude,
-                            latitude: latitude,
-                          ),
+                          builder: (context) => const SeverityResultScreen(),
                         ),
                       );
                     },

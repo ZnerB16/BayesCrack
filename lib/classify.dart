@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-
 class Classifier {
   late Interpreter _interpreter;
   late List<String> _labels;

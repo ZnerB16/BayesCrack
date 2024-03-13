@@ -7,5 +7,6 @@ class Permissions {
     if (status != PermissionStatus.granted) {
       // Handle permission denial
     }
+
   }
 }

@@ -32,6 +32,7 @@ class _MainMenuState extends State<MainMenu> {
       medCount = countsMed[0];
       highCount = countsHigh[0];
     });
+
   }
 
   @override

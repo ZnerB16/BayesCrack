@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'permission_request.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart';
 import 'database/database_service.dart';
 import 'main_menu.dart';
 import 'database/crack_db.dart';
@@ -11,14 +12,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const MyHomePage(),
     );
   }
-  
 }
 
 class MyHomePage extends StatelessWidget {
@@ -46,7 +45,8 @@ class MyHomePage extends StatelessWidget {
                 final database = await DatabaseService().database;
                 var crackDB = CrackDB();
                 crackDB.createTable(database);
-                const Permissions().requestLocationPermission();
+                await Permission.location.request();
+
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) => const MainMenu()),
                 );

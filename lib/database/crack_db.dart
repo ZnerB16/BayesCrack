@@ -18,9 +18,8 @@ class CrackDB{
       """ CREATE TABLE IF NOT EXISTS $imageTable(
       "id" INTEGER NOT NULL,
       "image_path" TEXT NOT NULL,
-      "image_name" TEXT NOT NULL,
       "capture_datetime" TEXT NOT NULL,
-      "geolocation" TEXT,
+      "geolocation" TEXT NOT NULL,
       PRIMARY KEY("id" AUTOINCREMENT)
       );
       """
@@ -77,36 +76,6 @@ class CrackDB{
       );"""
     );
     await database.execute(
-    """ CREATE TABLE IF NOT EXISTS $recommendationsTable(
-    "id" INTEGER NOT NULL,
-    "advise" TEXT NOT NULL
-    );
-    """);
-    await database.execute(
-        """ INSERT INTO $recommendationsTable ("id", "advise")
-        VALUES(?, ?),
-        (?, ?),
-        (?, ?),
-        (?, ?);   
-    """,[1, "There is no crack detected.",
-         2, "This crack does not pose any serious risk. "
-        "However, sealing the crack with epoxy or polyurethane-based products is recommended to prevent it from expanding. "
-        "Ensure to use appropriate sealing materials suited to the type of crack and the surface material. "
-        "It is also essential to monitor the growth of the crack over time.",
-         3, "This crack poses a medium risk. As a precautionary measure, "
-        "it is essential to report the crack and exercise caution in the area. "
-        "Structural repairs such as injection grouting, crack stitching, "
-        "or replacement of wall sections may be necessary to prevent the crack from widening. "
-        "Seek assistance from a qualified professional to assess the extent of the damage and "
-        "ensure appropriate repair methods.",
-        4, "All occupants should evacuate the building immediately and report the crack. "
-          "Large cracks indicate severe structural instability, "
-          "posing high risks to anyone inside. Extensive repair works such as structural "
-          "reinforcement, wall replacements, breaking out, or recasting may be required to "
-          "ensure the building's safety. A qualified professional will assess the extent of the "
-          "damage and ensure appropriate repair methods."]);
-
-    await database.execute(
       """ CREATE TABLE IF NOT EXISTS $predictionTable(
       "id" INTEGER NOT NULL,
       "prediction" TEXT NOT NULL,
@@ -120,13 +89,13 @@ class CrackDB{
     );
   }
   // Insert into image table
-  Future<int> insertImage({required String imagePath}) async{
+  Future<int> insertImage({required String imagePath, required String datetime, required String geolocation}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $imageTable(image_path) VALUES (?)
+      INSERT INTO $imageTable(image_path, capture_datetime, geolocation) VALUES (?, ?, ?)
       ''',
-      [imagePath]
+      [imagePath, datetime, geolocation]
     );
   }
   // Insert into building table
@@ -140,33 +109,33 @@ class CrackDB{
     );
   }
   // Insert into floor table
-  Future<int> insertFloor({required String floorName, required int buildingID}) async{
+  Future<int> insertFloor({required String floorName}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $floorTable(floor_name, building_id) VALUES (?, ?)
+      INSERT INTO $floorTable(floor_name) VALUES (?)
       ''',
-        [floorName, buildingID]
+        [floorName]
     );
   }
   // Insert into room table
-  Future<int> insertRoom({required String roomName, required int buildingID, required int floorID}) async{
+  Future<int> insertRoom({required String roomName}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $floorTable(room_name, building_id, floor_id) VALUES (?, ?, ?)
+      INSERT INTO $floorTable(room_name) VALUES (?)
       ''',
-        [roomName, buildingID, floorID]
+        [roomName]
     );
   }
   // Insert into prediction table
-  Future<int> insertPrediction({required String prediction, required int recommendID, required int imageID}) async{
+  Future<int> insertPrediction({required String prediction, required int imageID}) async{
     final database = await DatabaseService().database;
     return await database.rawInsert(
       '''
-      INSERT INTO $predictionTable(prediction, recommendation_id, image_id) VALUES (?, ?, ?)
+      INSERT INTO $predictionTable(prediction, image_id) VALUES (?, ?)
       ''',
-        [prediction, recommendID, imageID]
+        [prediction, imageID]
     );
   }
   // Fetch crack info
@@ -174,7 +143,7 @@ class CrackDB{
     final database = await DatabaseService().database;
     final crackInfo = await database.rawQuery(
       '''
-      SELECT * FROM crack_info
+      SELECT * FROM $crackTable
       CROSS JOIN image ON crack_info.image_id = image.id
       CROSS JOIN building ON crack_info.building_id = building.id
       CROSS JOIN floor ON crack_info.floor_id = floor.id

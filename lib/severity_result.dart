@@ -1,31 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/main_menu.dart';
 import 'package:mobile_app/input_img_details.dart';
 import 'severity_result_explanations.dart';
+import 'globals.dart';
+import 'globals.dart' as globals;
 
 class SeverityResultScreen extends StatelessWidget {
-  final String imagePath;
-  final String classificationResult;
-  final String formattedDateTime;
-  final String geolocation;
-  final double latitude;
-  final double longitude;
-
-  const SeverityResultScreen({super.key,
-    required this.imagePath,
-    required this.classificationResult,
-    required this.formattedDateTime,
-    required this.geolocation,
-    required this.latitude,
-    required this.longitude
-  });
+  const SeverityResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     
-    String interpretation = interpretations[classificationResult] ?? 'Explanation not found';
+    String interpretation = interpretations[globals.classificationResult] ?? 'Explanation not found';
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +40,7 @@ class SeverityResultScreen extends StatelessWidget {
                     border: Border.all(color: Color(0xff284b63), width: 2.0),
                   ),
                   constraints: BoxConstraints(maxHeight: 450),
-                  child: Image.file(File(imagePath)),
+                  child: Image.file(File(globals.imagePath)),
                 ),
                 SizedBox(height: 1),
                 Container(
@@ -123,15 +112,18 @@ class SeverityResultScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      var crackDB = CrackDB();
+                      // Insert to table
+                      crackDB.insertImage(
+                          imagePath: globals.imagePath,
+                          datetime: globals.formattedDateTime,
+                          geolocation: globals.geolocation
+                      );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CrackInput(
-                            imagePath: imagePath,
-                            formattedDateTime: formattedDateTime,
-                            latitude: latitude,
-                            longitude: longitude,
-                          ),
+                          builder: (context) => const CrackInput(),
                         ),
                       );
                     },

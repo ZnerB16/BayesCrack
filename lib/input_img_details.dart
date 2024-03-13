@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/camera.dart';
 import 'package:mobile_app/save_image_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
+import 'globals.dart' as globals;
 
 class CrackInput extends StatefulWidget{
-  final String? imagePath;
-  final String? formattedDateTime;
-  final double? latitude;
-  final double? longitude;
-  final String? classificationResult;
-  final String? interpretation; 
 
-  const CrackInput (
-      {
-        super.key,
-        this.imagePath,
-        this.formattedDateTime,
-        this.latitude,
-        this.longitude,
-        this.classificationResult,
-        this.interpretation, 
-      });
+  const CrackInput ({super.key,});
 
   @override
   State<CrackInput> createState() => _CrackInput();
 }
 class _CrackInput extends State<CrackInput>{
+  final _controllerTrackingNo = TextEditingController();
+  final _controllerBuilding = TextEditingController();
+  final _controllerFloor = TextEditingController();
+  final _controllerRoom = TextEditingController();
+  final _controllerRemarks = TextEditingController();
+  String trackingNo = "";
+  String building = "";
+  String floor = "";
+  String room = "";
+  String remarks = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +51,15 @@ class _CrackInput extends State<CrackInput>{
             ),
             /// Start text fields
             const Padding(padding: EdgeInsets.only(top: 30)),
-            createTextField('Crack Tracking Number  (Numeric Input only)', isNumber: true),
+            createTextField('Crack Tracking Number  (Numeric Input only)', isNumber: true, controller: _controllerTrackingNo),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Building Name / Number'),
+            createTextField('Building Name / Number', controller: _controllerBuilding),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Floor Name / Number'),
+            createTextField('Floor Name / Number', controller: _controllerFloor),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Room Name / Number'),
+            createTextField('Room Name / Number', controller: _controllerRoom),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Remarks/Note (OPTIONAL)', height: 150),
+            createTextField('Remarks/Note (OPTIONAL)', height: 150, controller: _controllerRemarks, maxLines: 10),
             const Padding(padding: EdgeInsets.only(top: 20)),
             /// End text fields
 
@@ -91,7 +89,9 @@ class _CrackInput extends State<CrackInput>{
                     ),
                     child: TextButton(
                       onPressed: (){
-                        Navigator.pop(context);
+                        Navigator.push(context,MaterialPageRoute(builder: (context){
+                          return const CameraScreen();
+                        }));
                       },
                     child: const Text(
                         'CANCEL',
@@ -127,6 +127,19 @@ class _CrackInput extends State<CrackInput>{
                     ),
                     child: TextButton(
                         onPressed: (){
+                          setState(() {
+                            trackingNo = _controllerTrackingNo.text;
+                            building = _controllerBuilding.text;
+                            floor = _controllerFloor.text;
+                            room = _controllerRoom.text;
+                            remarks = _controllerRemarks.text;
+                          });
+                          globals.trackingNo = int.parse(trackingNo);
+                          globals.building = building;
+                          globals.floor = floor;
+                          globals.room = room;
+                          globals.remarks = remarks;
+
                             Navigator.of(context).push(HeroDialogRoute(
                                 builder: (context){
                                     return const SaveImagePopup();
@@ -153,7 +166,7 @@ class _CrackInput extends State<CrackInput>{
     );
   }
   /// Text field creation function
-  SizedBox createTextField(String text, {double height = 50.0, bool isNumber = false}){
+  SizedBox createTextField(String text, {double height = 50.0, bool isNumber = false, required TextEditingController controller, int maxLines = 1}){
     TextInputType keyboard = TextInputType.text;
     if(isNumber){
       keyboard = TextInputType.number;
@@ -162,6 +175,7 @@ class _CrackInput extends State<CrackInput>{
       width: 300,
       height: height,
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xff284b63), width: 2.0),
@@ -172,7 +186,7 @@ class _CrackInput extends State<CrackInput>{
             fillColor: Colors.black12
         ),
         keyboardType: keyboard,
-        maxLines: 10,
+        maxLines: maxLines,
         style: const TextStyle(
             fontSize: 12
         ),
