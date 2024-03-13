@@ -129,17 +129,24 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (_selectedIndex == 1) {
+      if (_selectedIndex == 0) {
+      // If the gallery button is clicked
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => GalleryScreen()), 
+      );
+      } else if (_selectedIndex == 1) {
         // If the camera button is clicked
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CameraScreen()), // Navigate to CameraScreen
+          MaterialPageRoute(builder: (context) => CameraScreen()), 
         );
       } else if (_selectedIndex == 2) {
         // If the quit button is clicked
         SystemNavigator.pop(); // This will exit the app
-      }
-    });
+          }
+        }
+    );
   }
 
   @override
