@@ -4,10 +4,14 @@ import 'gallery.dart';
 import 'delete_image_popup.dart';
 
 class FolderView extends StatelessWidget {
+  final String folderName; 
+  FolderView({required this.folderName});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+        title: Text(folderName), // Use folderName as the title
+      ),
       body: ImageList(),
       bottomNavigationBar: CustomBottomNavigationBar(),
     );
@@ -38,7 +42,14 @@ class _ImageListState extends State<ImageList> {
     },
   ];
 
-  List<bool> isCheckedList = List.generate(3, (index) => false); // Generate initial list of checkbox states
+  List<bool> isCheckedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    isCheckedList = List.generate(imageData.length, (index) => false); // Dynamic generate list for checkboxes
+  }
+
   List<int> selectedIndices = []; // Maintain a list of selected indices
 
   @override
