@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import the SystemNavigator
+import 'package:flutter/services.dart';
 import 'main_menu.dart';
 import 'folders.dart';
 
@@ -19,7 +19,7 @@ class GalleryScreen extends StatelessWidget {
 
 class FolderListView extends StatelessWidget {
 
- final List _folders = [
+  final List _folders = [
     'Tracking No. 1',
     'Tracking No. 2',
     'Tracking No. 3',
@@ -40,7 +40,7 @@ class FolderListView extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold (
-        body:ListView.builder(
+      body:ListView.builder(
           itemCount: _folders.length,
           itemBuilder: (context, index) {
             return Folders(

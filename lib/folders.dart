@@ -13,7 +13,7 @@ class Folders extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FolderView(), 
+            builder: (context) => FolderView(),
           ),
         );
       },
@@ -27,11 +27,11 @@ class Folders extends StatelessWidget {
                 children: [
                   SizedBox(width: 5),
                   Image.asset(
-                    'assets/images/folder.png', 
-                    width: 30, 
-                    height: 30, 
+                    'assets/images/folder.png',
+                    width: 30,
+                    height: 30,
                   ),
-                  SizedBox(width: 10), 
+                  SizedBox(width: 10),
                   Center(
                     child: Text(
                       child,
@@ -42,7 +42,7 @@ class Folders extends StatelessWidget {
               ),
             ),
           ),
-          Divider(height: 1, color: Colors.grey), 
+          Divider(height: 1, color: Colors.grey),
         ],
       ),
     );
