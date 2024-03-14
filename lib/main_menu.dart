@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'camera.dart';
 import 'package:mobile_app/help_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 import 'database/crack_db.dart';
-import 'gallery.dart'; // Import the GalleryScreen
+import 'gallery.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -32,7 +33,6 @@ class _MainMenuState extends State<MainMenu> {
       medCount = countsMed[0];
       highCount = countsHigh[0];
     });
-
   }
 
   @override
@@ -60,7 +60,7 @@ class _MainMenuState extends State<MainMenu> {
               'assets/images/question_mark.png',
               fit: BoxFit.contain,
               height: 40,
-            ), // image asset
+            ),
             onPressed: () {
               Navigator.of(context).push(HeroDialogRoute(
                 builder: (context) {
@@ -71,19 +71,21 @@ class _MainMenuState extends State<MainMenu> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20.0),
-          Container(
-            width: double.infinity,
-            height: 100.0,
-            margin: const EdgeInsets.all(0),
-            decoration: BoxDecoration(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 20.0),
+            Container(
+              width: double.infinity,
+              height: 100.0,
+              margin: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
                 color: const Color(0xFF639598),
-                borderRadius: BorderRadius.circular(15.0)),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,96 +93,63 @@ class _MainMenuState extends State<MainMenu> {
                       const Text(
                         'Total Cracks Recorded',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500),
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 50),
                         child: Text(
                           "$total",
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.w500),
+                            color: Colors.white,
+                            fontSize: 45.0,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       )
                     ],
-                  )),
-            ),
-          ), //1container
-          const SizedBox(height: 10.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildRoundedBox(title: "None", count: noneCount),
-              _buildRoundedBox(title: "Low", count: lowCount),
-              _buildRoundedBox(title: "Medium", count: medCount),
-              _buildRoundedBox(title: "High", count: highCount),
-            ],
-          ),
-          const SizedBox(height: 50.0),
-          Container(
-            width: double.infinity,
-            height: 320.0,
-            margin: const EdgeInsets.all(0),
-            decoration: BoxDecoration(
-                color: const Color(0xFF284B63),
-                borderRadius: BorderRadius.circular(15.0)),
-            child: const Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 16.0, top: 30),
-                child: Text(
-                  'Recent Captures',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
                   ),
                 ),
               ),
             ),
-          ), //2container
-          BottomAppBar(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                IconButton(
-                  icon: Image.asset(
-                    'assets/images/gallery_icon.png',
-                    fit: BoxFit.contain,
-                    height: 40,
-                  ), // image asset
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GalleryScreen()), // Navigate to GalleryScreen
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Image.asset(
-                    'assets/images/camera_icon_blue.png',
-                    fit: BoxFit.contain,
-                    height: 40,
-                  ), // image asset
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CameraScreen()),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    // Navigate to quit
-                  },
-                ),
+                _buildRoundedBox(title: "None", count: noneCount),
+                _buildRoundedBox(title: "Low", count: lowCount),
+                _buildRoundedBox(title: "Medium", count: medCount),
+                _buildRoundedBox(title: "High", count: highCount),
               ],
             ),
-          ), //bottomAppBar
-        ], //children
+            const SizedBox(height: 50.0),
+            Container(
+              width: double.infinity,
+              height: 320.0,
+              margin: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                color: const Color(0xFF284B63),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: const Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16.0, top: 30),
+                  child: Text(
+                    'Recent Captures',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            CustomBottomNavigationBar(),
+          ],
+        ),
       ),
     );
   }
@@ -190,27 +159,125 @@ class _MainMenuState extends State<MainMenu> {
       width: 90.0,
       height: 120.0,
       decoration: BoxDecoration(
-        color: const Color(0xffD9D9D9), // You can set your desired color
+        color: const Color(0xffD9D9D9),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Align(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 65,
-                child: Text(
-                  "$count",
-                  style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w500),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 65,
+              child: Text(
+                "$count",
+                style: const TextStyle(fontSize: 60, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomBottomNavigationBar extends StatefulWidget {
+  @override
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState();
+}
+
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (_selectedIndex == 0) {
+        // If the gallery button is clicked
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GalleryScreen()),
+        );
+      } else if (_selectedIndex == 1) {
+        // If the camera button is clicked
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CameraScreen()),
+        );
+      } else if (_selectedIndex == 2) {
+        // If the quit button is clicked
+        SystemNavigator.pop(); // This will exit the app
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            label: 'Gallery',
+            icon: Image.asset(
+              'assets/images/photo.png', // Path to your gallery icon image
+              width: 20, // Adjust the width of the gallery icon
+              height: 20, // Adjust the height of the gallery icon
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: '', // No label for the camera
+            icon: Stack(
+              children: [
+                Center(
+                  child: IconButton(
+                    onPressed: () {
+                      _onItemTapped(1); // Call _onItemTapped with index 1 when camera button is clicked
+                    },
+                    icon: Image.asset(
+                      'assets/images/Camera.png', // Path to your camera icon image
+                      width: 60, // Adjust the width of the camera icon
+                      height: 60, // Adjust the height of the camera icon
+                    ),
+                  ),
                 ),
-              ),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-            ],
-          )),
+              ],
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: 'Quit',
+            icon: Image.asset(
+              'assets/images/logout.png', // Path to your quit icon image
+              width: 20, // Adjust the width of the quit icon
+              height: 18, // Adjust the height of the quit icon
+            ),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.black, // Change the color of the selected item
+        unselectedItemColor: Colors.black, // Change the color of the unselected item
+        selectedLabelStyle: TextStyle(
+          fontSize: 12, // Specify the font size of the selected item text
+          color: Colors.black, // Specify the font color of the selected item text
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 12, // Specify the font size of the unselected item text
+          color: Colors.black, // Specify the font color of the unselected item text
+        ),
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'gallery.dart';
 import 'delete_image_popup.dart';
+import 'main_menu.dart';
 
 class FolderView extends StatelessWidget {
   @override
