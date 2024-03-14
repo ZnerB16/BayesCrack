@@ -8,7 +8,6 @@ import 'gallery.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
-
   @override
   State<MainMenu> createState() => _MainMenuState();
 }
@@ -19,14 +18,12 @@ class _MainMenuState extends State<MainMenu> {
   int medCount = 0;
   int highCount = 0;
   int total = 0;
-
   void setCounts() async {
     var crackDB = CrackDB();
     var countsNone = await crackDB.countPredictions("None");
     var countsLow = await crackDB.countPredictions("Low");
     var countsMed = await crackDB.countPredictions("Medium");
     var countsHigh = await crackDB.countPredictions("High");
-
     setState(() {
       noneCount = countsNone[0];
       lowCount = countsLow[0];
@@ -34,13 +31,11 @@ class _MainMenuState extends State<MainMenu> {
       highCount = countsHigh[0];
     });
   }
-
   @override
   void initState() {
     super.initState();
     setCounts();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,7 +188,6 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -215,7 +209,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
