@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'gallery.dart';
+import 'delete_image_popup.dart';
 
 class FolderView extends StatelessWidget {
   @override
@@ -64,6 +65,7 @@ class _ImageListState extends State<ImageList> {
                         children: [
                           Checkbox(
                             value: isCheckedList[index], // Use isCheckedList to maintain the state
+                            activeColor: Colors.black, // Set the color of the checkmark to black
                             onChanged: (bool? value) {
                               setState(() {
                                 isCheckedList[index] = value ?? false; // Update isCheckedList state
@@ -110,17 +112,13 @@ class _ImageListState extends State<ImageList> {
               height: 70, // Set height to desired size
               child: IconButton(
                 onPressed: () {
-                  // Perform delete operation for selected indices
-                  setState(() {
-                    // Remove items from imageData using selectedIndices
-                    selectedIndices.sort((a, b) => b.compareTo(a)); // Sort indices in descending order
-                    for (int index in selectedIndices) {
-                      imageData.removeAt(index);
-                    }
-                    // Clear selectedIndices and isCheckedList after deletion
-                    selectedIndices.clear();
-                    isCheckedList = List.generate(imageData.length, (index) => false);
-                  });
+                  // Show delete image popup
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DeleteImagePopup();
+                    },
+                  );
                 },
                 icon: Image.asset('assets/images/delete2.png'), // Use delete.png asset
               ),
