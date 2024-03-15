@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'main_menu.dart';
 import 'delete_image_popup.dart';
+import 'image_interface.dart'; // Import ImageInterface
 
 class FolderView extends StatelessWidget {
     final String folderName;
@@ -104,7 +105,16 @@ class _ImageListState extends State<ImageList> {
                                                 ],
                                             ),
                                             onTap: () {
-                                                // Handle tap on list item
+                                                // Navigate to ImageInterface screen when tapped
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ImageInterface(
+                                                        img_path: img_path,
+                                                        img_id: img_id,
+                                                        capture_date: capture_date,
+                                                        // Pass other required parameters here
+                                                    )),
+                                                );
                                             },
                                         ),
                                     ),
