@@ -24,11 +24,13 @@ class _MainMenuState extends State<MainMenu> {
     var countsLow = await crackDB.countPredictions("Low");
     var countsMed = await crackDB.countPredictions("Medium");
     var countsHigh = await crackDB.countPredictions("High");
+    var totalCount = await crackDB.countAll();
     setState(() {
-      noneCount = countsNone[0];
-      lowCount = countsLow[0];
-      medCount = countsMed[0];
-      highCount = countsHigh[0];
+      noneCount = countsNone!;
+      lowCount = countsLow!;
+      medCount = countsMed!;
+      highCount = countsHigh!;
+      total = totalCount!;
     });
   }
   @override

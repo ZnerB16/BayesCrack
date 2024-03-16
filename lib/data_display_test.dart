@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/main_menu.dart';
+import 'database/classes/image.dart';
 import 'database/crack_db.dart';
 
 class DisplayDataFromDB extends StatefulWidget{
@@ -14,11 +16,12 @@ class _DisplayDataFromDB extends State<DisplayDataFromDB>{
 
   void getImage() async {
     var crackDB = CrackDB();
-    var image = await crackDB.getLatestImage();
-    setState(() {
-      path = image[1];
+
+    List<ImageDB> imageList;
+    setState(() async {
+      imageList = await crackDB.getLatestImage();
+      path = imageList[0].imagePath;
     });
-    print(path);
   }
 
 
@@ -31,7 +34,30 @@ class _DisplayDataFromDB extends State<DisplayDataFromDB>{
         children: [
           Image.file(
             File(path)
-          )
+          ),
+          SizedBox(
+            width: 120,
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () {
+                // Navigate back to the camera screen
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const MainMenu()));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xffd9d9d9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Main Menu',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

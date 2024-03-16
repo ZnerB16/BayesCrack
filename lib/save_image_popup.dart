@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
 import 'package:mobile_app/data_display_test.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
+import 'package:mobile_app/main_menu.dart';
 import 'input_img_details.dart';
 import 'globals.dart' as globals;
 
@@ -25,10 +27,13 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
     var floorList = await crackDB.getLatestFloor();
 
     setState(() {
-      imageID = imageList[0];
+      imageID = imageList[0].id;
       buildingID = buildList[0];
       floorID = floorList[0];
     });
+    print("ImageID: $imageID");
+    print("Building: $buildingID");
+    print("Floor: $floorID");
 
   }
   @override
@@ -142,7 +147,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                         ),
                                         child: TextButton(
                                             onPressed: () async {
-
+                                              await GallerySaver.saveImage(globals.imagePath);
                                               var crackDB = CrackDB();
                                               crackDB.insertImage(
                                                   imagePath: globals.imagePath,
@@ -167,6 +172,15 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                                   recommendation: globals.recommend,
                                                   imageID: imageID
                                               );
+                                              globals.recommend = "";
+                                              globals.floor = "";
+                                              globals.building = "";
+                                              globals.geolocation = "";
+                                              globals.formattedDateTime = "";
+                                              globals.imagePath = "";
+                                              globals.remarks = "";
+                                              globals.trackingNo = 0;
+                                              globals.room = "";
 
                                               Navigator.push(
                                                 // Insert image saved

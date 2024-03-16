@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:mobile_app/globals.dart';
 import 'package:sqflite/sqflite.dart';
 import 'classes/image.dart';
@@ -167,25 +169,27 @@ class CrackDB{
     );
   }
   // Count predictions
-  Future<List> countPredictions(String prediction) async{
+  Future<int?> countPredictions(String prediction) async{
     final database = await DatabaseService().database;
-    final count = await database.rawQuery(
+    List<Map<String, dynamic>> count = await database.rawQuery(
       '''
       SELECT COUNT(id) 
-      FROM predictions WHERE prediction = ?
+      FROM $predictionTable WHERE prediction = ?
       ''', [prediction]
     );
-    return count.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
+    int? result = Sqflite.firstIntValue(count);
+    return result;
   }
   // Count all images
-  Future<List> countAll() async{
+  Future<int?> countAll() async{
     final database = await DatabaseService().database;
-    final count = await database.rawQuery(
+    List<Map<String, dynamic>> count = await database.rawQuery(
       '''
-      SELECT COUNT(id) FROM predictions
+      SELECT COUNT(*) FROM $predictionTable
       '''
     );
-    return count.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
+    int? result = Sqflite.firstIntValue(count);
+    return result;
   }
   Future<List> getLatestBuilding() async{
     final database = await DatabaseService().database;
@@ -214,15 +218,16 @@ class CrackDB{
     );
     return room.map((info) => Room.fromSQfliteDatabase(info)).toList();
   }
-  Future<List> getLatestImage() async{
+  Future<List<ImageDB>> getLatestImage() async{
     final database = await DatabaseService().database;
-    final images = await database.rawQuery(
-        '''
-      SELECT id FROM images ORDER BY id DESC LIMIT 1;
+    var images = await database.rawQuery(
+      '''
+      SELECT image_path FROM images ORDER BY id DESC LIMIT 1;
       '''
     );
-    return images.map((info) => Image.fromSQfliteDatabase(info)).toList();
+    return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
+
   Future<List> getSixLatestImages() async{
     final database = await DatabaseService().database;
     final images = await database.rawQuery(
