@@ -45,7 +45,6 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
   }
   @override
   Widget build(BuildContext context) {
-    getID();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),

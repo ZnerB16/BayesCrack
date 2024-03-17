@@ -113,13 +113,6 @@ class SeverityResultScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      var crackDB = CrackDB();
-                      // Insert to table
-                      crackDB.insertImage(
-                          imagePath: globals.imagePath,
-                          datetime: globals.formattedDateTime,
-                          geolocation: globals.geolocation
-                      );
 
                       Navigator.push(
                         context,
