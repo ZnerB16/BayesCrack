@@ -285,7 +285,7 @@ class CrackDB{
     final database = await DatabaseService().database;
     final trackingNo = await database.rawQuery(
         '''
-      SELECT DISTINCT tracking_no FROM $crackTable;
+      SELECT DISTINCT tracking_no FROM $crackTable ORDER BY tracking_no ASC;
       '''
     );
     return trackingNo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();

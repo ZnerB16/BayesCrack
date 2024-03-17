@@ -20,24 +20,48 @@ class SaveImagePopup extends StatefulWidget{
 }
 
 class _SaveImagePopupState extends State<SaveImagePopup> {
-  int imageID = 1;
-  int buildingID = 1;
-  int floorID = 1;
-  int roomID = 1;
+  int imageID = 0;
+  int buildingID = 0;
+  int floorID = 0;
+  int roomID = 0;
+  var crackDB = CrackDB();
 
-  void getID() async {
-    var crackDB = CrackDB();
-    List<ImageDB> imageList = await crackDB.getLatestImageID();
-    List<Building> buildList = await crackDB.getLatestBuilding();
-    List<Floor> floorList = await crackDB.getLatestFloor();
+  Future<void> getImageBuildID() async {
+    List<ImageDB>? imageList = await crackDB.getLatestImageID();
+    List<Building>? buildList = await crackDB.getLatestBuilding();
+
+    if(imageList.isEmpty){
+      imageID = 1;
+      buildingID = 1;
+    }
+    else{
+      setState(() {
+        imageID = imageList[0].id;
+        buildingID = buildList[0].id;
+      });
+    }
+  }
+  Future<void> getFloorID() async {
+    List<Floor>? floorList = await crackDB.getLatestFloor();
+    if(floorList.isEmpty){
+      floorID = 1;
+    }
+    else{
+      setState(() {
+        floorID = floorList[0].id;
+      });
+    }
+  }
+  Future<void> getRoomID() async {
     List<Room> roomList = await crackDB.getLatestRoom();
-
-    setState(() {
-      imageID = imageList[0].id;
-      buildingID = buildList[0].id;
-      floorID = floorList[0].id;
-      roomID = roomList[0].id;
-    });
+    if(roomList.isEmpty){
+      roomID = 1;
+    }
+    else{
+      setState(() {
+        roomID = roomList[0].id;
+      });
+    }
   }
   @override
   void initState(){
@@ -156,25 +180,27 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                               await GallerySaver.saveImage(globals.imagePath);
                                               var crackDB = CrackDB();
 
-                                              crackDB.insertImage(
+                                              await crackDB.insertImage(
                                                   imagePath: globals.imagePath,
                                                   datetime: globals.formattedDateTime,
                                                   geolocation: globals.geolocation
                                               );
-                                              crackDB.insertBuilding(
+                                              await crackDB.insertBuilding(
                                                   buildingName: globals.building
                                               );
-                                              getID();
-                                              crackDB.insertFloor(
+                                              await getImageBuildID();
+                                              await crackDB.insertFloor(
                                                   floorName: globals.floor,
                                                   buildingID: buildingID
                                               );
-                                              crackDB.insertRoom(
+                                              await getFloorID();
+                                              await crackDB.insertRoom(
                                                   roomName: globals.room,
                                                   buildingID: buildingID,
                                                   floorID: floorID
                                               );
-                                              crackDB.insertCrackInfo(
+                                              await getRoomID();
+                                              await crackDB.insertCrackInfo(
                                                   imageID: imageID,
                                                   trackingNo: globals.trackingNo,
                                                   buildingID: buildingID,
@@ -182,7 +208,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                                   roomID: roomID,
                                                   remarks: globals.remarks
                                               );
-                                              crackDB.insertPrediction(
+                                              await crackDB.insertPrediction(
                                                   prediction: globals.classificationResult,
                                                   recommendation: globals.recommend,
                                                   imageID: imageID
