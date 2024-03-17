@@ -20,10 +20,10 @@ class SaveImagePopup extends StatefulWidget{
 }
 
 class _SaveImagePopupState extends State<SaveImagePopup> {
-  int imageID = 0;
-  int buildingID = 0;
-  int floorID = 0;
-  int roomID = 0;
+  int imageID = 1;
+  int buildingID = 1;
+  int floorID = 1;
+  int roomID = 1;
 
   void getID() async {
     var crackDB = CrackDB();
