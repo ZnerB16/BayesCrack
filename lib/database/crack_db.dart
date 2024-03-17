@@ -133,6 +133,18 @@ class CrackDB{
         [roomName, buildingID, floorID]
     );
   }
+  // Insert into crack table
+  Future<int> insertCrackInfo({required int imageID, required int trackingNo, required int buildingID, required int floorID, required int roomID, required String remarks}) async{
+    final database = await DatabaseService().database;
+    return await database.rawInsert(
+        '''
+      INSERT INTO $crackTable(image_id, tracking_no, building_id, floor_id, room_id, remarks) 
+      VALUES (?, ?, ?, ?, ?, ?)
+      ''',
+        [imageID, trackingNo, buildingID, floorID, roomID, remarks]
+    );
+  }
+
   // Insert into prediction table
   Future<int> insertPrediction({required String prediction, required String recommendation, required int imageID}) async{
     final database = await DatabaseService().database;
@@ -195,7 +207,7 @@ class CrackDB{
     final database = await DatabaseService().database;
     final building = await database.rawQuery(
       '''
-      SELECT * FROM $buildingTable ORDER BY id DESC LIMIT 1;
+      SELECT id FROM $buildingTable ORDER BY id DESC LIMIT 1;
       '''
     );
     return building.map((info) => Building.fromSQfliteDatabase(info)).toList();
@@ -204,7 +216,7 @@ class CrackDB{
     final database = await DatabaseService().database;
     final floor = await database.rawQuery(
       '''
-      SELECT * FROM $floorTable ORDER BY id DESC LIMIT 1;
+      SELECT id FROM $floorTable ORDER BY id DESC LIMIT 1;
       '''
     );
     return floor.map((info) => Floor.fromSQfliteDatabase(info)).toList();
@@ -213,7 +225,7 @@ class CrackDB{
     final database = await DatabaseService().database;
     final room = await database.rawQuery(
       '''
-      SELECT * FROM $roomTable ORDER BY id DESC LIMIT 1;
+      SELECT id FROM $roomTable ORDER BY id DESC LIMIT 1;
       '''
     );
     return room.map((info) => Room.fromSQfliteDatabase(info)).toList();
@@ -222,8 +234,17 @@ class CrackDB{
     final database = await DatabaseService().database;
     var images = await database.rawQuery(
       '''
-      SELECT image_path FROM images ORDER BY id DESC LIMIT 1;
+      SELECT image_path FROM $imageTable ORDER BY id DESC LIMIT 1;
       '''
+    );
+    return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
+  }
+  Future<List<ImageDB>> getImageOnTrackingNo({required int trackingNo}) async{
+    final database = await DatabaseService().database;
+    var images = await database.rawQuery(
+        '''
+      SELECT id, image_path, capture_datetime FROM $imageTable WHERE id IN (SELECT image_id FROM $crackTable WHERE tracking_no = ?) ;
+      ''', [trackingNo]
     );
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
@@ -232,9 +253,30 @@ class CrackDB{
     final database = await DatabaseService().database;
     final images = await database.rawQuery(
       '''
-      SELECT * FROM images ORDER BY id DESC LIMIT 6;
+      SELECT * FROM $imageTable ORDER BY id DESC LIMIT 6;
       '''
     );
-    return images.map((info) => Floor.fromSQfliteDatabase(info)).toList();
+    return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
+  }
+
+  Future<int?> getTrackingNoCount() async{
+    final database = await DatabaseService().database;
+    List<Map<String, dynamic>> count = await database.rawQuery(
+        '''
+      SELECT COUNT(*) FROM $crackTable
+      '''
+    );
+    int? result = Sqflite.firstIntValue(count);
+    return result;
+  }
+
+  Future<List<CrackInfo>> getTrackingNos() async{
+    final database = await DatabaseService().database;
+    final trackingNo = await database.rawQuery(
+        '''
+      SELECT DISTINCT tracking_no FROM $crackTable;
+      '''
+    );
+    return trackingNo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
   }
 }

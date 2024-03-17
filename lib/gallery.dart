@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_app/database/classes/crack_info.dart';
+import 'database/crack_db.dart';
 import 'main_menu.dart';
 import 'folders.dart';
 import 'delete_folder_popup.dart';
 
-List<String> folders = [
-  'Tracking No. 1',
-  'Tracking No. 2',
-  'Tracking No. 3',
-  'Tracking No. 4'
-]; // placeholder folders
+
+List<String> folders = [];
 
 class GalleryScreen extends StatefulWidget {
   @override
@@ -18,9 +16,35 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   List<String> checkedFolders = []; // List to hold checked folders
+  List<CrackInfo> listTrack = [];
+  // placeholder folders
+
+  var crackDB = CrackDB();
+
+  void getTrackingNo() async{
+
+    listTrack = await crackDB.getTrackingNos();
+
+    setState(() {
+      int currentTrack = 0;
+
+      for(int i = 0; i < listTrack.length; i++){
+        currentTrack = listTrack[i].trackingNo;
+        folders.add("Tracking No. $currentTrack");
+      }
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    folders = [];
+    getTrackingNo();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: CustomAppBar(),
       body: Column(
@@ -69,11 +93,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 }
 
-class FolderListView extends StatelessWidget {
+class FolderListView extends StatefulWidget {
   final List<String> folders;
+
   final void Function(String, bool) onCheckboxChanged; // Callback function
 
-  FolderListView({required this.folders, required this.onCheckboxChanged});
+  FolderListView({super.key, required this.folders, required this.onCheckboxChanged});
+
+  @override
+  State<FolderListView> createState() => _FolderListViewState();
+}
+
+class _FolderListViewState extends State<FolderListView> {
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +115,11 @@ class FolderListView extends StatelessWidget {
 
         return FoldersStateful(
           child: folderName, // Pass folder name as child
+          trackingNo: int.parse(folderName.replaceAll(RegExp(r'[^0-9]'),'')),
           folderName: folderName, // Pass folder name to FoldersStateful
           isChecked: false, // Initially unchecked
           onCheckboxChanged: (isChecked) {
-            onCheckboxChanged(folderName, isChecked); // Call the callback function with folder name and checkbox state
+            widget.onCheckboxChanged(folderName, isChecked); // Call the callback function with folder name and checkbox state
           },
         );
       },

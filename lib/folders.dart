@@ -4,11 +4,13 @@ import 'folder_view.dart';
 class FoldersStateful extends StatefulWidget {
   final String child;
   final String folderName;
+  final int trackingNo;
   final bool isChecked;
   final ValueChanged<bool> onCheckboxChanged;
 
   FoldersStateful({
     required this.child,
+    required this.trackingNo,
     required this.folderName,
     required this.isChecked,
     required this.onCheckboxChanged,
@@ -20,6 +22,7 @@ class FoldersStateful extends StatefulWidget {
 
 class _FoldersStatefulState extends State<FoldersStateful> {
   bool _isChecked = false; // Local state to track checkbox state
+
 
   @override
   void initState() {
@@ -35,7 +38,10 @@ class _FoldersStatefulState extends State<FoldersStateful> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FolderView(folderName: widget.folderName),
+            builder: (context) => FolderView(
+                folderName: widget.folderName,
+                trackingNo: widget.trackingNo,
+            ),
           ),
         );
       },

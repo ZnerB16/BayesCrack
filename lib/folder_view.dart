@@ -1,53 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/database/classes/image.dart';
+import 'package:mobile_app/database/crack_db.dart';
 import 'main_menu.dart';
 import 'delete_image_popup.dart';
 import 'image_interface.dart'; // Import ImageInterface
 
 class FolderView extends StatelessWidget {
     final String folderName;
-    FolderView({required this.folderName});
+    final int trackingNo;
+    FolderView({
+        required this.folderName,
+        required this.trackingNo
+    });
     @override
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
                 title: Text(folderName), // Use folderName as the title
             ),
-            body: ImageList(),
+            body: ImageList(trackingNo: trackingNo),
             bottomNavigationBar: CustomBottomNavigationBar(),
         );
     }
 }
 
 class ImageList extends StatefulWidget {
+    final int trackingNo;
+    ImageList({
+        super.key,
+        required this.trackingNo
+    });
+
     @override
     _ImageListState createState() => _ImageListState();
 }
 
 class _ImageListState extends State<ImageList> {
-    List<Map<String, dynamic>> imageData = [
-        {
-            'img_path': 'assets/images/brenz.png',
-            'img_id': 'Image 1',
-            'capture_date': '2024-03-14 05:38:03',
-        },
-        {
-            'img_path': 'assets/images/raven.png',
-            'img_id': 'Image 2',
-            'capture_date': '2024-03-15 11:00:00',
-        },
-        {
-            'img_path': 'assets/images/francis.png',
-            'img_id': 'Image 3',
-            'capture_date': '2024-03-15 12:00:00'
-        },
-    ];
-
+    List<Map<String, dynamic>> imageData = [];
+    List<ImageDB> imageList = [];
     List<bool> isCheckedList = [];
+
+    var crackDB = CrackDB();
+    void getImages() async {
+
+        imageList = await crackDB.getImageOnTrackingNo(trackingNo: widget.trackingNo);
+
+        setState(() {
+          for(int i = 0; i < imageList.length; i++){
+              imageData.add({
+                  'img_path': imageList[i].imagePath,
+                  'img_name': 'Image ${imageList[i].id}',
+                  'capture_date': imageList[i].dateTime
+              });
+              print("Added $i");
+          }
+        });
+    }
 
     @override
     void initState() {
         super.initState();
+        imageData = [];
+        getImages();
+        print(widget.trackingNo);
         isCheckedList = List.generate(imageData.length, (index) => false); // Dynamic generate list for checkboxes
     }
 
@@ -55,6 +71,7 @@ class _ImageListState extends State<ImageList> {
 
     @override
     Widget build(BuildContext context) {
+
         return Column(
             children: [
                 Expanded(
@@ -62,7 +79,7 @@ class _ImageListState extends State<ImageList> {
                         itemCount: imageData.length,
                         itemBuilder: (context, index) {
                             final img_path = imageData[index]['img_path'];
-                            final img_id = imageData[index]['img_id'];
+                            final img_name = imageData[index]['img_name'];
                             final capture_date = DateTime.parse(imageData[index]['capture_date']);
                             final formattedDate = DateFormat.yMMMd().format(capture_date);
                             final formattedTime = DateFormat.jm().format(capture_date);
@@ -96,7 +113,7 @@ class _ImageListState extends State<ImageList> {
                                                     ),
                                                 ],
                                             ),
-                                            title: Text(img_id),
+                                            title: Text(img_name),
                                             subtitle: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -110,7 +127,7 @@ class _ImageListState extends State<ImageList> {
                                                     context,
                                                     MaterialPageRoute(builder: (context) => ImageInterface(
                                                         img_path: img_path,
-                                                        img_id: img_id,
+                                                        img_id: img_name,
                                                         capture_date: capture_date,
                                                         // Pass other required parameters here
                                                     )),

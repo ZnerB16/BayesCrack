@@ -19,26 +19,29 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
   int imageID = 0;
   int buildingID = 0;
   int floorID = 0;
+  int roomID = 0;
 
   void getID() async {
     var crackDB = CrackDB();
     var imageList = await crackDB.getLatestImage();
     var buildList = await crackDB.getLatestBuilding();
     var floorList = await crackDB.getLatestFloor();
+    var roomList = await crackDB.getLatestFloor();
 
     setState(() {
       imageID = imageList[0].id;
-      buildingID = buildList[0];
-      floorID = floorList[0];
+      buildingID = buildList[0].id;
+      floorID = floorList[0].id;
+      roomID = roomList[0].id;
     });
-    print("ImageID: $imageID");
-    print("Building: $buildingID");
-    print("Floor: $floorID");
-
+  }
+  @override
+  void initState(){
+    super.initState();
+    getID();
   }
   @override
   Widget build(BuildContext context) {
-    getID();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -167,6 +170,15 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                                   buildingID: buildingID,
                                                   floorID: floorID
                                               );
+                                              crackDB.insertCrackInfo(
+                                                  imageID: imageID,
+                                                  trackingNo: globals.trackingNo,
+                                                  buildingID: buildingID,
+                                                  floorID: floorID,
+                                                  roomID: roomID,
+                                                  remarks: globals.remarks
+                                              );
+
                                               crackDB.insertPrediction(
                                                   prediction: globals.classificationResult,
                                                   recommendation: globals.recommend,
@@ -184,7 +196,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
 
                                               Navigator.push(
                                                 // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const DisplayDataFromDB())
+                                                  context, MaterialPageRoute(builder: (_) => const MainMenu())
                                               );
                                             },
                                             child: const Text(
