@@ -203,7 +203,7 @@ class CrackDB{
     int? result = Sqflite.firstIntValue(count);
     return result;
   }
-  Future<List> getLatestBuilding() async{
+  Future<List<Building>> getLatestBuilding() async{
     final database = await DatabaseService().database;
     final building = await database.rawQuery(
       '''
@@ -212,7 +212,7 @@ class CrackDB{
     );
     return building.map((info) => Building.fromSQfliteDatabase(info)).toList();
   }
-  Future<List> getLatestFloor() async{
+  Future<List<Floor>> getLatestFloor() async{
     final database = await DatabaseService().database;
     final floor = await database.rawQuery(
       '''
@@ -221,7 +221,7 @@ class CrackDB{
     );
     return floor.map((info) => Floor.fromSQfliteDatabase(info)).toList();
   }
-  Future<List> getLatestRoom() async{
+  Future<List<Room>> getLatestRoom() async{
     final database = await DatabaseService().database;
     final room = await database.rawQuery(
       '''
@@ -239,6 +239,17 @@ class CrackDB{
     );
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
+
+  Future<List<ImageDB>> getLatestImageID() async{
+    final database = await DatabaseService().database;
+    var images = await database.rawQuery(
+        '''
+      SELECT id FROM $imageTable ORDER BY id DESC LIMIT 1;
+      '''
+    );
+    return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
+  }
+
   Future<List<ImageDB>> getImageOnTrackingNo({required int trackingNo}) async{
     final database = await DatabaseService().database;
     var images = await database.rawQuery(

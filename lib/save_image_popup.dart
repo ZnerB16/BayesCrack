@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
 import 'package:mobile_app/data_display_test.dart';
+import 'package:mobile_app/database/classes/building.dart';
+import 'package:mobile_app/database/classes/floor.dart';
+import 'package:mobile_app/database/classes/image.dart';
+import 'package:mobile_app/database/classes/room.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 import 'package:mobile_app/main_menu.dart';
@@ -23,10 +27,10 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
 
   void getID() async {
     var crackDB = CrackDB();
-    var imageList = await crackDB.getLatestImage();
-    var buildList = await crackDB.getLatestBuilding();
-    var floorList = await crackDB.getLatestFloor();
-    var roomList = await crackDB.getLatestFloor();
+    List<ImageDB> imageList = await crackDB.getLatestImageID();
+    List<Building> buildList = await crackDB.getLatestBuilding();
+    List<Floor> floorList = await crackDB.getLatestFloor();
+    List<Room> roomList = await crackDB.getLatestRoom();
 
     setState(() {
       imageID = imageList[0].id;
@@ -38,10 +42,10 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
   @override
   void initState(){
     super.initState();
-    getID();
   }
   @override
   Widget build(BuildContext context) {
+    getID();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -152,6 +156,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                             onPressed: () async {
                                               await GallerySaver.saveImage(globals.imagePath);
                                               var crackDB = CrackDB();
+
                                               crackDB.insertImage(
                                                   imagePath: globals.imagePath,
                                                   datetime: globals.formattedDateTime,
@@ -178,7 +183,6 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                                   roomID: roomID,
                                                   remarks: globals.remarks
                                               );
-
                                               crackDB.insertPrediction(
                                                   prediction: globals.classificationResult,
                                                   recommendation: globals.recommend,
