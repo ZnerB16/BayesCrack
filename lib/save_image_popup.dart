@@ -177,7 +177,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                         ),
                                         child: TextButton(
                                             onPressed: () async {
-                                              await GallerySaver.saveImage(globals.imagePath);
+                                              await GallerySaver.saveImage(globals.imagePath, toDcim: true);
                                               var crackDB = CrackDB();
 
                                               await crackDB.insertImage(

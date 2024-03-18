@@ -42,10 +42,9 @@ class _ImageListState extends State<ImageList> {
     List<bool> isCheckedList = [];
 
     var crackDB = CrackDB();
-    void getImages() async {
+    Future<void> getImages() async {
 
         imageList = await crackDB.getImageOnTrackingNo(trackingNo: widget.trackingNo);
-
         setState(() {
           for(int i = 0; i < imageList.length; i++){
               imageData.add({
@@ -53,7 +52,6 @@ class _ImageListState extends State<ImageList> {
                   'img_name': 'Image ${imageList[i].id}',
                   'capture_date': imageList[i].dateTime
               });
-              print("Added $i");
           }
         });
     }
@@ -61,17 +59,17 @@ class _ImageListState extends State<ImageList> {
     @override
     void initState() {
         super.initState();
-        imageData = [];
-        getImages();
-        print(widget.trackingNo);
-        isCheckedList = List.generate(imageData.length, (index) => false); // Dynamic generate list for checkboxes
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+            imageData = []; // To avoid duplicate images when page refreshed
+            await getImages(); // Inserts image data in imageData map
+            isCheckedList = List.generate(imageData.length, (index) => false); // Dynamic generate list for checkboxes
+        });
     }
 
     List<int> selectedIndices = []; // Maintain a list of selected indices
-
     @override
     Widget build(BuildContext context) {
-
+        print("Records in list: ${imageData.length}");
         return Column(
             children: [
                 Expanded(
