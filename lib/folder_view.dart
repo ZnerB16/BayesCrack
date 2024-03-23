@@ -18,7 +18,39 @@ class FolderView extends StatelessWidget {
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
-                title: Text(folderName), // Use folderName as the title
+              leading: InkWell(
+                onTap: () {
+                    Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xff284b63),
+                        BlendMode.modulate,
+                      ),
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: Image.asset('assets/images/back_icon.png'),
+                      ),
+                    ),
+                    const Text(
+                      'Back',
+                      style: TextStyle(
+                        color: Color(0xff284b63),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+                centerTitle: true,
+                title: Text(folderName,
+                    style: TextStyle(color: Color(0xff284b63)
+                    ),
+                  ), 
             ),
             body: ImageList(trackingNo: trackingNo),
             bottomNavigationBar: const CustomBottomNavigationBar(),

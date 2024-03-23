@@ -13,8 +13,8 @@ class LoadingScreen extends StatelessWidget {
             // Image widget
             Image.asset(
               'assets/images/blue_loading.gif', 
-              width: 300, 
-              height: 300,
+              width: 150, 
+              height: 150,
             ),
             const SizedBox(height: 20), 
             // Text widget

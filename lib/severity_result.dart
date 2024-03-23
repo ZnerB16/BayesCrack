@@ -39,32 +39,40 @@ class SeverityResultScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: const BoxConstraints(maxHeight: 450),
+                  constraints: const BoxConstraints(maxHeight: 420),
                   child: Image.file(File(globals.imagePath)),
                 ),
                 const SizedBox(height: 1),
                 Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.transparent,
                 ),
                 padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
                     Text(
-                      'Result: $classificationResult',
+                      'Severity: $classificationResult',
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      interpretation,
-                      textAlign: TextAlign.justify,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        ),
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 350, 
+                        child: Text(
+                          interpretation,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

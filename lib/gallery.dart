@@ -178,7 +178,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const Text(
-                '',
+                'Back',
                 style: TextStyle(
                   color: Color(0xff284b63),
                   fontSize: 15,

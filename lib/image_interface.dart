@@ -61,7 +61,36 @@ class _ImageInterfaceState extends State<ImageInterface> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crack Severity Classification'),
+         leading: InkWell(
+                onTap: () {
+                    Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xff284b63),
+                        BlendMode.modulate,
+                      ),
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: Image.asset('assets/images/back_icon.png'),
+                      ),
+                    ),
+                    const Text(
+                      'Back',
+                      style: TextStyle(
+                        color: Color(0xff284b63),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+        
+        title: const Text(''),
         automaticallyImplyLeading: true, // To show back button
       ),
       body: Padding(
@@ -111,35 +140,35 @@ class _ImageInterfaceState extends State<ImageInterface> {
                     children: [
                       Text(
                         'Image Name: Crack_${widget.img_id ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Capture Date: $formattedDate',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Capture Time: $formattedTime',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Geolocation: ${geolocation ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Tracking Number: ${trackingNo ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Building: ${building ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Floor: ${floor ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Room: ${room ?? ''}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
