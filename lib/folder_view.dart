@@ -50,7 +50,7 @@ class _ImageListState extends State<ImageList> {
           for(int i = 0; i < imageList.length; i++){
               imageData.add({
                   'img_path': imageList[i].imagePath,
-                  'img_name': '${imageList[i].id}',
+                  'img_id': '${imageList[i].id}',
                   'capture_date': imageList[i].dateTime
               });
           }
@@ -78,7 +78,7 @@ class _ImageListState extends State<ImageList> {
                         itemCount: imageData.length,
                         itemBuilder: (context, index) {
                             final imgPath = imageData[index]['img_path'];
-                            final imgName = imageData[index]['img_name'];
+                            final imgID = imageData[index]['img_id'];
                             final captureDate = DateTime.parse(imageData[index]['capture_date']);
                             final formattedDate = DateFormat.yMMMd().format(captureDate);
                             final formattedTime = DateFormat.jm().format(captureDate);
@@ -112,7 +112,7 @@ class _ImageListState extends State<ImageList> {
                                                     ),
                                                 ],
                                             ),
-                                            title: Text('Crack_$imgName'),
+                                            title: Text('Crack_$imgID'),
                                             subtitle: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -126,7 +126,7 @@ class _ImageListState extends State<ImageList> {
                                                     context,
                                                     MaterialPageRoute(builder: (context) => ImageInterface(
                                                         img_path: imgPath,
-                                                        img_id: imgName,
+                                                        img_id: imgID,
                                                         capture_date: captureDate,
                                                         // Pass other required parameters here
                                                     )),

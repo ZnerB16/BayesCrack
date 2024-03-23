@@ -1,4 +1,5 @@
 
+import 'package:mobile_app/globals.dart';
 import 'package:sqflite/sqflite.dart';
 import 'classes/image.dart';
 import 'classes/building.dart';
@@ -180,17 +181,6 @@ class CrackDB{
     );
     return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
   }
-  // Delete image data including its info and prediction
-  Future<void> deleteImage(int id) async{
-    final database = await DatabaseService().database;
-    await database.rawDelete(
-      '''
-      DELETE FROM $imageTable WHERE id = ?;
-      DELETE FROM $crackTable WHERE image_id = ?;
-      DELETE FROM $predictionTable WHERE image_id = ?    
-      ''', [id, id, id]
-    );
-  }
   // Count predictions
   Future<int?> countPredictions(String prediction) async{
     final database = await DatabaseService().database;
@@ -300,5 +290,59 @@ class CrackDB{
       '''
     );
     return trackingNo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
+  // Delete image data
+  Future<void> deleteImage({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+      '''
+      DELETE FROM $imageTable WHERE id = ?;
+      ''', [id]
+    );
+  }
+  // Delete building data
+  Future<void> deleteBuilding({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+        '''
+      DELETE FROM $buildingTable WHERE id = ?;
+      ''', [id]
+    );
+  }
+  // Delete floor data
+  Future<void> deleteFloor({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+        '''
+      DELETE FROM $floorTable WHERE id = ?;
+      ''', [id]
+    );
+  }
+  // Delete floor data
+  Future<void> deleteRoom({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+        '''
+      DELETE FROM $roomTable WHERE id = ?;
+      ''', [id]
+    );
+  }
+  // Delete floor data
+  Future<void> deletePrediction({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+        '''
+      DELETE FROM $predictionTable WHERE image_id = ?;
+      ''', [id]
+    );
+  }
+  // Delete floor data
+  Future<void> deleteCrackInfo({required int id}) async{
+    final database = await DatabaseService().database;
+    await database.rawDelete(
+        '''
+      DELETE FROM $crackTable WHERE image_id = ?;
+      ''', [id]
+    );
   }
 }
