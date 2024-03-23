@@ -3,13 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:mobile_app/database/classes/image.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'main_menu.dart';
+import 'dart:io';
 import 'delete_image_popup.dart';
 import 'image_interface.dart'; // Import ImageInterface
 
 class FolderView extends StatelessWidget {
     final String folderName;
     final int trackingNo;
-    FolderView({
+    const FolderView({super.key, 
         required this.folderName,
         required this.trackingNo
     });
@@ -20,14 +21,14 @@ class FolderView extends StatelessWidget {
                 title: Text(folderName), // Use folderName as the title
             ),
             body: ImageList(trackingNo: trackingNo),
-            bottomNavigationBar: CustomBottomNavigationBar(),
+            bottomNavigationBar: const CustomBottomNavigationBar(),
         );
     }
 }
 
 class ImageList extends StatefulWidget {
     final int trackingNo;
-    ImageList({
+    const ImageList({
         super.key,
         required this.trackingNo
     });
@@ -49,7 +50,7 @@ class _ImageListState extends State<ImageList> {
           for(int i = 0; i < imageList.length; i++){
               imageData.add({
                   'img_path': imageList[i].imagePath,
-                  'img_name': 'Image ${imageList[i].id}',
+                  'img_name': '${imageList[i].id}',
                   'capture_date': imageList[i].dateTime
               });
           }
@@ -76,15 +77,15 @@ class _ImageListState extends State<ImageList> {
                     child: ListView.builder(
                         itemCount: imageData.length,
                         itemBuilder: (context, index) {
-                            final img_path = imageData[index]['img_path'];
-                            final img_name = imageData[index]['img_name'];
-                            final capture_date = DateTime.parse(imageData[index]['capture_date']);
-                            final formattedDate = DateFormat.yMMMd().format(capture_date);
-                            final formattedTime = DateFormat.jm().format(capture_date);
+                            final imgPath = imageData[index]['img_path'];
+                            final imgName = imageData[index]['img_name'];
+                            final captureDate = DateTime.parse(imageData[index]['capture_date']);
+                            final formattedDate = DateFormat.yMMMd().format(captureDate);
+                            final formattedTime = DateFormat.jm().format(captureDate);
                             return Column(
                                 children: [
                                     Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                                         child: ListTile(
                                             leading: Row(
                                                 mainAxisSize: MainAxisSize.min,
@@ -103,15 +104,15 @@ class _ImageListState extends State<ImageList> {
                                                             });
                                                         },
                                                     ),
-                                                    Image.asset(
-                                                        img_path,
+                                                    Image.file(
+                                                        File(imgPath),
                                                         fit: BoxFit.cover,
                                                         width: 60,
                                                         height: 60,
                                                     ),
                                                 ],
                                             ),
-                                            title: Text(img_name),
+                                            title: Text('Crack_$imgName'),
                                             subtitle: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -124,16 +125,16 @@ class _ImageListState extends State<ImageList> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(builder: (context) => ImageInterface(
-                                                        img_path: img_path,
-                                                        img_id: img_name,
-                                                        capture_date: capture_date,
+                                                        img_path: imgPath,
+                                                        img_id: imgName,
+                                                        capture_date: captureDate,
                                                         // Pass other required parameters here
                                                     )),
                                                 );
                                             },
                                         ),
                                     ),
-                                    Divider(height: 1, color: Colors.grey),
+                                    const Divider(height: 1, color: Colors.grey),
                                 ],
                             );
                         },
@@ -142,7 +143,7 @@ class _ImageListState extends State<ImageList> {
                 if (selectedIndices.isNotEmpty) // Show delete button only if any checkboxes are checked
                     Align(
                         alignment: Alignment.centerRight,
-                        child: Container(
+                        child: SizedBox(
                             width: 70, // Set width to desired size
                             height: 70, // Set height to desired size
                             child: IconButton(
@@ -151,7 +152,7 @@ class _ImageListState extends State<ImageList> {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                            return DeleteImagePopup();
+                                            return const DeleteImagePopup();
                                         },
                                     );
                                 },

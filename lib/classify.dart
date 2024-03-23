@@ -31,7 +31,9 @@ class Classifier {
       // Check if labels are loaded successfully
       if (_labels.isNotEmpty) {
         print('Labels loaded successfully:');
-        _labels.forEach((label) => print(label));
+        for (var label in _labels) {
+          print(label);
+        }
       } else {
         print('Failed to load labels or labels file is empty.');
       }

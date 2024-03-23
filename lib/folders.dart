@@ -8,7 +8,7 @@ class FoldersStateful extends StatefulWidget {
   final bool isChecked;
   final ValueChanged<bool> onCheckboxChanged;
 
-  FoldersStateful({
+  const FoldersStateful({super.key, 
     required this.child,
     required this.trackingNo,
     required this.folderName,
@@ -61,23 +61,23 @@ class _FoldersStatefulState extends State<FoldersStateful> {
                     });
                   },
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Image.asset(
                   'assets/images/folder.png',
                   width: 30,
                   height: 30,
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     widget.child,
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
               ],
             ),
           ),
-          Divider(height: 1, color: Colors.grey),
+          const Divider(height: 1, color: Colors.grey),
         ],
       ),
     );

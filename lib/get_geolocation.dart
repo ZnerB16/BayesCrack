@@ -1,5 +1,4 @@
 import 'package:geocoding/geocoding.dart';
-import 'package:mobile_app/permission_request.dart';
 
 class GetAddress{
   final double latitude;

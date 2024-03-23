@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
 
 class DeleteImagePopup extends StatefulWidget {
-  const DeleteImagePopup({Key? key}) : super(key: key);
+  const DeleteImagePopup({super.key});
 
   @override
   State<DeleteImagePopup> createState() => _DeleteImagePopupState();
@@ -33,7 +33,7 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   child: Column(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Delete Image",
@@ -45,7 +45,7 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Are you sure you want to delete this file? It cannot be recovered.",

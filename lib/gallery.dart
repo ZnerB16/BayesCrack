@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile_app/database/classes/crack_info.dart';
 import 'database/crack_db.dart';
 import 'main_menu.dart';
@@ -10,6 +9,8 @@ import 'delete_folder_popup.dart';
 List<String> folders = [];
 
 class GalleryScreen extends StatefulWidget {
+  const GalleryScreen({super.key});
+
   @override
   _GalleryScreenState createState() => _GalleryScreenState();
 }
@@ -46,7 +47,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -68,7 +69,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             visible: checkedFolders.isNotEmpty,
             child: Align(
               alignment: Alignment.centerRight,
-              child: Container(
+              child: SizedBox(
                 width: 70, // Set width to desired size
                 height: 70, // Set height to desired size
                 child: IconButton(
@@ -77,7 +78,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return DeleteFolderPopup();
+                        return const DeleteFolderPopup();
                       },
                     );
                   },
@@ -88,7 +89,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(), // Add CustomBottomNavigationBar here
+      bottomNavigationBar: const CustomBottomNavigationBar(), // Add CustomBottomNavigationBar here
     );
   }
 }
@@ -98,7 +99,7 @@ class FolderListView extends StatefulWidget {
 
   final void Function(String, bool) onCheckboxChanged; // Callback function
 
-  FolderListView({super.key, required this.folders, required this.onCheckboxChanged});
+  const FolderListView({super.key, required this.folders, required this.onCheckboxChanged});
 
   @override
   State<FolderListView> createState() => _FolderListViewState();
@@ -129,12 +130,14 @@ class _FolderListViewState extends State<FolderListView> {
 
 //////////////////////////////
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({super.key});
+
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + 50); // Increased height by 50
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 50); // Increased height by 50
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: Colors.grey,
@@ -157,14 +160,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MainMenu()),
+              MaterialPageRoute(builder: (context) => const MainMenu()),
               ModalRoute.withName('/'),
             );
           },
           child: Row(
             children: [
               ColorFiltered(
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   Color(0xff284b63),
                   BlendMode.modulate,
                 ),
@@ -174,7 +177,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Image.asset('assets/images/back_icon.png'),
                 ),
               ),
-              Text(
+              const Text(
                 '',
                 style: TextStyle(
                   color: Color(0xff284b63),

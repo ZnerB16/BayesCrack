@@ -7,7 +7,7 @@ import 'database/crack_db.dart';
 import 'gallery.dart';
 
 class MainMenu extends StatefulWidget {
-  const MainMenu({Key? key}) : super(key: key);
+  const MainMenu({super.key});
   @override
   State<MainMenu> createState() => _MainMenuState();
 }
@@ -144,7 +144,7 @@ class _MainMenuState extends State<MainMenu> {
                 ),
               ),
             ),
-            CustomBottomNavigationBar(),
+            const CustomBottomNavigationBar(),
           ],
         ),
       ),
@@ -183,6 +183,8 @@ class _MainMenuState extends State<MainMenu> {
 }
 
 class CustomBottomNavigationBar extends StatefulWidget {
+  const CustomBottomNavigationBar({super.key});
+
   @override
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState();
@@ -197,13 +199,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         // If the gallery button is clicked
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GalleryScreen()),
+          MaterialPageRoute(builder: (context) => const GalleryScreen()),
         );
       } else if (_selectedIndex == 1) {
         // If the camera button is clicked
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CameraScreen()),
+          MaterialPageRoute(builder: (context) => const CameraScreen()),
         );
       } else if (_selectedIndex == 2) {
         // If the quit button is clicked
@@ -214,7 +216,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           top: BorderSide(
             color: Colors.grey,
@@ -264,11 +266,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         onTap: _onItemTapped,
         selectedItemColor: Colors.black, // Change the color of the selected item
         unselectedItemColor: Colors.black, // Change the color of the unselected item
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 12, // Specify the font size of the selected item text
           color: Colors.black, // Specify the font color of the selected item text
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 12, // Specify the font size of the unselected item text
           color: Colors.black, // Specify the font color of the unselected item text
         ),

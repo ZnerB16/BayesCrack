@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/main_menu.dart';
 import 'package:mobile_app/input_img_details.dart';
 import 'severity_result_explanations.dart';
@@ -38,31 +37,31 @@ class SeverityResultScreen extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff284b63), width: 2.0),
+                    border: Border.all(color: const Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 450),
+                  constraints: const BoxConstraints(maxHeight: 450),
                   child: Image.file(File(globals.imagePath)),
                 ),
-                SizedBox(height: 1),
+                const SizedBox(height: 1),
                 Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.transparent,
                 ),
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
                     Text(
                       'Result: $classificationResult',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       interpretation,
                       textAlign: TextAlign.justify,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         ),
@@ -90,7 +89,7 @@ class SeverityResultScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => const MainMenu(),
                         ),
                       );
                     },
@@ -103,7 +102,7 @@ class SeverityResultScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Container(
                   height: 40,
                   width: 120,

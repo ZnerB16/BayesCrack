@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
               width: 300, 
               height: 300,
             ),
-            SizedBox(height: 20), 
+            const SizedBox(height: 20), 
             // Text widget
             const Text(
               'Loading. Please wait.',

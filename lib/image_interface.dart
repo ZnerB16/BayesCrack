@@ -1,46 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/database/classes/crack_info.dart';
+import 'package:mobile_app/database/crack_db.dart';
+import 'dart:io';
+import 'database/classes/prediction.dart';
 import 'remarks.dart'; // Importing RemarksDialog class
 
-class ImageInterface extends StatelessWidget {
+class ImageInterface extends StatefulWidget {
   final String img_path;
   final String img_id;
   final DateTime capture_date;
-  final String? geolocation;
-  final int? tracking_no;
-  final int? building_id;
-  final int? floor_id;
-  final int? room_id;
-  final String? severity;
-  final String? recommendation;
-  final String? remarks; // Add remarks parameter
 
-  ImageInterface({
+  const ImageInterface({super.key, 
     required this.img_path,
     required this.img_id,
     required this.capture_date,
-    this.geolocation,
-    this.tracking_no,
-    this.building_id,
-    this.floor_id,
-    this.room_id,
-    this.severity,
-    this.recommendation,
-    this.remarks, // Initialize remarks parameter
   });
 
   @override
+  State<ImageInterface> createState() => _ImageInterfaceState();
+}
+
+class _ImageInterfaceState extends State<ImageInterface> {
+  String? geolocation;
+  int? trackingNo;
+  String? building;
+  String? floor;
+  String? room;
+  String? severity;
+  String? recommend;
+  String? remarks;
+
+  void getInfo() async{
+    var crackDB = CrackDB();
+    List<CrackInfo> crackList = await crackDB.fetchALlCrack(imageID: int.parse(widget.img_id));
+    List<Prediction> predictionList = await crackDB.getPrediction(imageID: int.parse(widget.img_id));
+
+    setState(() {
+      trackingNo = crackList[0].trackingNo;
+      geolocation = crackList[0].geolocation;
+      building  = crackList[0].building;
+      floor = crackList[0].floor;
+      room = crackList[0].room;
+      severity = predictionList[0].prediction;
+      recommend = predictionList[0].recommend;
+      remarks = crackList[0].remarks;
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    getInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat.yMMMd().format(capture_date);
-    final formattedTime = DateFormat.jm().format(capture_date);
+    final formattedDate = DateFormat.yMMMd().format(widget.capture_date);
+    final formattedTime = DateFormat.jm().format(widget.capture_date);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crack Severity Classification'),
+        title: const Text('Crack Severity Classification'),
         automaticallyImplyLeading: true, // To show back button
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -53,14 +78,14 @@ class ImageInterface extends StatelessWidget {
                   width: 180, // Fixed width for image
                   child: Stack(
                     children: [
-                      Image.asset(
-                        img_path,
+                      Image.file(
+                        File(widget.img_path),
                         fit: BoxFit.cover,
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
+                        child: SizedBox(
                           height: 40, // Adjust the height as needed
                           child: IconButton(
                             icon: Image.asset('assets/images/question_mark.png'), // Add your icon asset
@@ -78,66 +103,67 @@ class ImageInterface extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 16), // Space between image and details
+                const SizedBox(width: 16), // Space between image and details
                 // Details on the right
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Image Name: ${img_id ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        'Image Name: Crack_${widget.img_id ?? ''}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Capture Date: $formattedDate',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Capture Time: $formattedTime',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Geolocation: ${geolocation ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Tracking Number: ${tracking_no ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        'Tracking Number: ${trackingNo ?? ''}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Building: ${building_id ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        'Building: ${building ?? ''}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Floor: ${floor_id ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        'Floor: ${floor ?? ''}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Room: ${room_id ?? ''}',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        'Room: ${room ?? ''}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16), // Space between details and severity/recommendation
+            const SizedBox(height: 16), // Space between details and severity/recommendation
             // Box containing severity and recommendation
             Container(
+              height: 300,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
-                color: Color(0xFFD9D9D9),
+                color: const Color(0xFFD9D9D9),
                 borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 3,
                     blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
               ),
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   // Severity row
@@ -146,19 +172,29 @@ class ImageInterface extends StatelessWidget {
                     children: [
                       Text(
                         'Severity: ${severity ?? ''}',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 8), // Space between severity and recommendation
+                  const SizedBox(height: 8), // Space between severity and recommendation
                   // Recommendation row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Recommendation here ${recommendation ?? ''}',
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      SizedBox(
+                        width: 300,
+                        child:  Text(
+                          recommend?? '',
+                          style: const TextStyle(
+                              fontSize: 18,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      )
+
                     ],
                   ),
                 ],

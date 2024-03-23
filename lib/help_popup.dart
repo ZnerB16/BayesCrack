@@ -47,7 +47,7 @@ class HelpPopup extends StatelessWidget{
                             color: Colors.black
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
                             'assets/images/logo_text.png',
@@ -55,7 +55,7 @@ class HelpPopup extends StatelessWidget{
                           ),
                         ),
                   
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                       const Text(
                         "It is crafted with a deep learning model named “BayesCrack Convolutional Ensemble” to empower a swift and accurate process of classifying concrete cracks severity.",
                         style: TextStyle(
@@ -63,7 +63,7 @@ class HelpPopup extends StatelessWidget{
                             color: Colors.black
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 100)),
+                      const Padding(padding: EdgeInsets.only(top: 100)),
                       SizedBox(
                           width: 300,
                           child: Center(
@@ -202,7 +202,7 @@ class HelpPopup2 extends StatelessWidget{
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
                             'assets/images/camera_icon_blue.png',
@@ -210,7 +210,7 @@ class HelpPopup2 extends StatelessWidget{
                           ),
                         ),
                   
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                       const Text(
                         "Step 2: Confirm and wait to classify.",
                         style: TextStyle(
@@ -219,14 +219,14 @@ class HelpPopup2 extends StatelessWidget{
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
                             'assets/images/blue_loading.gif',
                             height: 100,
                           ),
                         ),
-                      Padding(padding: EdgeInsets.only(top: 100)),
+                      const Padding(padding: EdgeInsets.only(top: 100)),
                       SizedBox(
                           width: 300,
                           child: Center(
@@ -365,7 +365,7 @@ class HelpPopup3 extends StatelessWidget{
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
                             'assets/images/crack_classification.png',
@@ -373,7 +373,7 @@ class HelpPopup3 extends StatelessWidget{
                           ),
                         ),
                   
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                       const Text(
                         "Step 4: Save the Image (Optional)",
                         style: TextStyle(
@@ -382,14 +382,14 @@ class HelpPopup3 extends StatelessWidget{
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      const Padding(padding: EdgeInsets.only(top: 20)),
                         Center(
                           child: Image.asset(
                             'assets/images/crack_information.png',
                             height: 110,
                           ),
                         ),
-                      Padding(padding: EdgeInsets.only(top: 100)),
+                      const Padding(padding: EdgeInsets.only(top: 100)),
                       SizedBox(
                           width: 300,
                           child: Center(
@@ -523,12 +523,12 @@ class HelpPopup4 extends StatelessWidget{
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Image.asset(
                             'assets/images/raven.png',
                             height: 80,
                           ),
-                          Padding(padding: EdgeInsets.only(left: 15)),
+                          const Padding(padding: EdgeInsets.only(left: 15)),
                           const Text(
                             "Raven E. Cagulang",
                             style: TextStyle(
@@ -539,16 +539,16 @@ class HelpPopup4 extends StatelessWidget{
                         ],
                       ),
                       
-                      Padding(padding: EdgeInsets.only(top: 15)),
+                      const Padding(padding: EdgeInsets.only(top: 15)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Image.asset(
                             'assets/images/francis.png',
                             height: 80,
                           ),
-                          Padding(padding: EdgeInsets.only(left: 15)),
+                          const Padding(padding: EdgeInsets.only(left: 15)),
                           const Text(
                             "Francis Ryan C. Diesto",
                             style: TextStyle(
@@ -558,16 +558,16 @@ class HelpPopup4 extends StatelessWidget{
                           ),
                         ],
                       ),
-                      Padding(padding: EdgeInsets.only(top: 15)),
+                      const Padding(padding: EdgeInsets.only(top: 15)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Image.asset(
                             'assets/images/brenz.png',
                             height: 80,
                           ),
-                          Padding(padding: EdgeInsets.only(left: 15)),
+                          const Padding(padding: EdgeInsets.only(left: 15)),
                           const Text(
                             "Brenz Gwynne M. Hababag",
                             style: TextStyle(
@@ -577,16 +577,16 @@ class HelpPopup4 extends StatelessWidget{
                           ),
                         ],
                       ),
-                      Padding(padding: EdgeInsets.only(top: 15)),
+                      const Padding(padding: EdgeInsets.only(top: 15)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Image.asset(
                             'assets/images/kyra.png',
                             height: 80,
                           ),
-                          Padding(padding: EdgeInsets.only(left: 15)),
+                          const Padding(padding: EdgeInsets.only(left: 15)),
                           const Text(
                             "Kyra Jyne A. Melendres",
                             style: TextStyle(
@@ -596,7 +596,7 @@ class HelpPopup4 extends StatelessWidget{
                           ),
                         ],
                       ),
-                      Padding(padding: EdgeInsets.only(top: 100)),
+                      const Padding(padding: EdgeInsets.only(top: 100)),
                       SizedBox(
                           width: 300,
                           child: Center(

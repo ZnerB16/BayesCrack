@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
 
 class DeleteFolderPopup extends StatefulWidget {
-  const DeleteFolderPopup({Key? key}) : super(key: key);
+  const DeleteFolderPopup({super.key});
 
   @override
   State<DeleteFolderPopup> createState() => _DeleteFolderPopupState();
@@ -33,7 +33,7 @@ class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   child: Column(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Delete Folder",
@@ -45,7 +45,7 @@ class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Align(
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Are you sure you want to delete this file? It cannot be recovered.",

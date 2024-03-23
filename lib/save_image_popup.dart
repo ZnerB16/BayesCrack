@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
-import 'package:mobile_app/data_display_test.dart';
 import 'package:mobile_app/database/classes/building.dart';
 import 'package:mobile_app/database/classes/floor.dart';
 import 'package:mobile_app/database/classes/image.dart';
@@ -24,6 +22,9 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
   int buildingID = 0;
   int floorID = 0;
   int roomID = 0;
+  String? filePath;
+
+
   var crackDB = CrackDB();
 
   Future<void> getImageBuildID() async {
@@ -63,9 +64,11 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
       });
     }
   }
+
   @override
   void initState(){
     super.initState();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -177,7 +180,7 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                         ),
                                         child: TextButton(
                                             onPressed: () async {
-                                              await GallerySaver.saveImage(globals.imagePath, toDcim: true);
+
                                               var crackDB = CrackDB();
 
                                               await crackDB.insertImage(

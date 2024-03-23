@@ -49,7 +49,7 @@ class _DisplayDataFromDB extends State<DisplayDataFromDB>{
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Main Menu',
                 style: TextStyle(
                   color: Colors.black,

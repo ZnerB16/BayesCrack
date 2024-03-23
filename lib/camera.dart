@@ -12,7 +12,7 @@ import 'loading_screen.dart';
 import 'globals.dart' as globals;
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  const CameraScreen({super.key});
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -76,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff284b63),
+      backgroundColor: const Color(0xff284b63),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text(
@@ -92,7 +92,7 @@ class _CameraScreenState extends State<CameraScreen> {
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MainMenu()), 
+              MaterialPageRoute(builder: (context) => const MainMenu()), 
               ModalRoute.withName('/'),
             );
           },
@@ -188,7 +188,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 elevation: 10.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0),
-                  side: BorderSide(color: Colors.transparent),
+                  side: const BorderSide(color: Colors.transparent),
                 ),
                 backgroundColor: Colors.white,
                 child: Image.asset('assets/images/capture_icon.png'),
@@ -199,21 +199,21 @@ class _CameraScreenState extends State<CameraScreen> {
             onPressed: () {
               _toggleFlash();
             },
-            child: Transform.scale(
-              scale: 1.0,
-              child: Icon(
-                _isFlashOn ? Icons.flash_on : Icons.flash_off,
-                color: Color(0xff284b63),
-              ),
-            ),
             backgroundColor: Colors.white,
             elevation: 0.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
-              side: BorderSide(color: Colors.transparent),
+              side: const BorderSide(color: Colors.transparent),
             ),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             mini: true,
+            child: Transform.scale(
+              scale: 1.0,
+              child: Icon(
+                _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                color: const Color(0xff284b63),
+              ),
+            ),
           ),
         ],
       ),
@@ -247,7 +247,7 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirmation',
+        title: const Text('Confirmation',
           style: TextStyle(
               color: Color(0xff284b63),
               fontSize: 24,
@@ -266,13 +266,13 @@ class DisplayPictureScreen extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff284b63), width: 2.0),
+                    border: Border.all(color: const Color(0xff284b63), width: 2.0),
                   ),
-                  constraints: BoxConstraints(maxHeight: 450),
+                  constraints: const BoxConstraints(maxHeight: 450),
                   child: Image.file(File(globals.imagePath)),
                 ),
-                SizedBox(height: 20),
-                Center(
+                const SizedBox(height: 20),
+                const Center(
                   child: Text(
                     'Run severity classification on this image?',
                     style: TextStyle(
@@ -281,12 +281,12 @@ class DisplayPictureScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
+                const SizedBox(height: 20),
+                SizedBox(
                     width: 250,
                     child: Text(
                       'Date Time: $formattedDateTime \nGeolocation: $geolocation',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                       ),
@@ -314,7 +314,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'CANCEL',
                       style: TextStyle(
                         color: Colors.black,
@@ -323,7 +323,7 @@ class DisplayPictureScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 SizedBox(
                   width: 120,
                   height: 40,
@@ -334,11 +334,11 @@ class DisplayPictureScreen extends StatelessWidget {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return LoadingScreen();
+                          return const LoadingScreen();
                         },
                       );
 
-                      await Future.delayed(Duration(milliseconds: 1000));
+                      await Future.delayed(const Duration(milliseconds: 1000));
 
                       // Instantiate Classifier
                       Classifier classifier = Classifier();
@@ -368,7 +368,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'CONFIRM',
                       style: TextStyle(
                         color: Colors.white,

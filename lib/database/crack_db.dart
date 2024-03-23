@@ -1,6 +1,4 @@
-import 'dart:ui';
 
-import 'package:mobile_app/globals.dart';
 import 'package:sqflite/sqflite.dart';
 import 'classes/image.dart';
 import 'classes/building.dart';
@@ -155,17 +153,30 @@ class CrackDB{
         [prediction, recommendation, imageID]
     );
   }
+  Future<List<Prediction>> getPrediction({required int imageID}) async{
+    final database = await DatabaseService().database;
+    final predictionInfo = await database.rawQuery(
+      '''
+      SELECT prediction, recommendation 
+      FROM $predictionTable
+      WHERE image_id = ?
+      ''',
+        [imageID]
+    );
+    return predictionInfo.map((info) => Prediction.fromSQfliteDatabase(info)).toList();
+}
   // Fetch crack info
-  Future<List<CrackInfo>> fetchALlCrack() async{
+  Future<List<CrackInfo>> fetchALlCrack({required int imageID}) async{
     final database = await DatabaseService().database;
     final crackInfo = await database.rawQuery(
       '''
       SELECT * FROM $crackTable
-      CROSS JOIN image ON crack_info.image_id = image.id
-      CROSS JOIN building ON crack_info.building_id = building.id
-      CROSS JOIN floor ON crack_info.floor_id = floor.id
-      CROSS JOIN room ON crack_info.room_id = room.id
-      '''
+      CROSS JOIN $imageTable ON crack_info.image_id = $imageTable.id
+      CROSS JOIN $buildingTable ON crack_info.building_id = $buildingTable.id
+      CROSS JOIN $floorTable ON crack_info.floor_id = $floorTable.id
+      CROSS JOIN $roomTable ON crack_info.room_id = $roomTable.id
+      WHERE $crackTable.image_id = ?
+      ''', [imageID]
     );
     return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
   }
@@ -260,7 +271,7 @@ class CrackDB{
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
 
-  Future<List> getSixLatestImages() async{
+  Future<List<ImageDB>> getSixLatestImages() async{
     final database = await DatabaseService().database;
     final images = await database.rawQuery(
       '''
