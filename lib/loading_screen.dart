@@ -12,7 +12,7 @@ class LoadingScreen extends StatelessWidget {
           children: [
             // Image widget
             Image.asset(
-              'assets/images/tobedeleted.gif', 
+              'assets/images/blue_loading.gif', 
               width: 300, 
               height: 300,
             ),
