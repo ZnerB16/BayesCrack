@@ -277,7 +277,10 @@ class CrackDB{
     final database = await DatabaseService().database;
     var images = await database.rawQuery(
         '''
-      SELECT id, image_path, capture_datetime FROM $imageTable WHERE id IN (SELECT image_id FROM $crackTable WHERE tracking_no = ?) ;
+      SELECT id, image_path, capture_datetime FROM $imageTable 
+      WHERE id IN 
+        (SELECT image_id FROM $crackTable WHERE tracking_no = ?)
+      ORDER BY capture_datetime DESC;
       ''', [trackingNo]
     );
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
