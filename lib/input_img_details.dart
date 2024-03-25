@@ -22,9 +22,14 @@ class _CrackInput extends State<CrackInput>{
   String floor = "";
   String room = "";
   String remarks = "";
+  bool _validateTracking = false;
+  bool _validateBuilding = false;
+  bool _validateFloor = false;
+  bool _validateRoom = false;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -50,17 +55,32 @@ class _CrackInput extends State<CrackInput>{
               ),
             ),
             /// Start text fields
-            const Padding(padding: EdgeInsets.only(top: 30)),
-            createTextField('Crack Tracking Number  (Numeric Input only)', isNumber: true, controller: _controllerTrackingNo),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Building Name / Number', controller: _controllerBuilding),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Floor Name / Number', controller: _controllerFloor),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Room Name / Number', controller: _controllerRoom),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            createTextField('Remarks/Note (OPTIONAL)', height: 150, controller: _controllerRemarks, maxLines: 10),
             const Padding(padding: EdgeInsets.only(top: 20)),
+            createTextField('Crack Tracking Number  (Numeric Input only)',
+                isNumber: true,
+                controller: _controllerTrackingNo,
+                validate: _validateTracking
+            ),
+
+            createTextField('Building Name / Number',
+                controller: _controllerBuilding,
+                validate: _validateBuilding
+            ),
+            createTextField(
+                'Floor Name / Number',
+                controller: _controllerFloor,
+                validate: _validateFloor
+            ),
+            createTextField('Room Name / Number',
+                controller: _controllerRoom,
+                validate: _validateRoom
+            ),
+            createTextField('Remarks/Note (OPTIONAL)',
+                height: 150,
+                controller: _controllerRemarks,
+                maxLines: 10
+            ),
+            const Padding(padding: EdgeInsets.only(top: 30)),
             /// End text fields
 
             /// Start Cancel and Done button
@@ -128,23 +148,32 @@ class _CrackInput extends State<CrackInput>{
                     child: TextButton(
                         onPressed: (){
                           setState(() {
+                            _validateTracking = _controllerTrackingNo.text.isEmpty;
+                            _validateBuilding = _controllerBuilding.text.isEmpty;
+                            _validateFloor = _controllerFloor.text.isEmpty;
+                            _validateRoom = _controllerRoom.text.isEmpty;
                             trackingNo = _controllerTrackingNo.text;
                             building = _controllerBuilding.text;
                             floor = _controllerFloor.text;
                             room = _controllerRoom.text;
                             remarks = _controllerRemarks.text;
                           });
-                          globals.trackingNo = int.parse(trackingNo);
-                          globals.building = building;
-                          globals.floor = floor;
-                          globals.room = room;
-                          globals.remarks = remarks;
+                          if(_validateTracking || _validateBuilding || _validateFloor || _validateRoom){
+
+                          }
+                          else{
+                            globals.trackingNo = int.parse(trackingNo);
+                            globals.building = building;
+                            globals.floor = floor;
+                            globals.room = room;
+                            globals.remarks = remarks;
 
                             Navigator.of(context).push(HeroDialogRoute(
-                                builder: (context){
-                                    return const SaveImagePopup();
-                                  },
-                              ));
+                              builder: (context){
+                                return const SaveImagePopup();
+                              },
+                            ));
+                          }
                         },
                         child: const Text(
                           'DONE',
@@ -152,7 +181,7 @@ class _CrackInput extends State<CrackInput>{
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           ),
-                        )
+                        ),
                       )
                     ),
                   ),
@@ -166,7 +195,16 @@ class _CrackInput extends State<CrackInput>{
     );
   }
   /// Text field creation function
-  SizedBox createTextField(String text, {double height = 50.0, bool isNumber = false, required TextEditingController controller, int maxLines = 1}){
+  SizedBox createTextField(
+      String text,
+      {
+        double height = 80.0,
+        bool isNumber = false,
+        required TextEditingController controller,
+        int maxLines = 1,
+        bool validate = false,
+      }
+      ){
     TextInputType keyboard = TextInputType.text;
     if(isNumber){
       keyboard = TextInputType.number;
@@ -183,7 +221,12 @@ class _CrackInput extends State<CrackInput>{
             ),
             hintText: text,
             filled: true,
-            fillColor: Colors.black12
+            fillColor: Colors.black12,
+            errorText: validate ? "Field cannot be empty": null,
+            errorStyle: const TextStyle(
+              height: 0,
+              fontSize: 10
+            )
         ),
         keyboardType: keyboard,
         maxLines: maxLines,
