@@ -48,7 +48,8 @@ class FolderView extends StatelessWidget {
               ),
                 centerTitle: true,
                 title: Text(folderName,
-                    style: TextStyle(color: Color(0xff284b63)
+                    style: const TextStyle(
+                        color: Color(0xff284b63)
                     ),
                   ), 
             ),
@@ -102,7 +103,6 @@ class _ImageListState extends State<ImageList> {
     List<int> selectedIndices = []; // Maintain a list of selected indices
     @override
     Widget build(BuildContext context) {
-        print("Records in list: ${imageData.length}");
         return Column(
             children: [
                 Expanded(
@@ -180,13 +180,24 @@ class _ImageListState extends State<ImageList> {
                             height: 70, // Set height to desired size
                             child: IconButton(
                                 onPressed: () {
+                                    List<int> imgID = [];
+                                    setState(() {
+                                        for(int i = 0; i < selectedIndices.length; i++){
+                                            imgID.add(int.parse(imageData[selectedIndices[i]]['img_id']));
+                                        }
+                                    });
                                     // Show delete image popup
                                     showDialog(
                                         context: context,
-                                        builder: (BuildContext context) {
-                                            return const DeleteImagePopup();
-                                        },
-                                    );
+                                        builder: (BuildContext context) =>
+                                            DeleteImagePopup(
+                                                imageID: imgID
+                                            )).then((value) { setState(() async {
+                                                imageData = [];
+                                                selectedIndices = [];
+                                                await getImages();
+                                    });});
+
                                 },
                                 icon: Image.asset('assets/images/delete2.png'), // Use delete.png asset
                             ),

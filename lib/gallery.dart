@@ -75,12 +75,17 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 child: IconButton(
                   onPressed: () {
                     // Show delete image popup
+                    // Show delete image popup
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const DeleteFolderPopup();
-                      },
-                    );
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DeleteFolderPopup(
+                              trackingNo: checkedFolders,
+                            )).then((value) { setState(() {
+                                folders = [];
+                                checkedFolders = [];
+                                });
+                            });
                   },
                   icon: Image.asset('assets/images/delete2.png'), // Use delete.png asset
                 ),

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
+import 'package:mobile_app/gallery.dart';
+import 'package:mobile_app/globals.dart';
+
+import 'database/classes/crack_info.dart';
+import 'database/crack_db.dart';
 
 class DeleteFolderPopup extends StatefulWidget {
-  const DeleteFolderPopup({super.key});
+  final List<String> trackingNo;
+  const DeleteFolderPopup({
+    super.key,
+    required this.trackingNo
+  });
 
   @override
   State<DeleteFolderPopup> createState() => _DeleteFolderPopupState();
@@ -83,10 +92,22 @@ class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
                             const SizedBox(width: 20),
                             ElevatedButton(
                               onPressed: () async {
+
                                 // Perform deletion logic here
                                 // Example: Delete folder from database
-                                // var crackDB = CrackDB();
-                                // crackDB.deletefolder(trackingId);
+                                var crackDB = CrackDB();
+                                for(int i = 0; i < widget.trackingNo.length; i++){
+                                  List<CrackInfo> trackInfo = await crackDB.fetchALlCrackTracking(trackingNo: int.parse(widget.trackingNo[i].replaceAll(RegExp(r'[^0-9]'),'')));
+                                  for(int j = 0; j < trackInfo.length; j++){
+                                    await crackDB.deleteImage(id: trackInfo[j].imageID);
+                                    await crackDB.deletePrediction(id: trackInfo[j].imageID);
+                                    await crackDB.deleteCrackInfo(id: trackInfo[j].imageID);
+                                    await crackDB.deleteBuilding(id: trackInfo[j].buildingID);
+                                    await crackDB.deleteFloor(id: trackInfo[j].floorID);
+                                    await crackDB.deleteRoom(id: trackInfo[j].roomID);
+                                  }
+                                }
+
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(

@@ -3,15 +3,15 @@ class CrackInfo{
   final int trackingNo;
   final int imageID;
   final int buildingID;
-  final String building;
+  final String? building;
   final int floorID;
-  final String floor;
+  final String? floor;
   final int roomID;
-  final String room;
+  final String? room;
   final String? remarks;
-  final String imagePath;
-  final String date;
-  final String geolocation;
+  final String? imagePath;
+  final String? date;
+  final String? geolocation;
 
 
   CrackInfo({
@@ -19,15 +19,15 @@ class CrackInfo{
     required this.trackingNo,
     required this.imageID,
     required this.buildingID,
-    required this.building,
+    this.building,
     required this.floorID,
-    required this.floor,
+    this.floor,
     required this.roomID,
-    required this.room,
+    this.room,
     this.remarks,
-    required this.imagePath,
-    required this.date,
-    required this.geolocation
+    this.imagePath,
+    this.date,
+    this.geolocation
 });
   factory CrackInfo.fromSQfliteDatabase(Map<String, dynamic> map) => CrackInfo(
     id: map['id']?.toInt() ?? 0,

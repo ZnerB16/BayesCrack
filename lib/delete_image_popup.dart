@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
+import 'package:mobile_app/database/classes/crack_info.dart';
+
+import 'database/crack_db.dart';
 
 class DeleteImagePopup extends StatefulWidget {
-  const DeleteImagePopup({super.key});
+  final List<int> imageID;
+  const DeleteImagePopup({
+    super.key,
+    required this.imageID
+  });
 
   @override
   State<DeleteImagePopup> createState() => _DeleteImagePopupState();
@@ -85,9 +92,18 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
                               onPressed: () async {
                                 // Perform deletion logic here
                                 // Example: Delete image from database
-                                // var crackDB = CrackDB();
-                                // crackDB.deleteImage(imageId);
-                                Navigator.pop(context);
+                                var crackDB = CrackDB();
+
+                                for(int i = 0; i < widget.imageID.length; i++){
+                                  List<CrackInfo> imageInfo = await crackDB.fetchALlCrackIDs(imageID: widget.imageID[i]);
+                                  await crackDB.deleteImage(id: widget.imageID[i]);
+                                  await crackDB.deletePrediction(id: widget.imageID[i]);
+                                  await crackDB.deleteCrackInfo(id: widget.imageID[i]);
+                                  await crackDB.deleteBuilding(id: imageInfo[0].buildingID);
+                                  await crackDB.deleteFloor(id: imageInfo[0].floorID);
+                                  await crackDB.deleteRoom(id: imageInfo[0].roomID);
+                                }
+                                Navigator.pop(context, true);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff284b63),

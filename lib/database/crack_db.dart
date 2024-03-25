@@ -181,6 +181,28 @@ class CrackDB{
     );
     return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
   }
+  // Fetch crack info IDs
+  Future<List<CrackInfo>> fetchALlCrackIDs({required int imageID}) async{
+    final database = await DatabaseService().database;
+    final crackInfo = await database.rawQuery(
+        '''
+      SELECT * FROM $crackTable
+      WHERE image_id = ?
+      ''', [imageID]
+    );
+    return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
+  // Fetch crack info IDs
+  Future<List<CrackInfo>> fetchALlCrackTracking({required int trackingNo}) async{
+    final database = await DatabaseService().database;
+    final crackInfo = await database.rawQuery(
+        '''
+      SELECT * FROM $crackTable
+      WHERE tracking_no = ?
+      ''', [trackingNo]
+    );
+    return crackInfo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
   // Count predictions
   Future<int?> countPredictions(String prediction) async{
     final database = await DatabaseService().database;
