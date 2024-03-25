@@ -44,7 +44,7 @@ class SeverityResultScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 1),
                 Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.transparent,
                 ),
                 padding: const EdgeInsets.all(15),

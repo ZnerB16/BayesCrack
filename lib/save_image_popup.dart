@@ -6,6 +6,7 @@ import 'package:mobile_app/database/classes/image.dart';
 import 'package:mobile_app/database/classes/room.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
+import 'package:mobile_app/image_saved.dart';
 import 'package:mobile_app/main_menu.dart';
 import 'input_img_details.dart';
 import 'globals.dart' as globals;
@@ -216,6 +217,12 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                                   recommendation: globals.recommend,
                                                   imageID: imageID
                                               );
+
+
+                                              await Navigator.push(
+                                                // Insert image saved
+                                                  context, MaterialPageRoute(builder: (_) => ImageSavedScreen(trackingNo: globals.trackingNo))
+                                              );
                                               globals.recommend = "";
                                               globals.floor = "";
                                               globals.building = "";
@@ -225,11 +232,6 @@ class _SaveImagePopupState extends State<SaveImagePopup> {
                                               globals.remarks = "";
                                               globals.trackingNo = 0;
                                               globals.room = "";
-
-                                              Navigator.push(
-                                                // Insert image saved
-                                                  context, MaterialPageRoute(builder: (_) => const MainMenu())
-                                              );
                                             },
                                             child: const Text(
                                               'CONFIRM',

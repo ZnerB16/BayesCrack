@@ -158,9 +158,7 @@ class _CrackInput extends State<CrackInput>{
                             room = _controllerRoom.text;
                             remarks = _controllerRemarks.text;
                           });
-                          if(_validateTracking || _validateBuilding || _validateFloor || _validateRoom){
-
-                          }
+                          if(_validateTracking || _validateBuilding || _validateFloor || _validateRoom){}
                           else{
                             globals.trackingNo = int.parse(trackingNo);
                             globals.building = building;

@@ -170,8 +170,8 @@ class _MainMenuState extends State<MainMenu> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0, top: 30),
+        const Padding(
+          padding: EdgeInsets.only(left: 16.0, top: 30),
           child: Text(
             'Recent Captures',
             style: TextStyle(
@@ -209,7 +209,7 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                       title: Text(
                         recentImages[index].imageName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16.0,
                         ),
@@ -219,14 +219,14 @@ class _MainMenuState extends State<MainMenu> {
                         children: [
                           Text(
                             'Tracking No: ${recentImages[index].trackingNo}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
                             ),
                           ),
                           Text(
                             recentImages[index].date,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
                             ),
@@ -235,7 +235,7 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.white, thickness: 1.0, height: 0.0, 
                   ),
                 ],
