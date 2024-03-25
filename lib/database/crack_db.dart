@@ -273,6 +273,18 @@ class CrackDB{
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
 
+  Future<List<CrackInfo>> getTrackingNo({required int imageID}) async{
+    final database = await DatabaseService().database;
+    var trackingNo = await database.rawQuery(
+        '''
+      SELECT tracking_no 
+      FROM $crackTable
+      WHERE image_id = ?;
+      ''', [imageID]
+    );
+    return trackingNo.map((info) => CrackInfo.fromSQfliteDatabase(info)).toList();
+  }
+
   Future<List<ImageDB>> getImageOnTrackingNo({required int trackingNo}) async{
     final database = await DatabaseService().database;
     var images = await database.rawQuery(
@@ -295,11 +307,11 @@ class CrackDB{
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
 
-  Future<List<ImageDB>> getSixLatestImages() async{
+  Future<List<ImageDB>> getFiveLatestImages() async{
     final database = await DatabaseService().database;
     final images = await database.rawQuery(
       '''
-      SELECT * FROM $imageTable ORDER BY id DESC LIMIT 6;
+      SELECT * FROM $imageTable ORDER BY id DESC LIMIT 5;
       '''
     );
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
