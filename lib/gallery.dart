@@ -84,6 +84,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             )).then((value) { setState(() {
                                 folders = [];
                                 checkedFolders = [];
+                                getTrackingNo();
                                 });
                             });
                   },

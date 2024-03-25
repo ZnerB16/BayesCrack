@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
 import 'package:mobile_app/database/classes/crack_info.dart';
-
+import 'database/classes/image.dart';
 import 'database/crack_db.dart';
 
 class DeleteImagePopup extends StatefulWidget {
@@ -96,12 +97,14 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
 
                                 for(int i = 0; i < widget.imageID.length; i++){
                                   List<CrackInfo> imageInfo = await crackDB.fetchALlCrackIDs(imageID: widget.imageID[i]);
+                                  List<ImageDB> imageList = await crackDB.getImageID(imageID: widget.imageID[i]);
                                   await crackDB.deleteImage(id: widget.imageID[i]);
                                   await crackDB.deletePrediction(id: widget.imageID[i]);
                                   await crackDB.deleteCrackInfo(id: widget.imageID[i]);
                                   await crackDB.deleteBuilding(id: imageInfo[0].buildingID);
                                   await crackDB.deleteFloor(id: imageInfo[0].floorID);
                                   await crackDB.deleteRoom(id: imageInfo[0].roomID);
+                                  await File(imageList[0].imagePath).delete();
                                 }
                                 Navigator.pop(context, true);
                               },

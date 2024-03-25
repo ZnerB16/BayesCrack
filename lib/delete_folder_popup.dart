@@ -1,8 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/custom_rect_tween.dart';
-import 'package:mobile_app/gallery.dart';
-import 'package:mobile_app/globals.dart';
-
+import 'package:mobile_app/database/classes/image.dart';
 import 'database/classes/crack_info.dart';
 import 'database/crack_db.dart';
 
@@ -99,12 +98,14 @@ class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
                                 for(int i = 0; i < widget.trackingNo.length; i++){
                                   List<CrackInfo> trackInfo = await crackDB.fetchALlCrackTracking(trackingNo: int.parse(widget.trackingNo[i].replaceAll(RegExp(r'[^0-9]'),'')));
                                   for(int j = 0; j < trackInfo.length; j++){
+                                    List<ImageDB> imageList = await crackDB.getImageOnTrackingNo(trackingNo: trackInfo[j].trackingNo);
                                     await crackDB.deleteImage(id: trackInfo[j].imageID);
                                     await crackDB.deletePrediction(id: trackInfo[j].imageID);
                                     await crackDB.deleteCrackInfo(id: trackInfo[j].imageID);
                                     await crackDB.deleteBuilding(id: trackInfo[j].buildingID);
                                     await crackDB.deleteFloor(id: trackInfo[j].floorID);
                                     await crackDB.deleteRoom(id: trackInfo[j].roomID);
+                                    await File(imageList[j].imagePath).delete();
                                   }
                                 }
 

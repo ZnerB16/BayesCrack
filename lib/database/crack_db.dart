@@ -282,6 +282,15 @@ class CrackDB{
     );
     return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
   }
+  Future<List<ImageDB>> getImageID({required int imageID}) async{
+    final database = await DatabaseService().database;
+    var images = await database.rawQuery(
+        '''
+      SELECT id, image_path, capture_datetime FROM $imageTable WHERE id = ? ;
+      ''', [imageID]
+    );
+    return images.map((info) => ImageDB.fromSQfliteDatabase(info)).toList();
+  }
 
   Future<List<ImageDB>> getSixLatestImages() async{
     final database = await DatabaseService().database;
