@@ -121,7 +121,7 @@ class _MainMenuState extends State<MainMenu> {
                 _buildRoundedBox(title: "High", count: highCount),
               ],
             ),
-            const SizedBox(height: 50.0),
+            const SizedBox(height: 30.0),
             Container(
               width: double.infinity,
               height: 320.0,

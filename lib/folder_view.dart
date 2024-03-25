@@ -138,7 +138,7 @@ class _ImageListState extends State<ImageList> {
                                                     ),
                                                     Image.file(
                                                         File(imgPath),
-                                                        fit: BoxFit.cover,
+                                                        fit: BoxFit.scaleDown,
                                                         width: 60,
                                                         height: 60,
                                                     ),
