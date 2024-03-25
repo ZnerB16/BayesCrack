@@ -5,6 +5,7 @@ import 'package:mobile_app/help_popup.dart';
 import 'package:mobile_app/hero_dialog_route.dart';
 import 'database/crack_db.dart';
 import 'gallery.dart';
+import 'recent_captures.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -13,6 +14,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+
   int noneCount = 0;
   int lowCount = 0;
   int medCount = 0;
@@ -68,7 +70,7 @@ class _MainMenuState extends State<MainMenu> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( //counters
         child: Column(
           children: [
             const SizedBox(height: 20.0),
@@ -122,34 +124,104 @@ class _MainMenuState extends State<MainMenu> {
               ],
             ),
             const SizedBox(height: 50.0),
-            Container(
-              width: double.infinity,
-              height: 320.0,
-              margin: const EdgeInsets.all(0),
-              decoration: BoxDecoration(
-                color: const Color(0xFF284B63),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: const Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16.0, top: 30),
-                  child: Text(
-                    'Recent Captures',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            _buildRecentImagesListView(context),
             const CustomBottomNavigationBar(),
           ],
         ),
       ),
     );
   }
+
+  List<RecentImages> recentImages = [   //atik atik data from recent_captures.dart
+  RecentImages(trackingNo: 1, imageName: 'Crack_1', date: '2022-03-14', imagePath: 'assets/images/brenz.png'),
+  RecentImages(trackingNo: 2, imageName: 'Crack_2', date: '2022-03-14', imagePath: 'assets/images/brenz.png'),
+  RecentImages(trackingNo: 3, imageName: 'Crack_3', date: '2022-03-14', imagePath: 'assets/images/brenz.png'),
+  RecentImages(trackingNo: 4, imageName: 'Crack_4', date: '2022-03-14', imagePath: 'assets/images/brenz.png'),
+  RecentImages(trackingNo: 5, imageName: 'Crack_5', date: '2022-03-14', imagePath: 'assets/images/brenz.png'),
+];
+
+  Widget _buildRecentImagesListView(BuildContext context) {
+  return Container(
+    width: double.infinity,
+    height: 320.0,
+    margin: const EdgeInsets.all(0),
+    decoration: BoxDecoration(
+      color: const Color(0xFF284B63),
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0, top: 30),
+          child: Text(
+            'Recent Captures',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: recentImages.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GalleryScreen()), // change to point to specific image file
+                      );
+                    },
+                    child: ListTile(
+                      leading: Image.asset(
+                        recentImages[index].imagePath,
+                        width: 30, // Adjust the width as needed
+                        height: 30, // Adjust the height as needed
+                        fit: BoxFit.cover,
+                      ),
+                      title: Text(
+                        recentImages[index].imageName,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tracking No: ${recentImages[index].trackingNo}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          Text(
+                            recentImages[index].date,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.white, thickness: 1.0, height: 0.0, 
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildRoundedBox({required String title, int count = 0}) {
     return Container(
