@@ -69,12 +69,14 @@ class _MainMenuState extends State<MainMenu> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: 80,
+        toolbarHeight: 85,
         flexibleSpace: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
           child: Image.asset(
             'assets/images/logo_text.png',
-            fit: BoxFit.contain,
-            height: 80,
+            height: kToolbarHeight + 20,
+            ),
           ),
         ),
         actions: [

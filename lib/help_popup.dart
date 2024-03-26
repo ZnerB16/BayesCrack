@@ -528,7 +528,7 @@ class HelpPopup4 extends StatelessWidget{
                             'assets/images/raven.png',
                             height: 80,
                           ),
-                          const Padding(padding: EdgeInsets.only(left: 45)),
+                          const Padding(padding: EdgeInsets.only(left: 48)),
                           const Text(
                             "Raven E. Cagulang",
                             style: TextStyle(
@@ -548,7 +548,7 @@ class HelpPopup4 extends StatelessWidget{
                             'assets/images/francis.png',
                             height: 80,
                           ),
-                          const Padding(padding: EdgeInsets.only(left: 45)),
+                          const Padding(padding: EdgeInsets.only(left: 48)),
                           const Text(
                             "Francis Ryan C. Diesto",
                             style: TextStyle(
@@ -586,7 +586,7 @@ class HelpPopup4 extends StatelessWidget{
                             'assets/images/kyra.png',
                             height: 80,
                           ),
-                          const Padding(padding: EdgeInsets.only(left: 30)),
+                          const Padding(padding: EdgeInsets.only(left: 25)),
                           const Text(
                             "Kyra Jyne A. Melendres",
                             style: TextStyle(
