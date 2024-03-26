@@ -154,21 +154,16 @@ class _CameraScreenState extends State<CameraScreen> {
                     // Ensure that the camera is initialized.
                     await _initializeControllerFuture;
 
-                    // Set flash mode to on just before capturing the image
-                    if (_isFlashOn) {
-                      await _controller.setFlashMode(FlashMode.torch);
-                    }
-
                     // Attempt to take a picture and get the file `image`
                     // where it was saved.
                     final image = await _controller.takePicture();
                     if (!context.mounted) return;
 
                     // Turn off flash after capturing the image
-                    await _controller.setFlashMode(FlashMode.off);
-                    setState(() {
-                      _isFlashOn = false;
-                    });
+                      await _controller.setFlashMode(FlashMode.off);
+                      setState(() {
+                        _isFlashOn = false;
+                      });
 
                     await getDetails();
                     globals.imagePath = image.path;
