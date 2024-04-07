@@ -5,8 +5,11 @@ This mobile application serves as a comprehensive tool for capturing and classif
 This mobile application is made for the deployment of the best-performing deep learning model based on model accuracy loss, and other evaluation metrics in the thesis project of
 
 Raven E. Cagulang
+
 Francis Ryan C. Diesto
+
 Brenz Gwynne M. Hababag
+
 Kyra Jyne A. Melendres
 
 The thesis project is entitled "ENHANCING CONCRETE CRACK SEVERITY CLASSIFICATION USING BAYESIAN CNN AND DEEPCRACK ARCHITECTURE". 
