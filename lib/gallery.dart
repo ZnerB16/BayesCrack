@@ -22,7 +22,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   var crackDB = CrackDB();
 
-  void getTrackingNo() async{
+  Future<void> getTrackingNo() async{
 
     listTrack = await crackDB.getTrackingNos();
 
@@ -39,13 +39,14 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   void initState(){
     super.initState();
-    folders = [];
-    getTrackingNo();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      folders = [];
+      await getTrackingNo();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Column(

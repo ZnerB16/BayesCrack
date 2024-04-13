@@ -18,7 +18,6 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-
   int noneCount = 0;
   int lowCount = 0;
   int medCount = 0;

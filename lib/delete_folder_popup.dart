@@ -62,6 +62,7 @@ class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
                           ),
                         ),
                       ),
+                      // Show confirmation after click
                       if (!_showConfirmationInput)
                         const Column(
                           children: [

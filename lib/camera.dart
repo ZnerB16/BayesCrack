@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/get_geolocation.dart';
@@ -58,13 +60,16 @@ class _CameraScreenState extends State<CameraScreen> {
     LocationData currentLocation = await location.getLocation();
     latitude = currentLocation.latitude!;
     longitude = currentLocation.longitude!;
+    globals.formattedDateTime = formattedDateTime;
+
+  }
+  Future<void> getGeolocation() async{
     await GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng().then((String result){
       setState(() {
         geolocation = result;
       });
-      globals.formattedDateTime = formattedDateTime;
-      globals.geolocation = geolocation;
     });
+    globals.geolocation = geolocation;
   }
 
   @override
@@ -166,6 +171,15 @@ class _CameraScreenState extends State<CameraScreen> {
                       });
 
                     await getDetails();
+
+                    try{
+                      await getGeolocation().timeout(const Duration(seconds: 8));
+                    } on PlatformException{
+                      globals.geolocation = "Geolocation or Network not found";
+                    } on TimeoutException{
+                      globals.geolocation = "Process took too long";
+                    }
+
                     globals.imagePath = image.path;
                     Navigator.of(context, rootNavigator: true).pop(); 
 
@@ -252,9 +266,11 @@ class DisplayPictureScreen extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
+      // Start of Column body
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Displays Image captured
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -290,6 +306,7 @@ class DisplayPictureScreen extends StatelessWidget {
               ],
             ),
           ),
+          // Button for Cancel
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Row(
@@ -319,6 +336,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 20),
+                // Button for Confirm
                 SizedBox(
                   width: 120,
                   height: 40,
@@ -377,6 +395,7 @@ class DisplayPictureScreen extends StatelessWidget {
           ),
         ],
       ),
+      // End of Column Body
     );
   }
 }
