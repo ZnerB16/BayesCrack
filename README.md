@@ -1,45 +1,21 @@
-# BayesCrack Mobile App
+# Crack Identification Classifier Mobile App
 
-Loving him is like driving a new Maserati down a dead end street
-Faster than the wind, passionate as sin, ending so suddenly
-Loving him is like trying to change your mind
-Once you're already flying through the free fall
-Like the colors in autumn, so bright, just before they lose it all
-Losing him was blue, like I'd never known
-Missing him was dark gray, all alone
-Forgetting him was like trying to know
-Somebody you never met
-But loving him was red
-Loving him was red
-Touching him was like realizing all you ever wanted
-Was right there in front of you
-Memorizing him was as easy as knowing all the words
-To your old favorite song
-Fighting with him was like trying to solve a crossword
-And realizing there's no right answer
-Regretting him was like wishing you never found out
-That love could be that strong
-Losing him was blue, like I'd never known
-Missing him was dark gray, all alone
-Forgetting him was like trying to know
-Somebody you never met
-But loving him was red
-Oh, red
-Burning red
-Remembering him comes in flashbacks and echoes
-Tell myself it's time now gotta let go
-But moving on from him is impossible
-When I still see it all in my head
-In burning red
-Burning, it was red
-Oh, losing him was blue, like I'd never known
-Missing him was dark gray, all alone
-Forgetting him was like trying to know
-Somebody you never met
-'Cause loving him was red
-Yeah, yeah, red
-Burning red
-And that's why he's spinning 'round in my head
-Comes back to me, burning red
-Yeah, yeah
-His love was like driving a new Maserati down a dead end street
+This mobile application serves as a comprehensive tool for capturing and classifying severity of concrete cracks.
+
+This mobile application is made for the deployment of the best-performing deep learning model based on model accuracy loss, and other evaluation metrics in the thesis project of
+
+Raven E. Cagulang
+
+Francis Ryan C. Diesto
+
+Brenz Gwynne M. Hababag
+
+Kyra Jyne A. Melendres
+
+The thesis project is entitled "ENHANCING CONCRETE CRACK SEVERITY CLASSIFICATION USING BAYESIAN CNN AND DEEPCRACK ARCHITECTURE". 
+
+The researchers aim to know the potential of modifying Bayesian CNN, DeepCrack Architecture, and creating  an ensemble model named BayesCrack Convolutional Ensemble (BCCE) for multiclass classification of concrete crack severity, evaluate overall performance, and deploy a deep learning model for real life application. The thesis project intends to improve the step towards automated image-based monitoring strategies in concrete crack severity classification.
+
+During training and evaluation of the three deep learning models, the BayesCrack Convolutional Ensemble (BCCE) demonstrated the highest performance and proved itself to be the best performing model. The model was exported and deployed in this mobile application.
+
+The mobile application attained % accuracy, exhibiting a high-level performance in practical settings. Furthermore, the application requires an average time of seconds to capture and classify concrete cracks, demonstrating a faster speed compared to a traditional non-destructive technique using a caliper.
