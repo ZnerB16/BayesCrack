@@ -7,13 +7,10 @@ This mobile application is made for the deployment of the best-performing deep l
 **ENHANCING CONCRETE CRACK SEVERITY CLASSIFICATION USING BAYESIAN CONVOLUTIONAL NEURAL NETWORK AND DEEPCRACK ARCHITECTURE**
 
 The researcher for the thesis project are:
-    
+
     Raven E. Cagulang
-
     Francis Ryan C. Diesto
-
     Brenz Gwynne M. Hababag
-
     Kyra Jyne A. Melendres
 
 The thesis project intends to improve the step towards automated image-based monitoring strategies in concrete crack severity classification. 
