@@ -48,7 +48,7 @@ class _CameraScreenState extends State<CameraScreen> {
       // Set flash mode to off initially
       _controller.setFlashMode(FlashMode.off);
     }).catchError((error) {
-      print('Error initializing cameras: $error');
+      //print('Error initializing cameras: $error');
     });
   }
   Future<void> getDetails() async{
@@ -191,7 +191,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                     );
                   } catch (e) {
-                    print(e);
+                    //print(e);
                   }
                 },
                 elevation: 10.0,
@@ -244,7 +244,7 @@ class _CameraScreenState extends State<CameraScreen> {
         _isFlashOn = !_isFlashOn;
       });
     } catch (e) {
-      print('Error toggling flashlight: $e');
+      //print('Error toggling flashlight: $e');
     }
   }
 }

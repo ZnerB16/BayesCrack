@@ -20,7 +20,7 @@ class Classifier {
       );
 
       // Check if interpreter is not null
-      print('Model loaded successfully.');
+      //print('Model loaded successfully.');
 
       // Allocate tensors
       _interpreter.allocateTensors();
@@ -30,15 +30,14 @@ class Classifier {
 
       // Check if labels are loaded successfully
       if (_labels.isNotEmpty) {
-        print('Labels loaded successfully:');
+        //print('Labels loaded successfully:');
         for (var label in _labels) {
-          print(label);
+          //print(label);
         }
       } else {
-        print('Failed to load labels or labels file is empty.');
+        //print('Failed to load labels or labels file is empty.');
       }
     } catch (e) {
-      print('Failed to load model: $e');
       // Handle the error, throw, or return as needed
     } 
   }
@@ -49,7 +48,7 @@ class Classifier {
       final fileData = await rootBundle.loadString(path);
       return fileData.split('\n').map((label) => label.trim()).toList();
     } catch (e) {
-      print('Failed to load labels: $e');
+      //print('Failed to load labels: $e');
       return <String>[];
       // Handle the error, throw, or return as needed
     }
@@ -63,21 +62,32 @@ class Classifier {
     try {
       // Read image file
       img.Image? image = img.decodeImage(File(imagePath).readAsBytesSync());
-      print('Image loaded from: $imagePath');
-      print('Image size: ${image?.length} bytes');
+      //print('Image loaded from: $imagePath');
+      //print('Image size: ${image?.length} bytes');
 
       // Resize image to 150x150 (assuming input size)
       img.Image resizedImage =
           img.copyResize(image!, width: 227, height: 227);
 
+      double threshold = 1;
+
       // Convert to Float32List
-       Float32List convertedImage = Float32List.fromList(resizedImage.getBytes().map((pixel) => pixel / 255.0).toList());
+       //Float32List convertedImage = Float32List.fromList(resizedImage.getBytes().map((pixel) => pixel / 255.0).toList());
+       Float32List filteredImage = Float32List.fromList(
+           resizedImage.getBytes().map((pixel) {
+             if(pixel / 255.0 < threshold){
+               return 0.0;
+             }
+             else{
+               return pixel / 255.0;
+             }
+           }).toList()
+       );
 
-      print('Image preprocessed.');
-      print('Processed image shape: ${resizedImage.width}x${resizedImage.height}');
-      print('Processed image data type: ${convertedImage.runtimeType}');
-      print('Processed image size: ${convertedImage.length} bytes');
-
+      // print('Image preprocessed.');
+      // print('Processed image shape: ${resizedImage.width}x${resizedImage.height}');
+      // print('Processed image data type: ${convertedImage.runtimeType}');
+      // print('Processed image size: ${convertedImage.length} bytes');
       // Print pixel values from the converted image row by row for test only
       // print('Pixel values of converted image:');
       // for (int y = 0; y < resizedImage.height; y++) {
@@ -89,7 +99,7 @@ class Classifier {
       //  print(rowBuffer.toString());
       //}
 
-      final input = convertedImage.reshape([1, 227, 227, 3]);
+      final input = filteredImage.reshape([1, 227, 227, 3]);
       final output = Float32List(1 * 4).reshape([1, 4]);
 
       _interpreter.run(input, output);
@@ -100,7 +110,7 @@ class Classifier {
               element > maxElement ? element : maxElement));
       return _labels[maxIndex];
     } catch (e) {
-      print('Error during classification: $e');
+      //print('Error during classification: $e');
       return "Error";
     }
   }
@@ -110,7 +120,7 @@ class Classifier {
     try {
       _interpreter.close();
     } catch (e) {
-      print('Failed to dispose model: $e');
+      //print('Failed to dispose model: $e');
       // Handle the error, throw, or return as needed
     }
   }
