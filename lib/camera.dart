@@ -71,6 +71,15 @@ class _CameraScreenState extends State<CameraScreen> {
     });
     globals.geolocation = geolocation;
   }
+  Future<void> tryExceptions() async {
+    try{
+      await getGeolocation().timeout(const Duration(seconds: 8));
+    } on PlatformException{
+      globals.geolocation = "Geolocation or Network not found";
+    } on TimeoutException{
+      globals.geolocation = "Process took too long";
+    }
+  }
 
   @override
   void dispose() {
@@ -171,14 +180,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       });
 
                     await getDetails();
-
-                    try{
-                      await getGeolocation().timeout(const Duration(seconds: 8));
-                    } on PlatformException{
-                      globals.geolocation = "Geolocation or Network not found";
-                    } on TimeoutException{
-                      globals.geolocation = "Process took too long";
-                    }
+                    await tryExceptions();
 
                     globals.imagePath = image.path;
                     Navigator.of(context, rootNavigator: true).pop(); 

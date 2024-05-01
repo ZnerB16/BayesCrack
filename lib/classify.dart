@@ -69,10 +69,10 @@ class Classifier {
       img.Image resizedImage =
           img.copyResize(image!, width: 227, height: 227);
 
-      double threshold = 1;
+      double threshold = 0.2;
 
       // Convert to Float32List
-       //Float32List convertedImage = Float32List.fromList(resizedImage.getBytes().map((pixel) => pixel / 255.0).toList());
+       Float32List convertedImage = Float32List.fromList(resizedImage.getBytes().map((pixel) => pixel / 255.0).toList());
        Float32List filteredImage = Float32List.fromList(
            resizedImage.getBytes().map((pixel) {
              if(pixel / 255.0 < threshold){
@@ -89,15 +89,15 @@ class Classifier {
       // print('Processed image data type: ${convertedImage.runtimeType}');
       // print('Processed image size: ${convertedImage.length} bytes');
       // Print pixel values from the converted image row by row for test only
-      // print('Pixel values of converted image:');
-      // for (int y = 0; y < resizedImage.height; y++) {
-      //  StringBuffer rowBuffer = StringBuffer();
-      //  for (int x = 0; x < resizedImage.width; x++) {
-      //    int pixelIndex = y * resizedImage.width + x;
-      //    rowBuffer.write('${convertedImage[pixelIndex]} ');
-      //  }
-      //  print(rowBuffer.toString());
-      //}
+      print('Pixel values of converted image:');
+      for (int y = 0; y < resizedImage.height; y++) {
+       StringBuffer rowBuffer = StringBuffer();
+       for (int x = 0; x < resizedImage.width; x++) {
+         int pixelIndex = y * resizedImage.width + x;
+         rowBuffer.write('${filteredImage[pixelIndex]} ');
+       }
+       print(rowBuffer.toString());
+      }
 
       final input = filteredImage.reshape([1, 227, 227, 3]);
       final output = Float32List(1 * 4).reshape([1, 4]);
