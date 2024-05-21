@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/custom_rect_tween.dart';
+import 'custom_rect_tween.dart';
 import 'package:mobile_app/database/classes/building.dart';
 import 'package:mobile_app/database/classes/floor.dart';
 import 'package:mobile_app/database/classes/image.dart';
 import 'package:mobile_app/database/classes/room.dart';
 import 'package:mobile_app/database/crack_db.dart';
-import 'package:mobile_app/hero_dialog_route.dart';
-import 'package:mobile_app/image_saved.dart';
-import 'package:mobile_app/main_menu.dart';
-import 'input_img_details.dart';
-import 'globals.dart' as globals;
+import 'hero_dialog_route.dart';
+import 'package:mobile_app/image_capture/image_saved.dart';
+import 'package:mobile_app/image_capture/input_img_details.dart';
+import 'package:mobile_app/globals.dart' as globals;
 
 class SaveImagePopup extends StatefulWidget{
   const SaveImagePopup({super.key});

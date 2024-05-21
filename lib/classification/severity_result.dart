@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_app/main_menu.dart';
-import 'package:mobile_app/input_img_details.dart';
+import 'package:mobile_app/image_capture/input_img_details.dart';
 import 'severity_result_explanations.dart';
-import 'globals.dart';
-import 'globals.dart' as globals;
+import 'package:mobile_app/globals.dart';
+import 'package:mobile_app/globals.dart' as globals;
 
 class SeverityResultScreen extends StatelessWidget {
   const SeverityResultScreen({super.key});

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app/database/classes/crack_info.dart';
 import 'package:mobile_app/database/classes/image.dart';
-import 'camera.dart';
-import 'package:mobile_app/help_popup.dart';
-import 'package:mobile_app/hero_dialog_route.dart';
+import 'package:mobile_app/image_capture/camera.dart';
+import 'package:mobile_app/popups/help_popup.dart';
+import 'package:mobile_app/popups/hero_dialog_route.dart';
 import 'database/crack_db.dart';
-import 'gallery.dart';
-import 'image_interface.dart';
+import 'package:mobile_app/gallery/gallery.dart';
+import 'package:mobile_app/gallery/image_interface.dart';
 import 'recent_captures.dart';
 
 class MainMenu extends StatefulWidget {

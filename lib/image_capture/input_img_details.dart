@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/camera.dart';
-import 'package:mobile_app/save_image_popup.dart';
-import 'package:mobile_app/hero_dialog_route.dart';
-import 'globals.dart' as globals;
+import 'camera.dart';
+import 'package:mobile_app/popups/save_image_popup.dart';
+import 'package:mobile_app/popups/hero_dialog_route.dart';
+import 'package:mobile_app/globals.dart' as globals;
 
 class CrackInput extends StatefulWidget{
 

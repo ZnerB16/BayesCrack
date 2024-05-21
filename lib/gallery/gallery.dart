@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/classes/crack_info.dart';
-import 'database/crack_db.dart';
-import 'main_menu.dart';
+import 'package:mobile_app/database/crack_db.dart';
+import 'package:mobile_app/main_menu.dart';
 import 'folders.dart';
-import 'delete_folder_popup.dart';
+import 'package:mobile_app/popups/delete_folder_popup.dart';
 
 
 List<String> folders = [];

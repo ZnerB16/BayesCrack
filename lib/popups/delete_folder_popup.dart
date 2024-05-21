@@ -1,22 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/custom_rect_tween.dart';
-import 'package:mobile_app/database/classes/crack_info.dart';
-import 'database/classes/image.dart';
-import 'database/crack_db.dart';
+import 'custom_rect_tween.dart';
+import 'package:mobile_app/database/classes/image.dart';
+import '../database/classes/crack_info.dart';
+import '../database/crack_db.dart';
 
-class DeleteImagePopup extends StatefulWidget {
-  final List<int> imageID;
-  const DeleteImagePopup({
+class DeleteFolderPopup extends StatefulWidget {
+  final List<String> trackingNo;
+  const DeleteFolderPopup({
     super.key,
-    required this.imageID,
+    required this.trackingNo
   });
 
   @override
-  State<DeleteImagePopup> createState() => _DeleteImagePopupState();
+  State<DeleteFolderPopup> createState() => _DeleteFolderPopupState();
 }
 
-class _DeleteImagePopupState extends State<DeleteImagePopup> {
+class _DeleteFolderPopupState extends State<DeleteFolderPopup> {
   bool _showConfirmationInput = false;
   late TextEditingController _confirmationController;
   bool _wrongConfirmation = false;
@@ -62,6 +62,7 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
                           ),
                         ),
                       ),
+                      // Show confirmation after click
                       if (!_showConfirmationInput)
                         const Column(
                           children: [
@@ -138,16 +139,18 @@ class _DeleteImagePopupState extends State<DeleteImagePopup> {
                                   if (_confirmationController.text == '1234') {
                                     var crackDB = CrackDB();
 
-                                    for (int i = 0; i < widget.imageID.length; i++) {
-                                      List<CrackInfo> imageInfo = await crackDB.fetchALlCrackIDs(imageID: widget.imageID[i]);
-                                      List<ImageDB> imageList = await crackDB.getImageID(imageID: widget.imageID[i]);
-                                      await crackDB.deleteImage(id: widget.imageID[i]);
-                                      await crackDB.deletePrediction(id: widget.imageID[i]);
-                                      await crackDB.deleteCrackInfo(id: widget.imageID[i]);
-                                      await crackDB.deleteBuilding(id: imageInfo[0].buildingID);
-                                      await crackDB.deleteFloor(id: imageInfo[0].floorID);
-                                      await crackDB.deleteRoom(id: imageInfo[0].roomID);
-                                      await File(imageList[0].imagePath).delete();
+                                    for(int i = 0; i < widget.trackingNo.length; i++){
+                                      List<CrackInfo> trackInfo = await crackDB.fetchALlCrackTracking(trackingNo: int.parse(widget.trackingNo[i].replaceAll(RegExp(r'[^0-9]'),'')));
+                                      for(int j = 0; j < trackInfo.length; j++){
+                                        List<ImageDB> imageList = await crackDB.getImageOnTrackingNo(trackingNo: trackInfo[j].trackingNo);
+                                        await crackDB.deleteImage(id: trackInfo[j].imageID);
+                                        await crackDB.deletePrediction(id: trackInfo[j].imageID);
+                                        await crackDB.deleteCrackInfo(id: trackInfo[j].imageID);
+                                        await crackDB.deleteBuilding(id: trackInfo[j].buildingID);
+                                        await crackDB.deleteFloor(id: trackInfo[j].floorID);
+                                        await crackDB.deleteRoom(id: trackInfo[j].roomID);
+                                        await File(imageList[j].imagePath).delete();
+                                      }
                                     }
 
                                     Navigator.pop(context);

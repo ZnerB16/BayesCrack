@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_app/database/classes/crack_info.dart';
 import 'package:mobile_app/database/crack_db.dart';
 import 'dart:io';
-import 'database/classes/prediction.dart';
+import 'package:mobile_app/database/classes/prediction.dart';
 import 'remarks.dart'; // Importing RemarksDialog class
 
 class ImageInterface extends StatefulWidget {

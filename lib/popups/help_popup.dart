@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/custom_rect_tween.dart';
-import 'package:mobile_app/hero_dialog_route.dart';
+import 'custom_rect_tween.dart';
+import 'hero_dialog_route.dart';
 
 class HelpPopup extends StatelessWidget{
   const HelpPopup ({super.key});

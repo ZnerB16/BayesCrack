@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/database/classes/image.dart';
 import 'package:mobile_app/database/crack_db.dart';
-import 'main_menu.dart';
+import '../main_menu.dart';
 import 'dart:io';
-import 'delete_image_popup.dart';
+import '../popups/delete_image_popup.dart';
 import 'image_interface.dart'; // Import ImageInterface
 
 class FolderView extends StatelessWidget {

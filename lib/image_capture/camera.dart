@@ -5,13 +5,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_app/get_geolocation.dart';
-import 'classify.dart';
-import 'globals.dart';
-import 'main_menu.dart';
-import 'severity_result.dart';
-import 'loading_screen.dart';
-import 'globals.dart' as globals;
+import 'get_geolocation.dart';
+import 'package:mobile_app/classification/classify.dart';
+import 'package:mobile_app/globals.dart';
+import 'package:mobile_app/main_menu.dart';
+import 'package:mobile_app/classification/severity_result.dart';
+import 'package:mobile_app/loading_screen.dart';
+import 'package:mobile_app/globals.dart' as globals;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -51,6 +51,7 @@ class _CameraScreenState extends State<CameraScreen> {
       print('Error initializing cameras: $error');
     });
   }
+
   Future<void> getDetails() async{
     // Get current date and time
     DateTime now = DateTime.now();
@@ -61,7 +62,6 @@ class _CameraScreenState extends State<CameraScreen> {
     latitude = currentLocation.latitude!;
     longitude = currentLocation.longitude!;
     globals.formattedDateTime = formattedDateTime;
-
   }
   Future<void> getGeolocation() async{
     await GetAddress(latitude: latitude, longitude: longitude).getAddressFromLatLng().then((String result){
@@ -70,6 +70,15 @@ class _CameraScreenState extends State<CameraScreen> {
       });
     });
     globals.geolocation = geolocation;
+  }
+  Future<void> tryExceptions() async {
+    try{
+      await getGeolocation().timeout(const Duration(seconds: 8));
+    } on PlatformException{
+      globals.geolocation = "Geolocation or Network not found";
+    } on TimeoutException{
+      globals.geolocation = "Process took too long";
+    }
   }
 
   @override
@@ -171,14 +180,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       });
 
                     await getDetails();
-
-                    try{
-                      await getGeolocation().timeout(const Duration(seconds: 8));
-                    } on PlatformException{
-                      globals.geolocation = "Geolocation or Network not found";
-                    } on TimeoutException{
-                      globals.geolocation = "Process took too long";
-                    }
+                    await tryExceptions();
 
                     globals.imagePath = image.path;
                     Navigator.of(context, rootNavigator: true).pop(); 
